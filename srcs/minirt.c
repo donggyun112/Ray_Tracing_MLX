@@ -1,49 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   struct.h                                           :+:      :+:    :+:   */
+/*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/07/20 12:02:15 by jinhyeop         ###   ########.fr       */
+/*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
+/*   Updated: 2023/07/20 12:27:48 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STRUCT_H
-# define STRUCT_H
+#include "../includes/minirt.h"
 
-typedef struct s_view
+int	main(int argc, char *argv[])
 {
-	void	*mlx;
-	void	*win;
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}	t_view;
+	t_view	view;
 
-
-typedef struct s_vec3
-{
-	double	x;
-	double	y;
-	double	z;
-	double	size;
-}	t_vec3;
-
-typedef struct s_point3
-{
-	double	x;
-	double	y;
-	double	z;
-}	t_point3;
-
-typedef struct s_ray3
-{
-	t_point3	origin;
-	t_vec3		dir;
-}	t_ray3;
-
-#endif
+	(void)argc;
+	(void)argv;
+	view.mlx = mlx_init();
+	view.win = mlx_new_window(view.mlx, 1920, 1080, "miniRT");
+	mlx_hook(view.win, 17, 1L << 5, win_destroy, &view);
+	mlx_hook(view.win, 2, 1L << 0, key_hook, &view);
+	mlx_loop(view.mlx);
+	return (0);
+}

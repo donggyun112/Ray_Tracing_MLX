@@ -1,49 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   struct.h                                           :+:      :+:    :+:   */
+/*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/07/20 12:02:15 by jinhyeop         ###   ########.fr       */
+/*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
+/*   Updated: 2023/07/20 12:27:24 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef STRUCT_H
-# define STRUCT_H
+#include "../includes/minirt.h"
 
-typedef struct s_view
+int	win_destroy(t_view *view)
 {
-	void	*mlx;
-	void	*win;
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}	t_view;
+	mlx_destroy_window(view->mlx, view->win);
+	exit(0);
+	return (0);
+}
 
-
-typedef struct s_vec3
+int	key_hook(int keycode, t_view *view)
 {
-	double	x;
-	double	y;
-	double	z;
-	double	size;
-}	t_vec3;
-
-typedef struct s_point3
-{
-	double	x;
-	double	y;
-	double	z;
-}	t_point3;
-
-typedef struct s_ray3
-{
-	t_point3	origin;
-	t_vec3		dir;
-}	t_ray3;
-
-#endif
+	if (keycode == 53)
+	{
+		mlx_destroy_window(view->mlx, view->win);
+		exit (0);
+	}
+	return (0);
+}

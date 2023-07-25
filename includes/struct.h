@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/07/20 13:32:56 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/07/26 04:53:13 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,14 @@ typedef struct s_ray3
 	t_point3	origin;
 	t_vec3		dir;
 }	t_ray3;
+
+typedef struct s_camera
+{
+	t_point3	origin;
+	t_vec3		dir;
+	t_vec3		r_norm;
+	t_vec3		v_norm;
+	t_vec3		left_up;
+}	t_camera;
 
 #endif

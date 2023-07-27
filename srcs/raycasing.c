@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 02:07:30 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/07/27 22:05:09 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/07/27 22:30:08 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ t_ray3	create_ray(t_camera cam, double u, int v)
 
 	ray.origin = cam.origin;
 	ray.dir = vunit(add_vector(\
-		add_vector(cam->left_bottom, multiply_vector(u, cam->r_norm)), \
-		multiply_vector(v, cam->v_norm)));
+		add_vector(cam.left_lower, multiply_vector(u, cam.r_norm)), \
+		multiply_vector(v, cam.v_norm)));
 	return (ray);
 }
 

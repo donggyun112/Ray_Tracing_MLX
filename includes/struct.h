@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/07/26 04:53:13 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/07/27 21:00:10 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,24 @@ typedef struct s_ray3
 typedef struct s_camera
 {
 	t_point3	origin;
+	t_point3	left_lower;
 	t_vec3		dir;
 	t_vec3		r_norm;
 	t_vec3		v_norm;
-	t_vec3		left_up;
+	double		aspect_ratio;
+	double		fov;
+	double		focal_len;
+	double		vp_height;
+	double		vp_width;
 }	t_camera;
+
+
+typedef struct s_screen
+{
+	double	aspect_ratio;
+	int		width;
+	int		height;
+	double	fov;
+}	t_screen;
 
 #endif

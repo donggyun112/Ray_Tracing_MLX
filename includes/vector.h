@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vector.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 11:49:07 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/07/20 16:57:34 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/07/27 02:02:44 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <math.h>
 
 //vector
-t_vec3	init_vec(double x, double y, double z);
+t_vec3	vec3(double x, double y, double z);
 t_vec3	norm_vec(t_vec3 vec);
 double	scalar_product(t_vec3 v1, t_vec3 v2);
 t_vec3	vector_product(t_vec3 v1, t_vec3 v2);

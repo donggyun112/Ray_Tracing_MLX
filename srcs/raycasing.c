@@ -6,27 +6,13 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 02:07:30 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/07/27 21:19:27 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/07/27 22:05:09 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include ".includes/minirt.h"
 #include "includes/vector.h"
 #include "includes/struct.h"
-
-t_ray3	create_ray(t_point3 camera, int i, int j)
-{
-	t_ray3	ray;
-	double	width;
-	double	height;
-
-	width = 3;
-	height = 2;
-	//i range [0, 1500], j range [0, 1000]
-	//left_up vector 에서 출발해서 width * i / 가로픽셀(1500)
-	//height * j / 세로픽셀(1000) 을 더해주면 카메라의 기준에서
-	//viewport로 가는 벡터를 구할 수 있다.
-}
 
 t_camera	cammera(t_point3 origin, t_vec3 dir, t_screen canvas)
 {
@@ -53,9 +39,22 @@ t_camera	cammera(t_point3 origin, t_vec3 dir, t_screen canvas)
 	cam.r_norm = cross_product(cam.dir, up); // right = dir x up
 	cam.v_norm = cross_product(cam.r_norm, cam.dir); // up = right x dir
 	cam.left_lower = sub_vector(sub_vector(\
-			sub_vector(cam.origin, multiply_vector(0.5 * cam.vp_width, cam.r_norm)), \
-					multiply_vector(0.5 * cam.vp_height, cam.v_norm)), multiply_vector(cam.focal_len, cam.dir));
+				sub_vector(add_vector(cam.origin, \
+				multiply_vector(0.5 * cam.vp_width, cam.r_norm)), \
+				multiply_vector(0.5 * cam.vp_height, cam.v_norm)), \
+				multiply_vector(cam.focal_len, cam.dir)), cam.origin);
 	return (cam);
+}
+
+t_ray3	create_ray(t_camera cam, double u, int v)
+{
+	t_ray3	ray;
+
+	ray.origin = cam.origin;
+	ray.dir = vunit(add_vector(\
+		add_vector(cam->left_bottom, multiply_vector(u, cam->r_norm)), \
+		multiply_vector(v, cam->v_norm)));
+	return (ray);
 }
 
 

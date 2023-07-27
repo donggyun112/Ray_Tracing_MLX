@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 11:49:07 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/07/27 02:02:44 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/07/27 22:09:56 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define VECTOR_H
 
 # include <math.h>
+# include "struct.h"
 
 //vector
 t_vec3	vec3(double x, double y, double z);
@@ -23,7 +24,7 @@ t_vec3	vector_product(t_vec3 v1, t_vec3 v2);
 
 //simple_vec_cal
 double	size_of_vec(double x, double y, double z);
-void	multiple_vector(double t, t_vec3 *vec);
+t_vec3	multiple_vector(double t, t_vec3 *vec);
 t_vec3	add_vector(t_vec3 v1, t_vec3 v2);
 t_vec3	sub_vector(t_vec3 v1, t_vec3 v2);
 

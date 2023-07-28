@@ -3,15 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/07/27 21:35:55 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/07/28 19:48:44 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCT_H
 # define STRUCT_H
+
+
 
 typedef struct s_view
 {
@@ -24,49 +26,79 @@ typedef struct s_view
 	int		endian;
 }	t_view;
 
-
 typedef struct s_vec3
 {
 	double	x;
 	double	y;
 	double	z;
-	double	size;
 }	t_vec3;
-
-typedef struct s_point3
-{
-	double	x;
-	double	y;
-	double	z;
-}	t_point3;
 
 typedef struct s_ray3
 {
-	t_point3	origin;
-	t_vec3		dir;
+	t_vec3			origin;
+	t_vec3			dir;
+	double			t;
+	int				type;
+	void			*obj;
+	unsigned char	color[3];
 }	t_ray3;
 
 typedef struct s_camera
 {
-	t_point3	origin;
-	t_point3	left_lower;
-	t_vec3		dir;
-	t_vec3		r_norm;
-	t_vec3		v_norm;
-	double		aspect_ratio;
-	double		fov;
-	double		focal_len;
-	double		vp_height;
-	double		vp_width;
+	t_vec3	origin;
+	t_vec3	left_lower;
+	t_vec3	dir;
+	t_vec3	r_norm;
+	t_vec3	v_norm;
+	double	fov;
+	double	focal_len;
 }	t_camera;
 
-
-typedef struct s_screen
+typedef struct s_plane
 {
-	double	aspect_ratio;
-	int		width;
-	int		height;
-	double	fov;
-}	t_screen;
+	t_vec3	on_plane;
+	t_vec3	norm;
+}	t_plane;
+
+typedef struct s_sphere
+{
+	t_vec3	center;
+	double	radius;
+	double	color[3];
+}	t_sphere;
+
+typedef struct s_cylinder
+{
+	t_vec3	center;
+	t_vec3	dir;
+	double	radius;
+	double	height;
+}	t_cylinder;
+
+typedef struct s_volume
+{
+	int			pl_cnt;
+	int			sp_cnt;
+	int			cy_cnt;
+	t_plane		*pl;
+	t_sphere	*sp;
+	t_cylinder	*cy;
+}	t_volume;
+
+typedef struct s_canvas
+{
+	int				width;
+	int				height;
+	double			ratio;
+	double			amb_bright;
+	unsigned char	amb_col[3];
+	t_vec3			cam_orig;
+	t_vec3			cam_dir;
+	int				fov;
+	t_vec3			light_orig;
+	double			light_birght;
+	unsigned char	light_col[3];
+	t_volume		*obj;
+}	t_canvas;
 
 #endif

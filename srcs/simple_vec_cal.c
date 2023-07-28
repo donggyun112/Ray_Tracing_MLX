@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   simple_vec_cal.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 13:07:58 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/07/27 21:05:11 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/07/28 05:16:27 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

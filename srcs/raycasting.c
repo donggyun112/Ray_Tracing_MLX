@@ -1,48 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycasing.c                                        :+:      :+:    :+:   */
+/*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 02:07:30 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/07/27 22:30:08 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/07/28 18:49:25 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include ".includes/minirt.h"
-#include "includes/vector.h"
-#include "includes/struct.h"
+#include "../includes/minirt.h"
 
-t_camera	cammera(t_point3 origin, t_vec3 dir, t_screen canvas)
+t_camera	camera(t_canvas canvas)
 {
 	t_camera	cam; 
 	t_vec3		up;
 	double		fov_radians;
-	double		viewport_height;
+	double		viewport[2];
 
 	// 카메라 좌표
-	cam.origin = origin;
+	cam.origin = canvas.cam_orig;
 
 	// fov각도에 따른 viewport와 카메라의 거리	
 	fov_radians = canvas.fov * M_PI / 180;
-	cam.focal_len = 0.5 * canvas.height / tan(0.5 * fov_radians);
+	cam.focal_len = 1.0 / tan(0.5 * fov_radians);
 	
 	// 정규화 되어있는 viewport 가로 세로 길이
-	cam.vp_height = 2.0;
-	cam.vp_width = cam.vp_height * canvas.aspect_ratio;
+	viewport[HEIGHT] = 2.0;
+	viewport[WIDTH] = viewport[HEIGHT] * canvas.ratio;
 
 	// viewport를 향하는 direction vector
-	cam.dir = dir;
+	cam.dir = canvas.cam_dir;
 
 	up = vec3(0.0, 1.0, 0.0);
 	cam.r_norm = cross_product(cam.dir, up); // right = dir x up
 	cam.v_norm = cross_product(cam.r_norm, cam.dir); // up = right x dir
-	cam.left_lower = sub_vector(sub_vector(\
+	cam.left_lower = sub_vector(sub_vector(\ //left_lower만들어서 리턴해주는 함수 따로 구현해야됨
 				sub_vector(add_vector(cam.origin, \
-				multiply_vector(0.5 * cam.vp_width, cam.r_norm)), \
-				multiply_vector(0.5 * cam.vp_height, cam.v_norm)), \
-				multiply_vector(cam.focal_len, cam.dir)), cam.origin);
+				multiple_vector(0.5 * viewport[WIDTH], cam.r_norm)), \
+				multiple_vector(0.5 * viewport[HEIGHT], cam.v_norm)), \
+				multiple_vector(cam.focal_len, cam.dir)), cam.origin);
 	return (cam);
 }
 
@@ -51,9 +49,9 @@ t_ray3	create_ray(t_camera cam, double u, int v)
 	t_ray3	ray;
 
 	ray.origin = cam.origin;
-	ray.dir = vunit(add_vector(\
-		add_vector(cam.left_lower, multiply_vector(u, cam.r_norm)), \
-		multiply_vector(v, cam.v_norm)));
+	ray.dir = norm_vec(add_vector(\
+		add_vector(cam.left_lower, multiple_vector(u, cam.r_norm)), \
+		multiple_vector(v, cam.v_norm)));
 	return (ray);
 }
 

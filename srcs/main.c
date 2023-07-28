@@ -47,19 +47,19 @@ t_world	parse(char *av[])
 	int a = 3;
 }
 
-int main(int ac, char *av[])
-{
-	(void)ac;
-	parse(av);
-	// t_ray3	ray;
+// int main(int ac, char *av[])
+// {
+// 	(void)ac;
+// 	parse(av);
+// 	// t_ray3	ray;
 
-	// for (int j = 0; j < /* 세로 */; j++)
-	// {
-	// 	for (int i = 0; i < /* 가로 */; i++)
-	// 	{
-	// 		double u = double(i) / (/* 가로 - 1 */);
-	// 		double v = double(j) / (/* 세로 - 1 */);
-	// 		ray = create_ray(cam, u, v);
-	// 	}
-	// }
-}
+// 	// for (int j = 0; j < /* 세로 */; j++)
+// 	// {
+// 	// 	for (int i = 0; i < /* 가로 */; i++)
+// 	// 	{
+// 	// 		double u = double(i) / (/* 가로 - 1 */);
+// 	// 		double v = double(j) / (/* 세로 - 1 */);
+// 	// 		ray = create_ray(cam, u, v);
+// 	// 	}
+// 	// }
+// }

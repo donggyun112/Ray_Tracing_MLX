@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   vector.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 11:38:12 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/07/19 14:37:19 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/07/27 21:35:27 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/vector.h"
 #include "../includes/struct.h"
 
-t_vec3	init_vec(double x, double y, double z)
+t_vec3	vec3(double x, double y, double z)
 {
 	t_vec3	new;
 

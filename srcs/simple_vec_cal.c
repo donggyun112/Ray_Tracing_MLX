@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 13:07:58 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/07/19 14:37:08 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/07/28 05:16:27 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,15 @@ double	size_of_vec(double x, double y, double z)
 	return (size);
 }
 
-void	multiple_vector(double t, t_vec3 *vec)
+t_vec3	multiple_vector(double t, t_vec3 vec)
 {
-	vec->x = t * vec->x;
-	vec->y = t * vec->y;
-	vec->z = t * vec->z;
-	vec->size = t * vec->size;
+	t_vec3	multiple;
+
+	multiple.x = t * vec.x;
+	multiple.y = t * vec.y;
+	multiple.z = t * vec.z;
+	multiple.size = t * vec.size;
+	return (multiple);
 }
 
 t_vec3	add_vector(t_vec3 v1, t_vec3 v2)

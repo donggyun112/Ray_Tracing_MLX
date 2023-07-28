@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 15:16:09 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/03/30 01:20:34 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/07/28 15:32:17 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,6 @@ void		ft_lstclear(t_list **lst, void (*del)(void *));
 void		ft_lstiter(t_list *lst, void (*f)(void *));
 t_list		*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 long long	ft_strtoll(const char *str);
+double		ft_strtod(char *nptr);
 
 #endif

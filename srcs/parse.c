@@ -90,29 +90,25 @@ t_canvas	parse(char *av[])
 		if (!line || !*line)
 			break ;
 		tmp = ft_split(line, " \t\n,");
-		if (!*tmp)
-			continue;
-		init_data(tmp, &data, i);
-		free_split(tmp);
+		if (*tmp)
+			init_data(tmp, &data, i);
 		free(line);
+		free_split(tmp);
 		i++;
 	}
 	return (data);
+}
+
+void	leaks()
+{
+	system("leaks a.out");
 }
 
 int main(int ac, char *av[])
 {
 	(void)ac;
 	parse(av);
-	// t_ray3	ray;
-
-	// for (int j = 0; j < /* 세로 */; j++)
-	// {
-	// 	for (int i = 0; i < /* 가로 */; i++)
-	// 	{
-	// 		double u = double(i) / (/* 가로 - 1 */);
-	// 		double v = double(j) / (/* 세로 - 1 */);
-	// 		ray = create_ray(cam, u, v);
-	// 	}
-	// }
+	int a = 3;
+	atexit(leaks);
+	return (0);
 }

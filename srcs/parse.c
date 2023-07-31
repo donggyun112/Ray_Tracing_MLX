@@ -72,10 +72,10 @@ t_canvas	parse(char *av[])
 {
 	t_canvas	data;
 	t_volume	*obj;
-	int 		fd;
-	char 		*line;
-	char 		**tmp;
-	int 		i;
+	int			fd;
+	char		*line;
+	char		**tmp;
+	int			i;
 
 	i = 0;
 	obj = (t_volume *)malloc(sizeof(t_volume));
@@ -98,7 +98,7 @@ t_canvas	parse(char *av[])
 	}
 	return (data);
 }
-
+/*
 void	leaks()
 {
 	system("leaks a.out");
@@ -112,3 +112,4 @@ int main(int ac, char *av[])
 	atexit(leaks);
 	return (0);
 }
+*/

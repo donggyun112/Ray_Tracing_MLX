@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 15:16:09 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/07/28 15:32:17 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/07/31 13:26:23 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define LIBFT_H
 
 # include <stdlib.h>
+# include "get_next_line_bonus.h"
 
 typedef struct s_list
 {

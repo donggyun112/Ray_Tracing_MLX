@@ -6,25 +6,55 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/07/28 19:48:44 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/07/31 13:20:49 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-void	intersection(t_ray3 *ray, t_volume *volume)
+void	intersection(t_ray3 *ray, t_volume *obj)
 {
 	int	idx;
 
 	idx = 0;
-	while (idx < volume.pl_cnt)
+	while (idx < obj->sp_cnt)
 	{
-		pl_inter(volume.pl[idx], ray);
+		hit_sphere(ray, &obj->sp[idx]);
+		idx++;
 	}
 }
 
-void	make_image(t_view *view, t_canvas canvas)
+void	color_cal(t_view *view, t_canvas canvas, t_ray3 *ray, int pix[])
 {
+	(void)canvas;
+	(void)ray;
+	if (ray->t > 0.0)
+		my_mlx_pixel_put(view, pix[0], pix[1], 0x00FFFFFF);
+	else
+		my_mlx_pixel_put(view, pix[0], pix[1], 0x00FF0000);
+}
+
+void	make_image(t_view *view, t_canvas canvas, t_camera cam)
+{
+	int		pix[2];
+	double	vp_idx[2];
+	t_ray3	ray;
+
+	pix[1] = 0;
+	while (pix[1] < canvas.height)
+	{
+		pix[0] = 0;
+		vp_idx[1] = (double)pix[1] / (double)canvas.height;
+		while (pix[0] < canvas.width)
+		{
+			vp_idx[0] = (double)pix[0] / (double)canvas.width;
+			ray = create_ray(cam, vp_idx[0], vp_idx[1]);
+			intersection(&ray, canvas.obj);
+			color_cal(view, canvas, &ray, pix); // put pixel info in this fn
+			pix[0]++;
+		}
+		pix[1]++;
+	}
 	/*
 	for (int i = 0; i < canvas.height; i++)
 	{
@@ -41,18 +71,19 @@ void	make_image(t_view *view, t_canvas canvas)
 
 int	main(int argc, char *argv[])
 {
-	t_view	view;
+	t_view		view;
+	t_canvas	canvas;
+	t_camera	cam;
 
 	(void)argc;
-	(void)argv;
-	//parse() + 오브젝트 배열 생성
-	//make_camera() 파싱 데이터 받아서 카메라 생성
+	canvas = parse(argv);
+	cam = camera(canvas);
 	view.mlx = mlx_init();
 	view.win = mlx_new_window(view.mlx, 1920, 1080, "miniRT");
 	view.img = mlx_new_image(view.mlx, 1920, 1080);
-	view.addr = mlx_get_data_addr(view.img, view.bits_per_pixel, \
-		view.line_length, view.endian);
-	make_image(&view, canvas); // viewport를 향해서 반복문 사용하여 ray 발사
+	view.addr = mlx_get_data_addr(view.img, &view.bits_per_pixel, \
+		&view.line_length, &view.endian);
+	make_image(&view, canvas, cam); // viewport를 향해서 반복문 사용하여 ray 발사
 	mlx_hook(view.win, 17, 1L << 5, win_destroy, &view);
 	mlx_hook(view.win, 2, 1L << 0, key_hook, &view);
 	mlx_loop(view.mlx);

@@ -6,11 +6,25 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 02:07:30 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/07/28 18:49:25 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/07/31 10:27:23 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
+
+void	left_lower(t_camera *cam, t_canvas canvas, double viewport[])
+{
+	t_vec3	left_lower;
+	t_vec3	r_half;
+	t_vec3	v_half;
+	t_vec3	tmp;
+
+	r_half = multiple_vector(0.5 * viewport[WIDTH], cam->r_norm);
+	v_half = multiple_vector(0.5 * viewport[HEIGHT], cam->v_norm);
+	tmp = add_vector(cam->dir, v_half);
+	left_lower = sub_vector(tmp, r_half);
+	cam->left_lower = left_lower;
+}
 
 t_camera	camera(t_canvas canvas)
 {
@@ -36,15 +50,17 @@ t_camera	camera(t_canvas canvas)
 	up = vec3(0.0, 1.0, 0.0);
 	cam.r_norm = cross_product(cam.dir, up); // right = dir x up
 	cam.v_norm = cross_product(cam.r_norm, cam.dir); // up = right x dir
-	cam.left_lower = sub_vector(sub_vector(\ //left_lower만들어서 리턴해주는 함수 따로 구현해야됨
+	cam.left_lower = left_lower(&cam, canvas, viewport);
+	/*sub_vector(sub_vector(\ //left_lower만들어서 리턴해주는 함수 따로 구현해야됨
 				sub_vector(add_vector(cam.origin, \
 				multiple_vector(0.5 * viewport[WIDTH], cam.r_norm)), \
 				multiple_vector(0.5 * viewport[HEIGHT], cam.v_norm)), \
 				multiple_vector(cam.focal_len, cam.dir)), cam.origin);
+	*/
 	return (cam);
 }
 
-t_ray3	create_ray(t_camera cam, double u, int v)
+t_ray3	create_ray(t_camera cam, double u, double v)
 {
 	t_ray3	ray;
 

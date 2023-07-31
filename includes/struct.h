@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/07/28 19:48:44 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/07/31 18:59:47 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef struct s_ray3
 typedef struct s_camera
 {
 	t_vec3	origin;
-	t_vec3	left_lower;
+	t_vec3	left_upper;
 	t_vec3	dir;
 	t_vec3	r_norm;
 	t_vec3	v_norm;
@@ -96,7 +96,7 @@ typedef struct s_canvas
 	t_vec3			cam_dir;
 	int				fov;
 	t_vec3			light_orig;
-	double			light_birght;
+	double			light_bright;
 	unsigned char	light_col[3];
 	t_volume		*obj;
 }	t_canvas;

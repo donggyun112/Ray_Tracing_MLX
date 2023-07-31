@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/07/20 12:27:24 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/07/31 13:21:09 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,12 @@ int	key_hook(int keycode, t_view *view)
 		exit (0);
 	}
 	return (0);
+}
+
+void	my_mlx_pixel_put(t_view *mlx, int x, int y, unsigned int color)
+{
+	char	*dst;
+
+	dst = mlx->addr + (y * mlx->line_length + x * (mlx->bits_per_pixel / 8));
+	*(unsigned int *)dst = color;
 }

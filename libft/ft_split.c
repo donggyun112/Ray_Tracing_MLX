@@ -3,107 +3,107 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/12 12:06:59 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/03/29 22:14:21 by jinhyeop         ###   ########.fr       */
+/*   Created: 2023/03/14 16:42:41 by dongkseo          #+#    #+#             */
+/*   Updated: 2023/08/01 01:11:00 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
+#include "libft.h"
 
-static unsigned int	cnt_words(char const *s, char c)
+int	is_charset(char tmp, char *c)
 {
-	unsigned int	cnt;
-	unsigned int	idx;
-	unsigned int	flag;
-
-	cnt = 0;
-	idx = 0;
-	flag = 0;
-	while (s[idx])
+	while (*c)
 	{
-		if (flag == 0 && s[idx] != c)
-		{
-			flag = 1;
-			cnt++;
-		}
-		else if (flag == 1 && s[idx] == c && s[idx] != '\0')
-			flag = 0;
-		idx++;
+		if (tmp == *c)
+			return (1);
+		c++;
 	}
-	return (cnt);
+	return (0);
 }
 
-static void	free_all(char **array, unsigned int cnt)
+int	string_len(char const *s, char *c)
 {
-	unsigned int	idx;
-
-	idx = 0;
-	while (idx <= cnt)
-		free(array[idx++]);
-	free(array);
-}
-
-static char	**put_words(char **array, unsigned int cnt, char const *s, char c)
-{
-	unsigned int	len;
-	unsigned int	idx;
+	int	len;
 
 	len = 0;
-	idx = 0;
-	while (s[len] != c && s[len] != '\0')
+	while (s[len] && !is_charset(s[len], c))
 		len++;
-	array[cnt] = (char *)malloc(len + 1);
-	if (array[cnt] == NULL)
-	{
-		free_all(array, cnt);
-		array = NULL;
-		return (0);
-	}
-	while (s[idx] != c && s[idx] != '\0')
-	{
-		array[cnt][idx] = s[idx];
-		idx++;
-	}
-	array[cnt][idx] = '\0';
-	return (array);
+	return (len);
 }
 
-static size_t	get_len(const char *str)
+char	**ft_clearall__________(int j, char **arr)
 {
-	size_t	len;
-
-	len = 0;
-	while (str[len])
-		len++;
-	return (len - 1);
+	while (j > 0)
+		free(arr[--j]);
+	free(arr);
+	return (NULL);
 }
 
-char	**ft_split(char const *s, char c)
+char	**ft_putstring(char const *s, char *c, char **arr)
 {
-	unsigned int	cnt;
-	char			**array;
+	int	len;
+	int	j;
+	int	z;
 
-	if (s == NULL)
-		return (0);
-	cnt = cnt_words(s, c);
-	array = (char **)malloc(sizeof(char *) * (cnt + 1));
-	if (array == NULL)
-		return (0);
-	cnt = 0;
+	j = 0;
 	while (*s)
 	{
-		if (*s != c)
+		if (!is_charset(*s, c))
 		{
-			array = put_words(array, cnt, s, c);
-			if (array == NULL)
-				return (0);
-			s = s + get_len(array[cnt]);
-			cnt++;
+			len = string_len(s, c);
+			arr[j] = (char *)malloc(len + 1);
+			if (!arr[j])
+				return (ft_clearall__________(j, arr));
+			z = 0;
+			while (len-- > 0)
+				arr[j][z++] = *s++;
+			arr[j][z] = '\0';
+			j++;
 		}
-		s++;
+		else
+			s++;
 	}
-	array[cnt] = NULL;
-	return (array);
+	return (arr);
+}
+
+int	word_count(char const *s, char *c)
+{
+	int	count;
+
+	count = 0;
+	while (*s)
+	{
+		if (!is_charset(*s, c))
+		{
+			count++;
+			while (*s && !is_charset(*s, c))
+				s++;
+		}
+		else
+			s++;
+	}
+	return (count);
+}
+
+char	**ft_split(char const *s, char *c)
+{
+	char	**arr;
+	int		count;
+
+	if (!s)
+		return (NULL);
+	count = word_count(s, c);
+	arr = (char **)malloc(sizeof(char *) * (count + 1));
+	if (!arr)
+		return (NULL);
+	arr = ft_putstring(s, c, arr);
+	if (!arr)
+	{
+		free(arr);
+		return (NULL);
+	}
+	arr[count] = NULL;
+	return (arr);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtod.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 15:31:09 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/07/28 17:18:38 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/01 01:14:49 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ double	ft_strtod(char *nptr)
 	arr[0] = 1;
 	if (*nptr == '-')
 		arr[0] = -1;
-	tmp = ft_split(nptr, '.');
+	tmp = ft_split(nptr, ".");
 	arr[1] = ft_atoi(tmp[0]);
 	if (tmp[1] != NULL)
 		arr[2] = ft_atoi(tmp[1]);

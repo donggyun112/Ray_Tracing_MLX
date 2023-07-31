@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr      +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 10:28:52 by jinhyeop          #+#    #+#             */
-/*   Updated: 2022/11/22 18:47:17 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/01 00:55:50 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,10 @@ char	*ft_strtrim(char const *s1, char const *set)
 {
 	unsigned int	size;
 	unsigned int	len;
-	unsigned int	idx;
 	char			*tr;
 
 	size = 0;
 	len = 0;
-	idx = 0;
 	if (s1[0] == '\0')
 	{
 		tr = (char *)malloc(1);

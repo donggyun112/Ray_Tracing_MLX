@@ -30,7 +30,7 @@ void	init_data(char **tmp, t_canvas *canvas, int num)
 		canvas->light_orig.x = ft_strtod(tmp[1]);
 		canvas->light_orig.y = ft_strtod(tmp[2]);
 		canvas->light_orig.z = ft_strtod(tmp[3]);
-		canvas->light_birght = ft_strtod(tmp[4]);
+		canvas->light_bright = ft_strtod(tmp[4]);
 		canvas->light_col[RED] = ft_strtod(tmp[5]);
 		canvas->light_col[GREEN] = ft_strtod(tmp[6]);
 		canvas->light_col[BLUE] = ft_strtod(tmp[7]);
@@ -98,7 +98,7 @@ t_canvas	parse(char *av[])
 	}
 	return (data);
 }
-/*
+
 void	leaks()
 {
 	system("leaks a.out");
@@ -112,4 +112,4 @@ int main(int ac, char *av[])
 	atexit(leaks);
 	return (0);
 }
-*/
+

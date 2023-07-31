@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 02:07:30 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/07/31 18:18:32 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/07/31 20:48:37 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,6 @@ t_camera	camera(t_canvas canvas)
 	printf("%f, %f, %f\n", cam.r_norm.x, cam.r_norm.y, cam.r_norm.z);
 	printf("%f, %f, %f\n", cam.v_norm.x, cam.v_norm.y, cam.v_norm.z);
 	printf("%f, %f, %f\n", cam.left_upper.x, cam.left_upper.y, cam.left_upper.z);
-	/*sub_vector(sub_vector(\ //left_upper만들어서 리턴해주는 함수 따로 구현해야됨
-				sub_vector(add_vector(cam.origin, \
-				multiple_vector(0.5 * viewport[WIDTH], cam.r_norm)), \
-				multiple_vector(0.5 * viewport[HEIGHT], cam.v_norm)), \
-				multiple_vector(cam.focal_len, cam.dir)), cam.origin);
-	*/
 	return (cam);
 }
 

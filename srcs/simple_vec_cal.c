@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 13:07:58 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/07/28 05:16:27 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/07/31 17:37:26 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ t_vec3	multiple_vector(double t, t_vec3 vec)
 	multiple.x = t * vec.x;
 	multiple.y = t * vec.y;
 	multiple.z = t * vec.z;
-	multiple.size = t * vec.size;
 	return (multiple);
 }
 
@@ -39,7 +38,6 @@ t_vec3	add_vector(t_vec3 v1, t_vec3 v2)
 	sum.x = v1.x + v2.x;
 	sum.y = v1.y + v2.y;
 	sum.z = v1.z + v2.z;
-	sum.size = size_of_vec(sum.x, sum.y, sum.z);
 	return (sum);
 }
 
@@ -50,6 +48,15 @@ t_vec3	sub_vector(t_vec3 v1, t_vec3 v2)
 	sub.x = v1.x - v2.x;
 	sub.y = v1.y - v2.y;
 	sub.z = v1.z - v2.z;
-	sub.size = size_of_vec(sub.x, sub.y, sub.z);
 	return (sub);
+}
+
+t_vec3	add_three_vector(t_vec3 v1, t_vec3 v2, t_vec3 v3)
+{
+	t_vec3	sum;
+
+	sum.x = v1.x + v2.x + v3.x;
+	sum.y = v1.y + v2.y + v3.y;
+	sum.z = v1.z + v2.z + v3.z;
+	return (sum);
 }

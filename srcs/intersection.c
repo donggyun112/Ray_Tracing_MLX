@@ -1,4 +1,5 @@
 #include "../includes/minirt.h"
+#include <stdio.h> //remove
 
 void	hit_sphere(t_ray3 *ray, t_sphere *sp)
 {
@@ -22,7 +23,7 @@ void	hit_sphere(t_ray3 *ray, t_sphere *sp)
 		tmp = tca + tnc;
 	else
 		tmp = tca - tnc;
-	if (ray->t > tmp)
+	if ((ray->t < 0.0 && tmp > 0.0) || ray->t > tmp)
 	{
 		ray->t = tmp;
 		ray->type = SP;

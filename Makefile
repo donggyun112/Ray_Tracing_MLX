@@ -6,7 +6,7 @@
 #    By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/02 15:17:44 by jinhyeop          #+#    #+#              #
-#    Updated: 2023/07/31 12:34:11 by jinhyeop         ###   ########.fr        #
+#    Updated: 2023/07/31 15:23:22 by jinhyeop         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ CLIB = -Llibft -lft -Lmlx -lmlx -framework OpenGL -framework Appkit -Imlx -lm
 NAME = minirt
 
 MAN_DIR = ./srcs
-MAN_FILE = minirt.c mlx_utils.c intersection.c parse.c raycasting.c
+MAN_FILE = minirt.c mlx_utils.c intersection.c raycasting.c tmp_parse.c \
+		vector.c simple_vec_cal.c
 BONUS_DIR = ./bonus
 BONUS_FILE = 
 MAN_SRCS = $(addprefix $(MAN_DIR)/, $(MAN_FILE))

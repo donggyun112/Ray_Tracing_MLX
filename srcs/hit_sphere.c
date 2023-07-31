@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 15:44:00 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/07/28 16:51:05 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/07/31 15:22:29 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,19 +55,18 @@ double	cal_coe_c(t_vec3 ray_orig, t_vec3 sph_center, double rad)
 	double	ret;
 
 	sub = sub_vector(ray_orig, sph_center);
-	ret = scalar_product(sub, sub) - (r * r);
+	ret = scalar_product(sub, sub) - (rad * rad);
 	return (ret);
 }
 
 // ray에 hit 됐을때 t값을 반환하는 함수, hit이 없을경우 -1.0을 반환
-double	hit_sphere(t_ray3 ray, t_sphere sphere)
+double	my_hit_sphere(t_ray3 *ray, t_sphere *sphere)
 {
 	double	coef[3];
-	double	sol;
 
-	coef[0] = scalar_product(ray.dir, ray.dir); //a
-	coef[1] = cal_coe_b(ray.dir, ray.origin, sphere.center); //b
-	coef[2] = cal_coe_c(ray.origin, sphere.center, sphere.radius); //c
+	coef[0] = scalar_product(ray->dir, ray->dir); //a
+	coef[1] = cal_coe_b(ray->dir, ray->origin, sphere->center); //b
+	coef[2] = cal_coe_c(ray->origin, sphere->center, sphere->radius); //c
 	if (discriminant(coef[0], coef[1], coef[2]))
 		return (quad_formula(coef[0], coef[1], coef[2]));
 	else

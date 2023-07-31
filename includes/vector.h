@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 11:49:07 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/07/28 17:10:03 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/07/31 17:18:37 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,6 @@ double	size_of_vec(double x, double y, double z);
 t_vec3	multiple_vector(double t, t_vec3 vec);
 t_vec3	add_vector(t_vec3 v1, t_vec3 v2);
 t_vec3	sub_vector(t_vec3 v1, t_vec3 v2);
+t_vec3	add_three_vector(t_vec3 v1, t_vec3 v2, t_vec3 v3);
 
 #endif

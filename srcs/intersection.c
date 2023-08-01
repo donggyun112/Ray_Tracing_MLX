@@ -23,10 +23,27 @@ void	hit_sphere(t_ray3 *ray, t_sphere *sp)
 		tmp = tca + tnc;
 	else
 		tmp = tca - tnc;
-	if ((ray->t < 0.0 && tmp > 0.0) || ray->t > tmp)
+	if ((ray->t < 0.0 && tmp > 0.0) || (tmp > 0.0 && ray->t > tmp))
 	{
 		ray->t = tmp;
 		ray->type = SP;
 		ray->obj = (void *)sp;
+	}
+}
+
+void	hit_plane(t_ray3 *ray, t_plane *pl)
+{
+	double	tmp;
+	double	scalar[3];
+
+	scalar[0] = scalar_product(pl->on_plane, pl->norm);
+	scalar[1] = scalar_product(ray->origin, pl->norm);
+	scalar[2] = scalar_product(ray->dir, pl->norm);
+	tmp = (scalar[0] - scalar[1]) / scalar[2];
+	if ((ray->t < 0.0 && tmp > 0.0) || (tmp > 0.0 && ray->t > tmp))
+	{
+		ray->t = tmp;
+		ray->type = PL;
+		ray->obj = (void *)pl;
 	}
 }

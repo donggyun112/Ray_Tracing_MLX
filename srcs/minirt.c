@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/01 19:53:28 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/01 21:59:06 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,12 @@ void	intersection(t_ray3 *ray, t_volume *obj)
 	while (idx < obj->sp_cnt)
 	{
 		hit_sphere(ray, &obj->sp[idx]);
+		idx++;
+	}
+	idx = 0;
+	while (idx < obj->pl_cnt)
+	{
+		hit_plane(ray, &obj->pl[idx]);
 		idx++;
 	}
 }
@@ -96,7 +102,11 @@ int	main(int argc, char *argv[])
 	t_canvas	canvas;
 	t_camera	cam;
 
-	(void)argc;
+	if (argc != 2)
+	{
+		printf("Error\nInput mapfile(*.rt) as argument\n");
+		return (1);
+	}
 	canvas = parse(argv);
 	cam = camera(canvas);
 	view.mlx = mlx_init();

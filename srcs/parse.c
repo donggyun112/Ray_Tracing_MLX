@@ -57,7 +57,7 @@ int	init_plane(char **tmp, t_canvas *canvas, int count)
 {
 	static int	idx;
 
-	if (count == 6 && !ft_strcmp(tmp[0], "pl"))
+	if (count == 9 && !ft_strcmp(tmp[0], "pl"))
 	{
 		canvas->obj->pl[idx].on_plane.x = ft_strtod(tmp[1]);
 		canvas->obj->pl[idx].on_plane.y = ft_strtod(tmp[2]);
@@ -65,6 +65,9 @@ int	init_plane(char **tmp, t_canvas *canvas, int count)
 		canvas->obj->pl[idx].norm.x = ft_strtod(tmp[4]);
 		canvas->obj->pl[idx].norm.y = ft_strtod(tmp[5]);
 		canvas->obj->pl[idx].norm.z = ft_strtod(tmp[6]);
+		canvas->obj->pl[idx].color[RED] = ft_strtod(tmp[7]);
+		canvas->obj->pl[idx].color[GREEN] = ft_strtod(tmp[8]);
+		canvas->obj->pl[idx].color[BLUE] = ft_strtod(tmp[9]);
 		idx++;
 	}
 	else

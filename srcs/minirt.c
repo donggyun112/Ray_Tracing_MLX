@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/01 17:19:11 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/01 19:53:28 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,7 @@ int	main(int argc, char *argv[])
 	t_camera	cam;
 
 	(void)argc;
-	(void)argv;
-	// canvas = parse(argv);
-	canvas = tmp_parse();
+	canvas = parse(argv);
 	cam = camera(canvas);
 	view.mlx = mlx_init();
 	view.win = mlx_new_window(view.mlx, 1920, 1080, "miniRT");

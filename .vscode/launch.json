@@ -4,7 +4,7 @@
             "name": "(lldb) 시작",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${fileDirname}/a.out",
+            "program": "/Users/jinhyeop/Desktop/project/minirt/minirt",
             "args": [
 				"../test.rt"
 			],

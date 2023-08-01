@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/07/31 15:51:22 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/01 19:54:14 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # define CY 2
 
 //parse
-// t_canvas	parse(char *av[]);
+t_canvas	parse(char *av[]);
 
 //utils
 
@@ -50,9 +50,6 @@ void		hit_sphere(t_ray3 *ray, t_sphere *sp);
 //raycasting
 t_ray3		create_ray(t_camera cam, double u, double v);
 t_camera	camera(t_canvas canvas);
-
-//tmp_parse
-t_canvas	tmp_parse(void);
 
 //my_hit_sphere
 double		my_hit_sphere(t_ray3 *ray, t_sphere *sphere);

@@ -19,7 +19,7 @@ int	init_view(char **tmp, t_canvas *canvas, int count)
 	{
 		canvas->width = ft_strtod(tmp[1]);
 		canvas->height = ft_strtod(tmp[2]);
-		canvas->ratio = canvas->width / canvas->height;
+		canvas->ratio = (double)canvas->width / (double)canvas->height;
 	}
 	else if (count == 4 && !ft_strcmp(tmp[0], "A"))
 	{
@@ -228,18 +228,3 @@ t_canvas	parse(char *av[])
 	}
 	return (data);
 }
-
-void	leaks()
-{
-	system("leaks a.out");
-}
-
-int main(int ac, char *av[])
-{
-	(void)ac;
-	parse(av);
-	int a = 3;
-	atexit(leaks);
-	return (0);
-}
-

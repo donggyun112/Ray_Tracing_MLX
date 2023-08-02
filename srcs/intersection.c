@@ -49,6 +49,14 @@ int	hit_line_sphere(t_ray3 *ray, t_sphere *sp)
 	return (1);
 }
 
+double distance_a(t_vec3 a, t_vec3 b) {
+    double dx = a.x - b.x;
+    double dy = a.y - b.y;
+    double dz = a.z - b.z;
+    return sqrt(dx*dx + dy*dy + dz*dz);
+}
+
+
 double	intersect_sphere_shadow(t_ray3 *ray, t_canvas canvas)
 {
 	t_vec3	p;
@@ -57,6 +65,7 @@ double	intersect_sphere_shadow(t_ray3 *ray, t_canvas canvas)
 	int		i;
 	int		j;
 	double	count;
+	double	dis;
 
 	i = 0;
 	j = 0;
@@ -75,13 +84,16 @@ double	intersect_sphere_shadow(t_ray3 *ray, t_canvas canvas)
 		{
 			if (hit_line_sphere(&light, &canvas.obj->sp[i]))
 			{
-				count++;
+				dis = distance_a(light.origin, canvas.obj->sp[i].center);
+				count += 1.0 / (dis * dis);
 				break ;
 			}
 			i++;
 		}
 		j++;
 	}
+	if (count == 0)
+		return (0.0);
 	return ((double)count / 5);
 }
 
@@ -89,6 +101,8 @@ void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 {
 	double	tmp;
 	double	scalar[3];
+	double	ll;
+	double	dist;
 	
 
 	(void)canvas;
@@ -101,12 +115,18 @@ void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 		ray->t = tmp;
 		ray->type = PL;
 		ray->obj = (void *)pl;
-		if (intersect_sphere_shadow(ray, canvas))
+		ll = intersect_sphere_shadow(ray, canvas);
+		if (ll)
 		{
+			dist = distance_a(ray->origin, canvas.light_orig);
 			ray->type = 111;
 			ray->color[RED] = 100;
 			ray->color[GREEN] = 100;
 			ray->color[BLUE] = 100;
+			ray->color[RED] -= 100 * (double)(ll * dist);
+			ray->color[GREEN] -= 100 * (double)(ll * dist);
+			ray->color[BLUE] -= 100 * (double)(ll * dist);
 		}
 	}
 }
+

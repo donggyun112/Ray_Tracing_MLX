@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/01 21:59:06 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/02 10:49:48 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	intersection(t_ray3 *ray, t_volume *obj)
 	}
 }
 
-double	test_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas)
+double	cos_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas)
 {
 	t_vec3	normal;
 	t_vec3	light;
@@ -39,8 +39,21 @@ double	test_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas)
 
 	hit = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
 	normal = norm_vec(sub_vector(hit, sp->center));
-	light = norm_vec(sub_vector(canvas.light_orig, sp->center));
+	light = norm_vec(sub_vector(canvas.light_orig, hit));
 	angle = scalar_product(normal, light);
+	angle = (angle + 1.0) / 2.0;
+	return (angle);
+}
+
+double	cos_pl(t_plane *pl, t_ray3 *ray, t_canvas canvas)
+{
+	t_vec3	hit;
+	t_vec3	light;
+	double	angle;
+
+	hit = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
+	light = norm_vec(sub_vector(canvas.light_orig, hit));
+	angle = scalar_product(pl->norm, light);
 	angle = (angle + 1.0) / 2.0;
 	return (angle);
 }
@@ -49,12 +62,18 @@ void	color_cal(t_view *view, t_canvas canvas, t_ray3 *ray, int pix[])
 {
 	double	angle;
 
-	(void)canvas;
-	(void)ray;
 	if (ray->t > 0.0)
 	{
-		angle = test_sp(ray->obj, ray, canvas);
-		my_mlx_pixel_put(view, pix[0], pix[1], 0x0000FF00 + 0x000000FF * angle);
+		if (ray->type == SP)
+			angle = cos_sp(ray->obj, ray, canvas);
+		else if (ray->type == PL)
+			angle = cos_pl(ray->obj, ray, canvas);
+		else
+			angle = -1.0;
+		if (angle > 0.999)
+			my_mlx_pixel_put(view, pix[0], pix[1], 0x00FFFFFF);
+		else
+			my_mlx_pixel_put(view, pix[0], pix[1], 0x0000FF00 + 0x000000FF * angle);
 	}
 	else
 		my_mlx_pixel_put(view, pix[0], pix[1], 0x00FFFFFF);
@@ -82,18 +101,6 @@ void	make_image(t_view *view, t_canvas canvas, t_camera cam)
 		}
 		pix[1]++;
 	}
-	/*
-	for (int i = 0; i < canvas.height; i++)
-	{
-		for (int j = 0; j < canvas.width; j++)
-		{
-			u,v값을 i,j에 맞게 변환
-			ray = create_ray();
-			intersection(&ray, canvas.volume);
-			color_cal(view, canvas, &ray);	-> my_pixel_put_mlx()
-		}
-	}
-	*/
 }
 
 int	main(int argc, char *argv[])

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/02 10:49:48 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/03 00:54:51 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-void	intersection(t_ray3 *ray, t_volume *obj)
+void	intersection(t_ray3 *ray, t_volume *obj, t_canvas canvas)
 {
 	int	idx;
 
@@ -25,7 +25,7 @@ void	intersection(t_ray3 *ray, t_volume *obj)
 	idx = 0;
 	while (idx < obj->pl_cnt)
 	{
-		hit_plane(ray, &obj->pl[idx]);
+		hit_plane(ray, &obj->pl[idx], canvas);
 		idx++;
 	}
 }
@@ -63,7 +63,7 @@ void	color_cal(t_view *view, t_canvas canvas, t_ray3 *ray, int pix[])
 	double	angle;
 
 	if (ray->t > 0.0)
-	{
+	{	
 		if (ray->type == SP)
 			angle = cos_sp(ray->obj, ray, canvas);
 		else if (ray->type == PL)
@@ -72,8 +72,14 @@ void	color_cal(t_view *view, t_canvas canvas, t_ray3 *ray, int pix[])
 			angle = -1.0;
 		if (angle > 0.999)
 			my_mlx_pixel_put(view, pix[0], pix[1], 0x00FFFFFF);
+		else if (ray->type ==  PL && ray->color[RED] == 100 && ray->color[BLUE] == 100)
+		{
+			my_mlx_pixel_put(view, pix[0], pix[1], 0x00000000);
+		}
 		else
+		{
 			my_mlx_pixel_put(view, pix[0], pix[1], 0x0000FF00 + 0x000000FF * angle);
+		}
 	}
 	else
 		my_mlx_pixel_put(view, pix[0], pix[1], 0x00FFFFFF);
@@ -95,7 +101,7 @@ void	make_image(t_view *view, t_canvas canvas, t_camera cam)
 			vp_idx[0] = canvas.ratio * 2.0 * (double)pix[0] \
 				/ (double)canvas.width;
 			ray = create_ray(cam, vp_idx[0], vp_idx[1]);
-			intersection(&ray, canvas.obj);
+			intersection(&ray, canvas.obj, canvas);
 			color_cal(view, canvas, &ray, pix); // put pixel info in this fn
 			pix[0]++;
 		}

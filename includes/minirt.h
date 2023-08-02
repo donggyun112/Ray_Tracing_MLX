@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/01 23:48:18 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/03 00:49:54 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int			rgb_to_int(int color[]);
 
 //intersection
 void		hit_sphere(t_ray3 *ray, t_sphere *sp);
-void		hit_plane(t_ray3 *ray, t_plane *pl);
+void		hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas);
 
 //raycasting
 t_ray3		create_ray(t_camera cam, double u, double v);

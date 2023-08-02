@@ -163,12 +163,10 @@ void	free_split(char **tmp)
 void	ft_obj_count(char **av, t_volume *volume)
 {
 	int		fd;
-	int		count;
 	char	*line;
 	char	**tmp;
 
 	fd = open(av[1], O_RDONLY);
-	count = 0;
 	while (1)
 	{
 		line = get_next_line(fd);

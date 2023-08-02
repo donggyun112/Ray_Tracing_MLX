@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/03 00:54:51 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/08/03 02:09:13 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,10 @@ int	main(int argc, char *argv[])
 	view.img = mlx_new_image(view.mlx, 1920, 1080);
 	view.addr = mlx_get_data_addr(view.img, &view.bits_per_pixel, \
 		&view.line_length, &view.endian);
+	canvas.obj->sp->color[RED] = 100;
+	canvas.obj->sp->color[GREEN] = 100;
+	canvas.obj->sp->color[BLUE] = 100;
+	printf ("%d\n,", rgb_to_int(canvas.obj->sp->color));
 	make_image(&view, canvas, cam); // viewport를 향해서 반복문 사용하여 ray 발사
 	mlx_put_image_to_window(view.mlx, view.win, view.img, 0, 0);
 	mlx_hook(view.win, 17, 1L << 5, win_destroy, &view);

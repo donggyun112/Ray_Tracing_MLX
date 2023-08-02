@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/01 21:38:59 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/03 02:08:16 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,9 @@ typedef struct s_plane
 
 typedef struct s_sphere
 {
-	t_vec3	center;
-	double	radius;
-	double	color[3];
+	t_vec3			center;
+	double			radius;
+	unsigned char	color[3];
 }	t_sphere;
 
 typedef struct s_cylinder

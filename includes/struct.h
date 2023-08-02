@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/07/31 18:59:47 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/01 21:38:59 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef struct s_plane
 {
 	t_vec3	on_plane;
 	t_vec3	norm;
+	int		color[3];
 }	t_plane;
 
 typedef struct s_sphere

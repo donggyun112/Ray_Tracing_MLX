@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/03 02:07:51 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/08/03 03:08:47 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int			key_hook(int keycode, t_view *view);
 void		my_mlx_pixel_put(t_view *mlx, int x, int y, unsigned int color);
 int			rgb_to_int(unsigned char color[]);
 double 		my_rand_double();
+double		my_rand_double_range(double min, double max);
 int 		my_rand();
 
 //intersection

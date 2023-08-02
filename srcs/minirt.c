@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/03 02:09:13 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/08/03 02:36:54 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,9 @@ void	color_cal(t_view *view, t_canvas canvas, t_ray3 *ray, int pix[])
 			angle = -1.0;
 		if (angle > 0.999)
 			my_mlx_pixel_put(view, pix[0], pix[1], 0x00FFFFFF);
-		else if (ray->type ==  PL && ray->color[RED] == 100 && ray->color[BLUE] == 100)
+		else if (ray->type ==  111)
 		{
-			my_mlx_pixel_put(view, pix[0], pix[1], 0x00000000);
+			my_mlx_pixel_put(view, pix[0], pix[1], rgb_to_int(ray->color));
 		}
 		else
 		{

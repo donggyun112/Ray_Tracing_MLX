@@ -49,39 +49,40 @@ int	hit_line_sphere(t_ray3 *ray, t_sphere *sp)
 	return (1);
 }
 
-int	intersect_sphere_shadow(t_ray3 *ray, t_canvas canvas)
+double	intersect_sphere_shadow(t_ray3 *ray, t_canvas canvas)
 {
 	t_vec3	p;
 	t_vec3	g_norm;
 	t_ray3	light;
 	int		i;
 	int		j;
-	int		num_light = 10;
-	int		shadow_count = 0;
+	double	count;
 
 	i = 0;
 	j = 0;
+	count = 0;
 	p = multiple_vector(ray->t, ray->dir);
-	g_norm = norm_vec(sub_vector(canvas.light_orig, p));
-	light.dir = g_norm;
-	light.origin = p;
-	while (j < num_light)
+	while (j < 5)
 	{
 		i = 0;
-		light.origin.x += (double)my_rand_double() - 0.5;
-        light.origin.y += (double)my_rand_double() - 0.5;
-        light.origin.z += (double)my_rand_double() - 0.5;
+		p.x += my_rand_double_range(-0.3, 0.1);
+		p.y += my_rand_double_range(-0.3, 0.1);
+		p.z += my_rand_double_range(-0.3, 0.1);
+		g_norm = norm_vec(sub_vector(canvas.light_orig, p));
+		light.dir = g_norm;
+		light.origin = p;
 		while (i < canvas.obj->sp_cnt)
 		{
 			if (hit_line_sphere(&light, &canvas.obj->sp[i]))
 			{
-				shadow_count++;
-				break;
+				count++;
+				break ;
 			}
+			i++;
 		}
 		j++;
 	}
-	return (shadow_count / num_light);
+	return ((double)count / 5);
 }
 
 void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
@@ -102,6 +103,7 @@ void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 		ray->obj = (void *)pl;
 		if (intersect_sphere_shadow(ray, canvas))
 		{
+			ray->type = 111;
 			ray->color[RED] = 100;
 			ray->color[GREEN] = 100;
 			ray->color[BLUE] = 100;

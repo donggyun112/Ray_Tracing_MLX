@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/03 02:14:44 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/08/03 03:08:42 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,6 @@ int rgb_to_int(unsigned char color[])
 	| color[BLUE]);
 }
 
-
- // 이 값을 변경하여 다른 난수 시퀀스를 얻을 수 있습니다.
-
-// 이 함수는 0부터 RAND_MAX까지의 난수를 반환합니다.
 int my_rand()
 {
 	static unsigned long seed = 123456789;
@@ -60,4 +56,9 @@ int my_rand()
 double my_rand_double()
 {
 	return ((double)my_rand() / 2147483648);
+}
+
+double my_rand_double_range(double min, double max)
+{
+	return min + (max - min) * my_rand_double();
 }

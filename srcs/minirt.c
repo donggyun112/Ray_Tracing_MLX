@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/03 03:36:08 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/08/03 18:59:25 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	color_cal(t_view *view, t_canvas canvas, t_ray3 *ray, int pix[])
 			angle = -1.0;
 		if (angle > 0.999)
 			my_mlx_pixel_put(view, pix[0], pix[1], 0x00FFFFFF);
-		else if (ray->type ==  111)
+		else if (ray->type ==  111 && ray->color[RED] != 255)
 		{
 			my_mlx_pixel_put(view, pix[0], pix[1], rgb_to_int(ray->color));
 		}

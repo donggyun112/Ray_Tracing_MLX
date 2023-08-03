@@ -57,45 +57,48 @@ double distance_a(t_vec3 a, t_vec3 b) {
 }
 
 
-double	intersect_sphere_shadow(t_ray3 *ray, t_canvas canvas)
+double	intersect_sphere_shadow(t_ray3 *ray, t_canvas canvas, int num_of_light)
 {
 	t_vec3	p;
 	t_vec3	g_norm;
+	t_vec3	sh;
 	t_ray3	light;
-	int		i;
-	int		j;
+	int		idx[2];
 	double	count;
-	double	dis;
 
-	i = 0;
-	j = 0;
+	idx[0] = -1;
 	count = 0;
 	p = multiple_vector(ray->t, ray->dir);
-	while (j < 5)
+	sh = p;
+	while (++idx[0] < num_of_light)
 	{
-		i = 0;
-		p.x += my_rand_double_range(-0.3, 0.1);
-		p.y += my_rand_double_range(-0.3, 0.1);
-		p.z += my_rand_double_range(-0.3, 0.1);
+		idx[1] = -1;
+		p.x += my_rand_double_range(-0.3, 0.3);
+		p.y += my_rand_double_range(-0.3, 0.3);
+		p.z += my_rand_double_range(-0.3, 0.3);
 		g_norm = norm_vec(sub_vector(canvas.light_orig, p));
 		light.dir = g_norm;
 		light.origin = p;
-		while (i < canvas.obj->sp_cnt)
+		while (++idx[1] < canvas.obj->sp_cnt)
 		{
-			if (hit_line_sphere(&light, &canvas.obj->sp[i]))
+			if (hit_line_sphere(&light, &canvas.obj->sp[idx[1]]))
 			{
-				dis = distance_a(light.origin, canvas.obj->sp[i].center);
-				count += 1.0 / (dis * dis);
+				count++;
 				break ;
 			}
-			i++;
 		}
-		j++;
+		p = sh;
 	}
 	if (count == 0)
 		return (0.0);
-	return ((double)count / 5);
+	return ((double)count / num_of_light);
 }
+
+double mapToRange(double value, double minInput, double maxInput, double minOutput, double maxOutput)
+{
+	return (((value - minInput) / (maxInput - minInput)) * (maxOutput - minOutput) + minOutput);
+}
+
 
 void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 {
@@ -115,17 +118,18 @@ void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 		ray->t = tmp;
 		ray->type = PL;
 		ray->obj = (void *)pl;
-		ll = intersect_sphere_shadow(ray, canvas);
+		ll = intersect_sphere_shadow(ray, canvas, 200); // 그림자 개수 --> 안티엘리어싱
 		if (ll)
 		{
 			dist = distance_a(ray->origin, canvas.light_orig);
+			dist = mapToRange(dist, 0, 100, 1.0, 1.5);
 			ray->type = 111;
-			ray->color[RED] = 100;
-			ray->color[GREEN] = 100;
-			ray->color[BLUE] = 100;
-			ray->color[RED] -= 100 * (double)(ll * dist);
-			ray->color[GREEN] -= 100 * (double)(ll * dist);
-			ray->color[BLUE] -= 100 * (double)(ll * dist);
+			ray->color[RED] = 120;
+			ray->color[GREEN] = 120;
+			ray->color[BLUE] = 120;
+			ray->color[RED] -= 80 * (double)(ll * dist);
+			ray->color[GREEN] -= 80 * (double)(ll * dist);
+			ray->color[BLUE] -= 80 * (double)(ll * dist);
 		}
 	}
 }

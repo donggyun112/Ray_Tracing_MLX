@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/03 03:08:42 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/08/04 04:37:13 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	my_mlx_pixel_put(t_view *mlx, int x, int y, unsigned int color)
 	*(unsigned int *)dst = color;
 }
 
-int rgb_to_int(unsigned char color[])
+int rgb_to_int(int color[])
 {
 	return ((color[RED] << 16) | (color[GREEN] << 8) \
 	| color[BLUE]);

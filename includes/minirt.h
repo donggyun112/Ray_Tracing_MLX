@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/03 03:08:47 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/08/04 04:37:43 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # define PL 0
 # define SP 1
 # define CY 2
+# define SHADOW 100
 
 //parse
 t_canvas	parse(char *av[]);
@@ -41,7 +42,7 @@ t_canvas	parse(char *av[]);
 int			win_destroy(t_view *view);
 int			key_hook(int keycode, t_view *view);
 void		my_mlx_pixel_put(t_view *mlx, int x, int y, unsigned int color);
-int			rgb_to_int(unsigned char color[]);
+int			rgb_to_int(int color[]);
 double 		my_rand_double();
 double		my_rand_double_range(double min, double max);
 int 		my_rand();
@@ -54,5 +55,11 @@ void		hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas);
 t_ray3		create_ray(t_camera cam, double u, double v);
 t_camera	camera(t_canvas canvas);
 
+//minirt
+double		cos_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas);
+double		cos_pl(t_plane *pl, t_ray3 *ray, t_canvas canvas);
+
+//color
+void		ray_color(t_canvas canvas, t_ray3 *ray);
 
 #endif

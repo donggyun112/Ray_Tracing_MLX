@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/03 18:59:25 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/04 02:58:44 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ double	cos_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas)
 	normal = norm_vec(sub_vector(hit, sp->center));
 	light = norm_vec(sub_vector(canvas.light_orig, hit));
 	angle = scalar_product(normal, light);
-	angle = (angle + 1.0) / 2.0;
+	if (angle < 0.0)
+		return (0.0);
 	return (angle);
 }
 
@@ -54,25 +55,20 @@ double	cos_pl(t_plane *pl, t_ray3 *ray, t_canvas canvas)
 	hit = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
 	light = norm_vec(sub_vector(canvas.light_orig, hit));
 	angle = scalar_product(pl->norm, light);
-	angle = (angle + 1.0) / 2.0;
+	if (angle < 0.0)
+		return (0.0);
 	return (angle);
 }
 
 void	color_cal(t_view *view, t_canvas canvas, t_ray3 *ray, int pix[])
 {
-	double	angle;
-
 	if (ray->t > 0.0)
 	{	
-		if (ray->type == SP)
-			angle = cos_sp(ray->obj, ray, canvas);
-		else if (ray->type == PL)
-			angle = cos_pl(ray->obj, ray, canvas);
-		else
-			angle = -1.0;
-		if (angle > 0.999)
-			my_mlx_pixel_put(view, pix[0], pix[1], 0x00FFFFFF);
-		else if (ray->type ==  111 && ray->color[RED] != 255)
+		ray_color(canvas, ray);
+		my_mlx_pixel_put(view, pix[0], pix[1], rgb_to_int(ray->color));
+	}
+/*
+		if (ray->type == 111 && ray->color[RED] != 255)
 		{
 			my_mlx_pixel_put(view, pix[0], pix[1], rgb_to_int(ray->color));
 		}
@@ -80,7 +76,10 @@ void	color_cal(t_view *view, t_canvas canvas, t_ray3 *ray, int pix[])
 		{
 			my_mlx_pixel_put(view, pix[0], pix[1], 0x0000FF00 + 0x000000FF * angle);
 		}
+		if (angle > 0.999)
+			my_mlx_pixel_put(view, pix[0], pix[1], 0xAAFFFFFF);
 	}
+*/
 	else
 		my_mlx_pixel_put(view, pix[0], pix[1], 0x00FFFFFF);
 }

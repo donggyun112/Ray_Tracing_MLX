@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/03 02:08:16 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/08/04 04:36:43 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ typedef struct s_ray3
 	double			t;
 	int				type;
 	void			*obj;
-	unsigned char	color[3];
+	int				color[3];
 }	t_ray3;
 
 typedef struct s_camera
@@ -65,7 +65,7 @@ typedef struct s_sphere
 {
 	t_vec3			center;
 	double			radius;
-	unsigned char	color[3];
+	int				color[3];
 }	t_sphere;
 
 typedef struct s_cylinder
@@ -92,13 +92,13 @@ typedef struct s_canvas
 	int				height;
 	double			ratio;
 	double			amb_bright;
-	unsigned char	amb_col[3];
+	int				amb_col[3];
 	t_vec3			cam_orig;
 	t_vec3			cam_dir;
 	int				fov;
 	t_vec3			light_orig;
 	double			light_bright;
-	unsigned char	light_col[3];
+	int				light_col[3];
 	t_volume		*obj;
 }	t_canvas;
 

@@ -26,6 +26,9 @@ void	hit_sphere(t_ray3 *ray, t_sphere *sp)
 	if ((ray->t < 0.0 && tmp > 0.0) || (tmp > 0.0 && ray->t > tmp))
 	{
 		ray->t = tmp;
+		ray->color[RED] = sp->color[RED];
+		ray->color[GREEN] = sp->color[GREEN];
+		ray->color[BLUE] = sp->color[BLUE];
 		ray->type = SP;
 		ray->obj = (void *)sp;
 	}
@@ -117,12 +120,17 @@ void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 	{
 		ray->t = tmp;
 		ray->type = PL;
+		ray->color[RED] = pl->color[RED];
+		ray->color[GREEN] = pl->color[GREEN];
+		ray->color[BLUE] = pl->color[BLUE];
 		ray->obj = (void *)pl;
-		ll = intersect_sphere_shadow(ray, canvas, 200); // 그림자 개수 --> 안티엘리어싱
+		ll = intersect_sphere_shadow(ray, canvas, 10); // 그림자 개수 --> 안티엘리어싱
 		if (ll)
 		{
+			ray->type = SHADOW;
 			dist = distance_a(ray->origin, canvas.light_orig);
 			dist = mapToRange(dist, 0, 100, 1.0, 1.5);
+			/*
 			ray->type = 111;
 			ray->color[RED] = 120;
 			ray->color[GREEN] = 120;
@@ -130,6 +138,7 @@ void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 			ray->color[RED] -= 80 * (double)(ll * dist);
 			ray->color[GREEN] -= 80 * (double)(ll * dist);
 			ray->color[BLUE] -= 80 * (double)(ll * dist);
+			*/
 		}
 	}
 }

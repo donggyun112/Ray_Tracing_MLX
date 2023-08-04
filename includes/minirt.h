@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/04 04:37:43 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/04 18:25:37 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,11 @@ void		hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas);
 t_ray3		create_ray(t_camera cam, double u, double v);
 t_camera	camera(t_canvas canvas);
 
-//minirt
+//angle
 double		cos_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas);
 double		cos_pl(t_plane *pl, t_ray3 *ray, t_canvas canvas);
+double		ref_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas);
+double		ref_pl(t_plane *pl, t_ray3 *ray, t_canvas canvas);
 
 //color
 void		ray_color(t_canvas canvas, t_ray3 *ray);

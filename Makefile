@@ -6,7 +6,7 @@
 #    By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/02 15:17:44 by jinhyeop          #+#    #+#              #
-#    Updated: 2023/08/04 02:03:17 by jinhyeop         ###   ########.fr        #
+#    Updated: 2023/08/04 18:24:41 by jinhyeop         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ NAME = minirt
 
 MAN_DIR = ./srcs
 MAN_FILE = minirt.c mlx_utils.c intersection.c raycasting.c parse.c \
-		vector.c simple_vec_cal.c color.c
+		vector.c simple_vec_cal.c color.c angle.c
 BONUS_DIR = ./bonus
 BONUS_FILE = 
 MAN_SRCS = $(addprefix $(MAN_DIR)/, $(MAN_FILE))

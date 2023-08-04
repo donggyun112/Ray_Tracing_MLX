@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/04 14:30:57 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/05 01:24:40 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,8 +92,8 @@ int	main(int argc, char *argv[])
 	canvas = parse(argv);
 	cam = camera(canvas);
 	view.mlx = mlx_init();
-	view.win = mlx_new_window(view.mlx, 1920, 1080, "miniRT");
-	view.img = mlx_new_image(view.mlx, 1920, 1080);
+	view.win = mlx_new_window(view.mlx, canvas.width, canvas.height, "miniRT");
+	view.img = mlx_new_image(view.mlx, canvas.width, canvas.height);
 	view.addr = mlx_get_data_addr(view.img, &view.bits_per_pixel, \
 		&view.line_length, &view.endian);
 	make_image(&view, canvas, cam); // viewport를 향해서 반복문 사용하여 ray 발사

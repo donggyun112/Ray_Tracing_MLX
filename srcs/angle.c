@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 14:30:31 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/04 16:19:29 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/07 16:51:14 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ double	ref_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas)
 	light = norm_vec(sub_vector(canvas.light_orig, hit));
 	normal = norm_vec(sub_vector(hit, sp->center));
 	reflect = norm_vec(reflection(normal, light));
-	ret = scalar_product(norm_vec(sub_vector(ray->origin, hit)), reflect);
+	ret = scalar_product(norm_vec(sub_vector(ray->origin, hit)), norm_vec(reflect));
 	if (ret < 0.0)
 		ret = 0.0;
 	return (ret);

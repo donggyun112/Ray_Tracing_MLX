@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/04 04:36:43 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/07 17:27:31 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCT_H
 # define STRUCT_H
-
 
 
 typedef struct s_view
@@ -32,6 +31,12 @@ typedef struct s_vec3
 	double	y;
 	double	z;
 }	t_vec3;
+
+typedef struct s_aabb
+{
+	t_vec3	lowerbound;
+	t_vec3	upperbound;
+}	t_aabb;
 
 typedef struct s_ray3
 {
@@ -63,6 +68,7 @@ typedef struct s_plane
 
 typedef struct s_sphere
 {
+	t_aabb			box;
 	t_vec3			center;
 	double			radius;
 	int				color[3];
@@ -100,6 +106,12 @@ typedef struct s_canvas
 	double			light_bright;
 	int				light_col[3];
 	t_volume		*obj;
+	t_camera		cam;
 }	t_canvas;
+
+// bvh
+
+
+
 
 #endif

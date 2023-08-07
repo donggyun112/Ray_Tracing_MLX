@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/07 19:02:04 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/08 00:15:29 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,12 @@ void	intersection(t_ray3 *ray, t_volume *obj, t_canvas canvas)
 	while (idx < obj->pl_cnt)
 	{
 		hit_plane(ray, &obj->pl[idx], canvas);
+		idx++;
+	}
+	idx = 0;
+	while (idx < obj->cy_cnt)
+	{
+		hit_cylinder(ray, &obj->cy[idx], canvas);
 		idx++;
 	}
 }

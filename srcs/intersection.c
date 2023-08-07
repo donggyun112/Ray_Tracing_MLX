@@ -77,14 +77,14 @@ double	intersect_sphere_shadow(t_ray3 *ray, t_canvas canvas, int num_of_light)
 
 	idx[0] = -1;
 	count = 0;
-	p = multiple_vector(ray->t, ray->dir);
+	p = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
 	sh = p;
 	while (++idx[0] < num_of_light)
 	{
 		idx[1] = -1;
-		p.x += my_rand_double_range(-0.1, 0.1);
-		p.y += my_rand_double_range(-0.1, 0.1);
-		p.z += my_rand_double_range(-0.1, 0.1);
+		p.x += my_rand_double_range(0.0, 0.2);
+		p.y += my_rand_double_range(0.0, 0.2);
+		p.z += my_rand_double_range(0.0, 0.2);
 		g_norm = norm_vec(sub_vector(canvas.light_orig, p));
 		light.dir = g_norm;
 		light.origin = p;
@@ -138,12 +138,12 @@ void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 		if (ll)
 		{
 			ray->type = SHADOW;
-			dist = distance_a(ray->origin, canvas.light_orig);
-			dist = mapToRange(dist, 0, 10, 1.0, 1.3);
-			dist = mapToRange(dist * ll, 0, 1, 1.8, 1.0);
-			ray->color[RED] *= dist;
-			ray->color[GREEN] *= dist;
-			ray->color[BLUE] *= dist;
+			dist = distance_a(add_vector(ray->origin, multiple_vector(ray->t, ray->dir)), canvas.light_orig);
+			dist = mapToRange(dist, 0, 10, 0.5, 1.0);
+			ll = mapToRange(ll, 0.0, 1.0, 1.0, 0.5);
+			ray->color[RED] *= dist * ll;
+			ray->color[GREEN] *= dist * ll;
+			ray->color[BLUE] *= dist * ll;
 		}
 	}
 }

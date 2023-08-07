@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 00:50:37 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/04 16:35:34 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/07 16:57:19 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	phong_light(t_canvas canvas, t_ray3 *ray, double angle, int idx)
 
 	(void)ray;
 	ret = (double)canvas.light_col[idx] * canvas.light_bright \
-		* pow(angle, 0.95);
+		* pow(angle, 30);
 	// printf("%lf\n", pow((angle), (double)ray->color[idx] / 255.0));
 	return (ret);
 }
@@ -51,6 +51,8 @@ int	add_color(t_canvas canvas, t_ray3 *ray, double *angle, int idx)
 		// color = color + phong_light(canvas, ray, angle[1], idx);
 	if (color > 255)
 		color = 255;
+	// if (idx == GREEN)
+		// printf("%d\n", color);
 	return (color);
 }
 
@@ -76,4 +78,5 @@ void	ray_color(t_canvas canvas, t_ray3 *ray)
 	ray->color[RED] = add_color(canvas, ray, angle, RED);
 	ray->color[GREEN] = add_color(canvas, ray, angle, GREEN);
 	ray->color[BLUE] = add_color(canvas, ray, angle, BLUE);
+	// printf("red:%d, green:%d, blue:%d\n";, ray->color[RED], ray->color[GREEN], ray->color[BLUE]);
 }

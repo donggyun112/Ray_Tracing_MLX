@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 14:30:31 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/07 16:51:14 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/09 17:16:27 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ double	cos_pl(t_plane *pl, t_ray3 *ray, t_canvas canvas)
 	light = norm_vec(sub_vector(canvas.light_orig, hit));
 	angle = scalar_product(pl->norm, light);
 	if (angle < 0.0)
-		return (0.0);
+		return (-1.0 * angle);
 	return (angle);
 }
 

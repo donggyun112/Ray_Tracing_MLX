@@ -162,6 +162,13 @@ int	cy_in_range(t_ray3 *ray, double t, t_cylinder *cy)
 	return (1);
 }
 
+void	hit_cylinder_cap(t_ray3 *ray, t_cylinder *cy, t_canvas canvas)
+{
+	(void)ray;
+	(void)cy;
+	(void)canvas;
+}
+
 void	hit_cylinder(t_ray3 *ray, t_cylinder *cy, t_canvas canvas)
 {
 	t_vec3	oc;

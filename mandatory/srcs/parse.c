@@ -99,14 +99,19 @@ int	init_cylinder(char **tmp, t_canvas *canvas, int count)
 {
 	static int	idx;
 
-	if (count == 7 && !ft_strcmp(tmp[0], "cy"))
+	if (count == 11 && !ft_strcmp(tmp[0], "cy"))
 	{
-		canvas->obj->pl[idx].on_plane.x = ft_strtod(tmp[1]);
-		canvas->obj->pl[idx].on_plane.y = ft_strtod(tmp[2]);
-		canvas->obj->pl[idx].on_plane.z = ft_strtod(tmp[3]);
-		canvas->obj->pl[idx].norm.x = ft_strtod(tmp[4]);
-		canvas->obj->pl[idx].norm.y = ft_strtod(tmp[5]);
-		canvas->obj->pl[idx].norm.z = ft_strtod(tmp[6]);
+		canvas->obj->cy[idx].center.x = ft_strtod(tmp[1]);
+		canvas->obj->cy[idx].center.y = ft_strtod(tmp[2]);
+		canvas->obj->cy[idx].center.z = ft_strtod(tmp[3]);
+		canvas->obj->cy[idx].dir.x = ft_strtod(tmp[4]);
+		canvas->obj->cy[idx].dir.y = ft_strtod(tmp[5]);
+		canvas->obj->cy[idx].dir.z = ft_strtod(tmp[6]);
+		canvas->obj->cy[idx].radius = ft_strtod(tmp[7]);
+		canvas->obj->cy[idx].height = ft_strtod(tmp[8]);
+		canvas->obj->cy[idx].color[RED] = ft_strtod(tmp[9]);
+		canvas->obj->cy[idx].color[GREEN] = ft_strtod(tmp[10]);
+		canvas->obj->cy[idx].color[BLUE] = ft_strtod(tmp[11]);
 		idx++;
 	}
 	else

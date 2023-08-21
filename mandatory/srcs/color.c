@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 00:50:37 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/07 16:57:19 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/09 16:45:30 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	phong_light(t_canvas canvas, t_ray3 *ray, double angle, int idx)
 
 	(void)ray;
 	ret = (double)canvas.light_col[idx] * canvas.light_bright \
-		* pow(angle, 30);
+		* pow(angle, 20);
 	// printf("%lf\n", pow((angle), (double)ray->color[idx] / 255.0));
 	return (ret);
 }

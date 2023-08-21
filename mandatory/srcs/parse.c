@@ -12,15 +12,17 @@ int	ft_strcmp(char *s1, char *s2)
 	return (0);
 }
 
+void	init_view2(t_canvas *canvas, char **tmp)
+{
+	canvas->width = ft_strtod(tmp[1]);
+	canvas->height = ft_strtod(tmp[2]);
+	canvas->ratio = (double)canvas->width / (double)canvas->height;
+}
 
 int	init_view(char **tmp, t_canvas *canvas, int count)
 {
 	if (count == 2 && !ft_strcmp(tmp[0], "R"))
-	{
-		canvas->width = ft_strtod(tmp[1]);
-		canvas->height = ft_strtod(tmp[2]);
-		canvas->ratio = (double)canvas->width / (double)canvas->height;
-	}
+		init_view2(canvas, tmp);
 	else if (count == 4 && !ft_strcmp(tmp[0], "A"))
 	{
 		canvas->amb_bright = ft_strtod(tmp[1]);

@@ -1,6 +1,30 @@
 #include "../includes/minirt.h"
 #include <stdio.h> //remove
 
+typedef	struct Color
+{
+	int	r;
+	int	g;
+	int	b;
+} Color;
+
+
+
+Color checkerTexture(t_vec3 point, Color color1, Color color2, float scale) {
+    // 체커무늬 패턴의 크기를 조절하기 위해 scale을 사용
+    float s = scale;
+    int checkerX = (int)(point.x * s) % 2;
+    int checkerY = (int)(point.y * s) % 2;
+    int checkerZ = (int)(point.z * s) % 2;
+
+    // 3D 체커무늬 패턴을 생성
+    if ((checkerX + checkerY + checkerZ) % 2 == 0) {
+        return color1;
+    } else {
+        return color2;
+    }
+}
+
 void	hit_sphere(t_ray3 *ray, t_sphere *sp)
 {
 	t_vec3	l;
@@ -8,6 +32,8 @@ void	hit_sphere(t_ray3 *ray, t_sphere *sp)
 	double	tnc;
 	double	d2;
 	double	tmp;
+	Color	a = {255, 255, 255};
+	Color	b = {0, 0, 0};
 
 
 	// p = p0 + tV
@@ -30,6 +56,10 @@ void	hit_sphere(t_ray3 *ray, t_sphere *sp)
 		ray->color[GREEN] = sp->color[GREEN];
 		ray->color[BLUE] = sp->color[BLUE];
 		ray->type = SP;
+		Color c = checkerTexture(add_vector(ray->origin, multiple_vector(ray->t, ray->dir)), a, b, 10);
+		ray->color[RED] = c.r;
+		ray->color[GREEN] = c.g;
+		ray->color[BLUE] = c.b;
 		ray->obj = (void *)sp;
 	}
 }
@@ -113,12 +143,16 @@ double mapToRange(double value, double minInput, double maxInput, double minOutp
 }
 
 
+
+
 void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 {
 	double	tmp;
 	double	scalar[3];
 	double	ll;
 	double	dist;
+	Color	a = {255, 255, 255};
+	Color	b = {0, 0, 0};
 	
 
 	(void)canvas;
@@ -134,7 +168,12 @@ void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 		ray->color[GREEN] = pl->color[GREEN];
 		ray->color[BLUE] = pl->color[BLUE];
 		ray->obj = (void *)pl;
-		ll = intersect_sphere_shadow(ray, canvas, 100); // 그림자 개수 --> 안티엘리어싱
+
+		Color c = checkerTexture(add_vector(ray->origin, multiple_vector(ray->t, ray->dir)), a, b, 1);
+		ray->color[RED] = c.r;
+		ray->color[GREEN] = c.g;
+		ray->color[BLUE] = c.b;
+		ll = intersect_sphere_shadow(ray, canvas, 10); // 그림자 개수 --> 안티엘리어싱
 		if (ll)
 		{
 			ray->type = SHADOW;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/08 00:15:29 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/21 17:46:35 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,11 +77,36 @@ void	make_image(t_view *view, t_canvas canvas, t_camera cam)
 				/ (double)canvas.width;
 			ray = create_ray(cam, vp_idx[0], vp_idx[1]);
 			intersection(&ray, canvas.obj, canvas);
-			color_cal(view, canvas, &ray, pix); // put pixel info in this fn
+			color_cal(view, canvas, &ray, pix);
 			pix[0]++;
 		}
 		pix[1]++;
 	}
+}
+
+int	is_valid_file_type(char *file_path)
+{
+	char	**path;
+	int		answer;
+	int		i;
+
+	answer = 0;
+	i = 0;
+	path = ft_split(file_path, ".");
+	if (!path)
+		return (0);
+	while (path[i] != 0)
+		i++;
+	if (ft_strncmp(path[i - 1], "rt", 2) == 0)
+		answer = 1;
+	i = 0;
+	while (path[i])
+	{
+		free(path[i]);
+		i++;
+	}
+	free(path);
+	return (answer);
 }
 
 int	main(int argc, char *argv[])
@@ -90,7 +115,7 @@ int	main(int argc, char *argv[])
 	t_canvas	canvas;
 	t_camera	cam;
 
-	if (argc != 2)
+	if (argc != 2 || !is_valid_file_type(argv[1]))
 	{
 		printf("Error\nInput mapfile(*.rt) as argument\n");
 		return (1);

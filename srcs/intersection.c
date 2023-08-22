@@ -9,6 +9,12 @@ typedef	struct Color
 } Color;
 
 
+typedef struct {
+    Color color_a;
+    Color color_b;
+    int width;
+    int height;
+} CheckerPattern;
 
 Color checkerTexture(t_vec3 point, Color color1, Color color2, float scale) {
     // 체커무늬 패턴의 크기를 조절하기 위해 scale을 사용
@@ -25,6 +31,33 @@ Color checkerTexture(t_vec3 point, Color color1, Color color2, float scale) {
     }
 }
 
+void spherical_map(t_vec3 p, float* u, float* v) {
+    float theta = atan2f(p.z, p.x);
+    float vecMagnitude = sqrtf(p.x * p.x + p.y * p.y + p.z * p.z);
+    float phi = acosf(p.y / vecMagnitude);
+
+    float raw_u = theta / (2.0f * M_PI);
+    *u = 1.0f - (raw_u + 0.5f);
+    *v = 1.0f - phi / M_PI;
+}
+
+Color uv_pattern_at(CheckerPattern pattern, float u, float v) {
+    int u2 = (int)(u * pattern.width);
+    int v2 = (int)(v * pattern.height);
+
+    if ((u2 + v2) % 2 == 0) {
+        return pattern.color_a;
+    } else {
+        return pattern.color_b;
+    }
+}
+
+Color checkerTextureOnSphere(t_vec3 point, CheckerPattern pattern) {
+    float u, v;
+    spherical_map(point, &u, &v);
+    return uv_pattern_at(pattern, u, v);
+}
+
 void	hit_sphere(t_ray3 *ray, t_sphere *sp)
 {
 	t_vec3	l;
@@ -32,8 +65,10 @@ void	hit_sphere(t_ray3 *ray, t_sphere *sp)
 	double	tnc;
 	double	d2;
 	double	tmp;
-	Color	a = {255, 255, 255};
-	Color	b = {0, 0, 0};
+	// Color	a = {255, 255, 255};
+	// Color	b = {0, 0, 0};
+    CheckerPattern pattern = {{255, 255, 255}, {0, 0, 0}, 200, 100};
+
 
 
 	// p = p0 + tV
@@ -56,7 +91,7 @@ void	hit_sphere(t_ray3 *ray, t_sphere *sp)
 		ray->color[GREEN] = sp->color[GREEN];
 		ray->color[BLUE] = sp->color[BLUE];
 		ray->type = SP;
-		Color c = checkerTexture(add_vector(ray->origin, multiple_vector(ray->t, ray->dir)), a, b, 10);
+		Color c = checkerTextureOnSphere(add_vector(ray->origin, multiple_vector(ray->t, ray->dir)), pattern);
 		ray->color[RED] = c.r;
 		ray->color[GREEN] = c.g;
 		ray->color[BLUE] = c.b;

@@ -39,6 +39,7 @@ int	init_view(char **tmp, t_canvas *canvas, int count)
 		canvas->cam_dir.y = ft_strtod(tmp[5]);
 		canvas->cam_dir.z = ft_strtod(tmp[6]);
 		canvas->fov = ft_strtod(tmp[7]);
+		canvas->cam_dir = norm_vec(canvas->cam_dir);
 	}
 	else
 		return (-1);
@@ -70,6 +71,7 @@ int	init_plane(char **tmp, t_canvas *canvas, int count)
 		canvas->obj->pl[idx].color[RED] = ft_strtod(tmp[7]);
 		canvas->obj->pl[idx].color[GREEN] = ft_strtod(tmp[8]);
 		canvas->obj->pl[idx].color[BLUE] = ft_strtod(tmp[9]);
+		canvas->obj->pl[idx].norm = norm_vec(canvas->obj->pl[idx].norm);
 		idx++;
 	}
 	else
@@ -114,6 +116,7 @@ int	init_cylinder(char **tmp, t_canvas *canvas, int count)
 		canvas->obj->cy[idx].color[RED] = ft_strtod(tmp[9]);
 		canvas->obj->cy[idx].color[GREEN] = ft_strtod(tmp[10]);
 		canvas->obj->cy[idx].color[BLUE] = ft_strtod(tmp[11]);
+		canvas->obj->cy[idx].dir = norm_vec(canvas->obj->cy[idx].dir);
 		idx++;
 	}
 	else

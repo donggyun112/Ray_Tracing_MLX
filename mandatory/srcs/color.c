@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 00:50:37 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/09 16:45:30 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/23 05:11:14 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,9 @@ int	add_color(t_canvas canvas, t_ray3 *ray, double *angle, int idx)
 
 	color = amb_light(canvas, ray, idx);
 	if (ray->type != SHADOW)
-		color = color + diff_light(canvas, ray, angle[0], idx) + phong_light(canvas, ray, angle[1], idx);
-		// color = color + phong_light(canvas, ray, angle[1], idx);
+		color += diff_light(canvas, ray, angle[0], idx) + phong_light(canvas, ray, angle[1], idx);
+		// color += diff_light(canvas, ray, angle[0], idx);
+		// color += phong_light(canvas, ray, angle[1], idx);
 	if (color > 255)
 		color = 255;
 	// if (idx == GREEN)
@@ -65,10 +66,16 @@ void	ray_color(t_canvas canvas, t_ray3 *ray)
 		angle[0] = cos_sp(ray->obj, ray, canvas);
 		angle[1] = ref_sp(ray->obj, ray, canvas);
 	}
-	else if (ray-> type == PL)
+	else if (ray->type == PL)
 	{
 		angle[0] = cos_pl(ray->obj, ray, canvas);
 		angle[1] = ref_pl(ray->obj, ray, canvas);
+	}
+	else if (ray->type == CY)
+	{
+		angle[0] = cos_cy(ray->obj, ray, canvas);
+		angle[1] = ref_cy(ray->obj, ray, canvas);
+		// printf("diff: %lf, ref: %lf\n", angle[0], angle[1]);
 	}
 	else
 	{

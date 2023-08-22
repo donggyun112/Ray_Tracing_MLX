@@ -200,28 +200,3 @@ void	hit_cylinder(t_ray3 *ray, t_cylinder *cy, t_canvas canvas)
 			ray->type = SHADOW;
 	}
 }
-/*
-void hit_cylinder(t_ray3 *ray, t_cylinder *cy)
-{
-    t_vec3 oc = sub_vector(ray->origin, cyl->center);
-    double a = scalar_product(ray->dir, ray->dir) - pow(scalar_product(ray->dir, cyl->center), 2);
-    double b = 2.0 * (scalar_product(ray->dir, oc) - scalar_product(ray->dir, cyl->center) * scalar_product(oc, cyl->center));
-    double c = scalar_product(oc, oc) - pow(scalar_product(oc, cyl->center), 2) - cyl->radius * cyl->radius;
-    double discriminant = b*b - 4*a*c;
-    if (discriminant > 0) {
-        double t0 = (-b - sqrt(discriminant)) / (2.0*a);
-        double t1 = (-b + sqrt(discriminant)) / (2.0*a);
-        double y0 = ray->origin.y + t0 * ray->dir.y;
-        double y1 = ray->origin.y + t1 * ray->dir.y;
-        if (y0 > cyl->center.y && y0 < cyl->center.y + cyl->height) {
-            update_ray(ray, t0, cyl->color, CYLINDER, cyl);
-            return;
-        }
-        if (y1 > cyl->center.y && y1 < cyl->center.y + cyl->height) {
-            update_ray(ray, t1, cyl->color, CYLINDER, cyl);
-            return;
-        }
-    }
-    // 원기둥의 상단 및 하단 원과의 교차를 처리하는 코드는 여기에 추가될 수 있습니다.
-}
-*/

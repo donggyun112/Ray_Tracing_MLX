@@ -117,6 +117,8 @@ int	init_cylinder(char **tmp, t_canvas *canvas, int count)
 		canvas->obj->cy[idx].color[GREEN] = ft_strtod(tmp[10]);
 		canvas->obj->cy[idx].color[BLUE] = ft_strtod(tmp[11]);
 		canvas->obj->cy[idx].dir = norm_vec(canvas->obj->cy[idx].dir);
+		canvas->obj->cy[idx].ucap = NULL;
+		canvas->obj->cy[idx].lcap = NULL;
 		idx++;
 	}
 	else

@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 14:30:31 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/23 06:26:25 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/23 12:15:11 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ double	get_hit_height(t_cylinder *cy, t_vec3 hit)
 
 	center_to_hit = sub_vector(hit, cy->center);
 	dist = size_of_vec2(center_to_hit);
-	if (dist < 1.0)
-		dist = 1.0;
+	if (dist < cy->radius)
+		dist = cy->radius;
 	hit_height = sqrt(pow(dist, 2) - pow(cy->radius, 2));
 	if (scalar_product(center_to_hit, cy->dir) < 0.0)
 		return (-1.0 * hit_height);

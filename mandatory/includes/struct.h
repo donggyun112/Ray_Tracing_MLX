@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/07 20:52:59 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/23 12:08:34 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ typedef struct s_cylinder
 	double	radius;
 	double	height;
 	int		color[3];
+	t_plane	*ucap;
+	t_plane	*lcap;
 }	t_cylinder;
 
 typedef struct s_volume

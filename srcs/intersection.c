@@ -16,47 +16,57 @@ typedef struct {
     int height;
 } CheckerPattern;
 
-Color checkerTexture(t_vec3 point, Color color1, Color color2, float scale) {
+Color checkerTexture(t_vec3 point, float scale) {
     // 체커무늬 패턴의 크기를 조절하기 위해 scale을 사용
     float s = scale;
+	if (point.z < 0)
+		point.z -= 1;
     int checkerX = (int)(point.x * s) % 2;
     int checkerY = (int)(point.y * s) % 2;
     int checkerZ = (int)(point.z * s) % 2;
 
     // 3D 체커무늬 패턴을 생성
+
     if ((checkerX + checkerY + checkerZ) % 2 == 0) {
-        return color1;
+        return (Color){0, 0, 0};
     } else {
-        return color2;
+        return (Color){255, 255, 255};
     }
 }
 
-void spherical_map(t_vec3 p, float* u, float* v) {
-    float theta = atan2f(p.z, p.x);
-    float vecMagnitude = sqrtf(p.x * p.x + p.y * p.y + p.z * p.z);
-    float phi = acosf(p.y / vecMagnitude);
+void spherical_map(t_vec3 p, float* u, float* v, t_vec3 center)
+{
+    t_vec3 relative_point = {p.x - center.x, p.y - center.y, p.z - center.z};
+    
+    float theta = atan2f(relative_point.z, relative_point.x);
+    float vecMagnitude = sqrtf(relative_point.x * relative_point.x + relative_point.y * relative_point.y + relative_point.z * relative_point.z);
+    float phi = acosf(relative_point.y / vecMagnitude);
 
     float raw_u = theta / (2.0f * M_PI);
-    *u = 1.0f - (raw_u + 0.5f);
+    *u = (raw_u + 0.5f);
     *v = 1.0f - phi / M_PI;
 }
 
-Color uv_pattern_at(CheckerPattern pattern, float u, float v) {
-    int u2 = (int)(u * pattern.width);
-    int v2 = (int)(v * pattern.height);
+Color uv_grid_pattern_at(CheckerPattern pattern, float u, float v)
+{
+    const int u2 = (int)(u * pattern.width);
+    const int v2 = (int)(v * pattern.height);
 
-    if ((u2 + v2) % 2 == 0) {
-        return pattern.color_a;
-    } else {
-        return pattern.color_b;
-    }
+    if ((u2 + v2) % 2)
+        return (pattern.color_a);
+    else
+		return (pattern.color_b);
 }
 
-Color checkerTextureOnSphere(t_vec3 point, CheckerPattern pattern) {
-    float u, v;
-    spherical_map(point, &u, &v);
-    return uv_pattern_at(pattern, u, v);
+Color gridTextureOnSphere(t_vec3 point, CheckerPattern pattern, t_vec3 center)
+{
+	float u;
+	float v;
+
+	spherical_map(point, &u, &v, center);
+	return (uv_grid_pattern_at(pattern, u, v));
 }
+
 
 void	hit_sphere(t_ray3 *ray, t_sphere *sp)
 {
@@ -65,13 +75,10 @@ void	hit_sphere(t_ray3 *ray, t_sphere *sp)
 	double	tnc;
 	double	d2;
 	double	tmp;
-	// Color	a = {255, 255, 255};
-	// Color	b = {0, 0, 0};
-    CheckerPattern pattern = {{255, 255, 255}, {0, 0, 0}, 200, 100};
+    CheckerPattern pattern = {{255, 255, 255}, {0, 0, 0}, 16, 8};
 
 
 
-	// p = p0 + tV
 	l = sub_vector(sp->center, ray->origin); // 원점과 구 중심을 잇는 방향벡터
 	tca = scalar_product(l, ray->dir); // 빛이 구를 향해가고 있는지를 판단
 	if (tca < 0)
@@ -91,7 +98,7 @@ void	hit_sphere(t_ray3 *ray, t_sphere *sp)
 		ray->color[GREEN] = sp->color[GREEN];
 		ray->color[BLUE] = sp->color[BLUE];
 		ray->type = SP;
-		Color c = checkerTextureOnSphere(add_vector(ray->origin, multiple_vector(ray->t, ray->dir)), pattern);
+		Color c = gridTextureOnSphere(add_vector(ray->origin, multiple_vector(ray->t, ray->dir)), pattern, sp->center);
 		ray->color[RED] = c.r;
 		ray->color[GREEN] = c.g;
 		ray->color[BLUE] = c.b;
@@ -186,9 +193,6 @@ void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 	double	scalar[3];
 	double	ll;
 	double	dist;
-	Color	a = {255, 255, 255};
-	Color	b = {0, 0, 0};
-	
 
 	(void)canvas;
 	scalar[0] = scalar_product(pl->on_plane, pl->norm);
@@ -204,7 +208,7 @@ void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 		ray->color[BLUE] = pl->color[BLUE];
 		ray->obj = (void *)pl;
 
-		Color c = checkerTexture(add_vector(ray->origin, multiple_vector(ray->t, ray->dir)), a, b, 1);
+		Color c = checkerTexture(add_vector(ray->origin, multiple_vector(ray->t, ray->dir)), 1);
 		ray->color[RED] = c.r;
 		ray->color[GREEN] = c.g;
 		ray->color[BLUE] = c.b;

@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/05 01:24:40 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/08/25 01:14:11 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ int	main(int argc, char *argv[])
 	}
 	canvas = parse(argv);
 	cam = camera(canvas);
+	view.cam = cam;
+	view.can = canvas;
 	view.mlx = mlx_init();
 	view.win = mlx_new_window(view.mlx, canvas.width, canvas.height, "miniRT");
 	view.img = mlx_new_image(view.mlx, canvas.width, canvas.height);
@@ -98,8 +100,8 @@ int	main(int argc, char *argv[])
 		&view.line_length, &view.endian);
 	make_image(&view, canvas, cam); // viewport를 향해서 반복문 사용하여 ray 발사
 	mlx_put_image_to_window(view.mlx, view.win, view.img, 0, 0);
-	mlx_hook(view.win, 17, 1L << 5, win_destroy, &view);
 	mlx_hook(view.win, 2, 1L << 0, key_hook, &view);
+	mlx_hook(view.win, 17, 1L << 5, win_destroy, &view);
 	mlx_loop(view.mlx);
 	return (0);
 }

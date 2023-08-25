@@ -116,15 +116,18 @@ int	init_cylinder(char **tmp, t_canvas *canvas, int count)
 
 int	init_light(char **tmp, t_canvas *canvas, int count)
 {
+	static int	idx;
+
 	if (!ft_strcmp(tmp[0], "l") && count == 7)
 	{
-		canvas->light_orig.x = ft_strtod(tmp[1]);
-		canvas->light_orig.y = ft_strtod(tmp[2]);
-		canvas->light_orig.z = ft_strtod(tmp[3]);
-		canvas->light_bright = ft_strtod(tmp[4]);
-		canvas->light_col[RED] = ft_strtod(tmp[5]);
-		canvas->light_col[GREEN] = ft_strtod(tmp[6]);
-		canvas->light_col[BLUE] = ft_strtod(tmp[7]);
+		canvas->obj->l[idx].light_orig.x = ft_strtod(tmp[1]);
+		canvas->obj->l[idx].light_orig.y = ft_strtod(tmp[2]);
+		canvas->obj->l[idx].light_orig.z = ft_strtod(tmp[3]);
+		canvas->obj->l[idx].light_bright = ft_strtod(tmp[4]);
+		canvas->obj->l[idx].light_col[RED] = ft_strtod(tmp[5]);
+		canvas->obj->l[idx].light_col[GREEN] = ft_strtod(tmp[6]);
+		canvas->obj->l[idx].light_col[BLUE] = ft_strtod(tmp[7]);
+		idx++;
 	}
 	else
 		return (-1);
@@ -181,6 +184,8 @@ void	ft_obj_count(char **av, t_volume *volume)
 				volume->pl_cnt++;
 			else if (!ft_strcmp(tmp[0], "cy"))
 				volume->cy_cnt++;
+			else if (!ft_strcmp(tmp[0], "l"))
+				volume->l_cnt++;
 		}
 		free_split(tmp);
 		free(line);
@@ -196,10 +201,12 @@ t_volume	*init_volume(char **av)
 	obj->cy_cnt = 0;
 	obj->pl_cnt = 0;
 	obj->sp_cnt = 0;
+	obj->l_cnt = 0;
 	obj->cy = NULL;
 	obj->pl = NULL;
 	obj->sp = NULL;
 	ft_obj_count(av, obj);
+	obj->l = (t_light *)malloc(sizeof(t_light) * obj->l_cnt);
 	obj->sp = (t_sphere *)malloc(sizeof(t_sphere) * obj->sp_cnt);
 	obj->pl = (t_plane *)malloc(sizeof(t_plane) * obj->pl_cnt);
 	obj->cy = (t_cylinder *)malloc(sizeof(t_cylinder) * obj->cy_cnt);

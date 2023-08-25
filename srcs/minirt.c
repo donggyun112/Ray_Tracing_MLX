@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/25 01:14:11 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/08/25 21:09:27 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	intersection(t_ray3 *ray, t_volume *obj, t_canvas canvas)
 	idx = 0;
 	while (idx < obj->sp_cnt)
 	{
-		hit_sphere(ray, &obj->sp[idx]);
+		hit_sphere(ray, &obj->sp[idx], canvas);
 		idx++;
 	}
 	idx = 0;
@@ -35,7 +35,7 @@ void	color_cal(t_view *view, t_canvas canvas, t_ray3 *ray, int pix[])
 	if (ray->t > 0.0)
 	{	
 		ray_color(canvas, ray);
-		my_mlx_pixel_put(view, pix[0], pix[1], rgb_to_int(ray->color));
+		// my_mlx_pixel_put(view, pix[0], pix[1], rgb_to_int(ray->color));
 	}
 /*
 		if (ray->type == 111 && ray->color[RED] != 255)
@@ -59,19 +59,46 @@ void	make_image(t_view *view, t_canvas canvas, t_camera cam)
 	int		pix[2];
 	double	vp_idx[2];
 	t_ray3	ray;
+	int		samplesPerPixel = 2;  // 예: 각 픽셀당 4x4 슈퍼샘플링
+	int	color2[3];
 
 	pix[1] = 0;
 	while (pix[1] < canvas.height)
 	{
 		pix[0] = 0;
-		vp_idx[1] = 2.0 * (double)pix[1] / (double)canvas.height;
+		// vp_idx[1] = 2.0 * (double)pix[1] / (double)canvas.height;
 		while (pix[0] < canvas.width)
 		{
-			vp_idx[0] = canvas.ratio * 2.0 * (double)pix[0] \
-				/ (double)canvas.width;
-			ray = create_ray(cam, vp_idx[0], vp_idx[1]);
-			intersection(&ray, canvas.obj, canvas);
-			color_cal(view, canvas, &ray, pix); // put pixel info in this fn
+			Color accumulatedColor = {0, 0, 0};
+
+			for (int sy = 0; sy < samplesPerPixel; sy++) {
+				for (int sx = 0; sx < samplesPerPixel; sx++) {
+					double u_offset = (float)sx / samplesPerPixel;
+					double v_offset = (float)sy / samplesPerPixel;
+
+					vp_idx[0] = canvas.ratio * 2.0 * ((double)pix[0] + u_offset) / (double)canvas.width;
+					vp_idx[1] = 2.0 * ((double)pix[1] + v_offset) / (double)canvas.height;
+
+					ray = create_ray(cam, vp_idx[0], vp_idx[1]);
+					intersection(&ray, canvas.obj, canvas);
+					color_cal(view, canvas, &ray, pix);
+					accumulatedColor.r += ray.color[RED];
+					accumulatedColor.g += ray.color[GREEN];
+					accumulatedColor.b += ray.color[BLUE];
+				}
+			}
+
+			// 평균 색상 계산
+			color2[RED] = accumulatedColor.r / (samplesPerPixel * samplesPerPixel);
+			color2[GREEN] = accumulatedColor.g / (samplesPerPixel * samplesPerPixel);
+			color2[BLUE] = accumulatedColor.b / (samplesPerPixel * samplesPerPixel);
+
+			// 최종 색상을 이미지 버퍼에 저장
+			if (ray.t > 0.0)
+				my_mlx_pixel_put(view, pix[0], pix[1], rgb_to_int(color2));
+			else
+				my_mlx_pixel_put(view, pix[0], pix[1], 0x00FFFFFF);
+
 			pix[0]++;
 		}
 		pix[1]++;

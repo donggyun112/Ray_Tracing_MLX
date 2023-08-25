@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/25 00:49:22 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/08/25 16:32:12 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ double		my_rand_double_range(double min, double max);
 int 		my_rand();
 
 //intersection
-void		hit_sphere(t_ray3 *ray, t_sphere *sp);
+void		hit_sphere(t_ray3 *ray, t_sphere *sp, t_canvas canvas);
 void		hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas);
 
 //raycasting

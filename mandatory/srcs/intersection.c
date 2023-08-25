@@ -162,11 +162,49 @@ int	cy_in_range(t_ray3 *ray, double t, t_cylinder *cy)
 	return (1);
 }
 
-void	hit_cylinder_cap(t_ray3 *ray, t_cylinder *cy, t_canvas canvas)
+void	make_cylinder_cap(t_cylinder *cy)
 {
-	(void)ray;
-	(void)cy;
-	(void)canvas;
+	int	idx;
+
+	idx = 0;
+	cy->ucap = (t_plane *)malloc(sizeof(t_plane));
+	cy->lcap = (t_plane *)malloc(sizeof(t_plane));
+	while (idx < 3)
+	{
+		cy->ucap->color[idx] = cy->color[idx];
+		cy->lcap->color[idx] = cy->color[idx];
+		idx++;
+	}
+	cy->ucap->norm = cy->dir;
+	cy->lcap->norm = multiple_vector(-1.0, cy->dir);
+	cy->ucap->on_plane = add_vector(cy->center, multiple_vector(cy->height / 2.0, cy->dir));
+	cy->lcap->on_plane = add_vector(cy->center, multiple_vector(cy->height / -2.0, cy->dir));
+}
+
+void	hit_cap(t_ray3 *ray, t_cylinder *cy, t_plane *cap, t_canvas canvas)
+{
+	double	tmp;
+	double	scalar[3];
+	t_vec3	hit;
+
+	scalar[0] = scalar_product(cap->on_plane, cap->norm);
+	scalar[1] = scalar_product(ray->origin, cap->norm);
+	scalar[2] = scalar_product(ray->dir, cap->norm);
+	tmp = (scalar[0] - scalar[1]) / scalar[2];
+	hit = add_vector(ray->origin, multiple_vector(tmp, ray->dir));
+	if (size_of_vec2(sub_vector(hit, cap->on_plane)) > cy->radius)
+		return ;
+	if ((ray->t < 0.0 && tmp > 0.0) || (tmp > 0.0 && ray->t > tmp))
+	{
+		ray->t = tmp;
+		ray->type = PL;
+		ray->color[RED] = cap->color[RED];
+		ray->color[GREEN] = cap->color[GREEN];
+		ray->color[BLUE] = cap->color[BLUE];
+		ray->obj = (void *)cap;
+		if (intersect_sphere_shadow(ray, canvas))
+			ray->type = SHADOW;
+	}
 }
 
 void	hit_cylinder(t_ray3 *ray, t_cylinder *cy, t_canvas canvas)
@@ -176,6 +214,9 @@ void	hit_cylinder(t_ray3 *ray, t_cylinder *cy, t_canvas canvas)
 	double	coef[3];
 	double	tmp;
 
+	make_cylinder_cap(cy);
+	hit_cap(ray, cy, cy->ucap, canvas);
+	hit_cap(ray, cy, cy->lcap, canvas);
 	oc = sub_vector(ray->origin, cy->center);
 	v[0] = vector_product(ray->dir, cy->dir);
 	v[1] = vector_product(oc, cy->dir);

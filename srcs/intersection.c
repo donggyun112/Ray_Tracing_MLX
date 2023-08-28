@@ -1,14 +1,6 @@
 #include "../includes/minirt.h"
 #include <stdio.h> //remove
 
-typedef	struct Color
-{
-	int	r;
-	int	g;
-	int	b;
-} Color;
-
-
 typedef struct {
     Color color_a;
     Color color_b;
@@ -67,15 +59,64 @@ Color gridTextureOnSphere(t_vec3 point, CheckerPattern pattern, t_vec3 center)
 	return (uv_grid_pattern_at(pattern, u, v));
 }
 
+int	hit_line_sphere(t_ray3 *ray, t_sphere *sp)
+{
+	t_vec3	l;
+	double	tca;
+	double	d2;
+	double	tnc;
 
-void	hit_sphere(t_ray3 *ray, t_sphere *sp)
+
+	// p = p0 + tV
+	l = sub_vector(sp->center, ray->origin); // 원점과 구 중심을 잇는 방향벡터
+	tca = scalar_product(l, ray->dir); // 빛이 구를 향해가고 있는지를 판단
+	if (tca < 0)
+		return (0);
+	d2 = scalar_product(l, l) - (tca * tca); // 원점에서 벡터 사이의 거리가 r^2보다 크면 FALSE d = d^2
+	if (d2 > sp->radius * sp->radius)
+		return (0);
+	tnc = sqrt(sp->radius * sp->radius - d2);;
+	if (tca - tnc < 0.0)
+		return (1);
+	else
+		return (1);
+	return (1);
+}
+
+
+int	intersect_sphere_shadow(t_ray3 *ray, t_canvas canvas)
+{
+	t_vec3	p;
+	t_vec3	g_norm;
+	t_ray3	light;
+	int		idx[2];
+
+	idx[0] = -1;
+	p = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
+	// printf("x:%f y:%f z:%f\n", canvas.obj->l->light_orig.x, canvas.obj->l->light_orig.y, canvas.obj->l->light_orig.z);
+	while (++idx[0] < canvas.obj->l_cnt)
+	{
+		g_norm = norm_vec(sub_vector(canvas.obj->l[idx[0]].light_orig, p));
+		light.dir = g_norm;
+		light.origin = p;
+		idx[1] = -1;
+		while (++idx[1] < canvas.obj->sp_cnt)
+		{
+			if (hit_line_sphere(&light, &canvas.obj->sp[idx[1]]))
+				return (1);
+		}
+	}
+	return (0);
+}
+
+void	hit_sphere(t_ray3 *ray, t_sphere *sp, t_canvas canvas)
 {
 	t_vec3	l;
 	double	tca;
 	double	tnc;
 	double	d2;
 	double	tmp;
-    CheckerPattern pattern = {{255, 255, 255}, {0, 0, 0}, 16, 8};
+    CheckerPattern pattern = {{255, 255, 255}, {100, 100, 0}, 32, 16};
 
 
 
@@ -103,31 +144,9 @@ void	hit_sphere(t_ray3 *ray, t_sphere *sp)
 		ray->color[GREEN] = c.g;
 		ray->color[BLUE] = c.b;
 		ray->obj = (void *)sp;
+		if (intersect_sphere_shadow(ray, canvas))
+			ray->type = SHADOW;
 	}
-}
-
-int	hit_line_sphere(t_ray3 *ray, t_sphere *sp)
-{
-	t_vec3	l;
-	double	tca;
-	double	d2;
-	double	tnc;
-
-
-	// p = p0 + tV
-	l = sub_vector(sp->center, ray->origin); // 원점과 구 중심을 잇는 방향벡터
-	tca = scalar_product(l, ray->dir); // 빛이 구를 향해가고 있는지를 판단
-	if (tca < 0)
-		return (0);
-	d2 = scalar_product(l, l) - (tca * tca); // 원점에서 벡터 사이의 거리가 r^2보다 크면 FALSE d = d^2
-	if (d2 > sp->radius * sp->radius)
-		return (0);
-	tnc = sqrt(sp->radius * sp->radius - d2);;
-	if (tca - tnc < 0.0)
-		return (1);
-	else
-		return (1);
-	return (1);
 }
 
 double distance_a(t_vec3 a, t_vec3 b) {
@@ -138,42 +157,43 @@ double distance_a(t_vec3 a, t_vec3 b) {
 }
 
 
-double	intersect_sphere_shadow(t_ray3 *ray, t_canvas canvas, int num_of_light)
-{
-	t_vec3	p;
-	t_vec3	g_norm;
-	t_vec3	sh;
-	t_ray3	light;
-	int		idx[2];
-	double	count;
+// double	intersect_sphere_shadow(t_ray3 *ray, t_canvas canvas, int num_of_light)
+// {
+// 	t_vec3	p;
+// 	t_vec3	g_norm;
+// 	t_vec3	sh;
+// 	t_ray3	light;
+// 	int		idx[2];
+// 	double	count;
 
-	idx[0] = -1;
-	count = 0;
-	p = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
-	sh = p;
-	while (++idx[0] < num_of_light)
-	{
-		idx[1] = -1;
-		p.x += my_rand_double_range(0.0, 0.2);
-		p.y += my_rand_double_range(0.0, 0.2);
-		p.z += my_rand_double_range(0.0, 0.2);
-		g_norm = norm_vec(sub_vector(canvas.light_orig, p));
-		light.dir = g_norm;
-		light.origin = p;
-		while (++idx[1] < canvas.obj->sp_cnt)
-		{
-			if (hit_line_sphere(&light, &canvas.obj->sp[idx[1]]))
-			{
-				count++;
-				break ;
-			}
-		}
-		p = sh;
-	}
-	if (count == 0)
-		return (0.0);
-	return ((double)count / num_of_light);
-}
+// 	idx[0] = -1;
+// 	count = 0;
+// 	p = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
+// 	sh = p;
+// 	while (++idx[0] < num_of_light)
+// 	{
+// 		idx[1] = -1;
+// 		p.x += my_rand_double_range(0.0, 0.2);
+// 		p.y += my_rand_double_range(0.0, 0.2);
+// 		p.z += my_rand_double_range(0.0, 0.2);
+// 		g_norm = norm_vec(sub_vector(canvas.light_orig, p));
+// 		light.dir = g_norm;
+// 		light.origin = p;
+// 		while (++idx[1] < canvas.obj->sp_cnt)
+// 		{
+// 			if (hit_line_sphere(&light, &canvas.obj->sp[idx[1]]))
+// 			{
+// 				count++;
+// 				break ;
+// 			}
+// 		}
+// 		p = sh;
+// 	}
+// 	if (count == 0)
+// 		return (0.0);
+// 	return ((double)count / num_of_light);
+// }
+
 
 double mapToRange(double value, double minInput, double maxInput, double minOutput, double maxOutput)
 {
@@ -191,8 +211,8 @@ void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 {
 	double	tmp;
 	double	scalar[3];
-	double	ll;
-	double	dist;
+	// double	ll;
+	// double	dist;
 
 	(void)canvas;
 	scalar[0] = scalar_product(pl->on_plane, pl->norm);
@@ -212,17 +232,19 @@ void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 		ray->color[RED] = c.r;
 		ray->color[GREEN] = c.g;
 		ray->color[BLUE] = c.b;
-		ll = intersect_sphere_shadow(ray, canvas, 10); // 그림자 개수 --> 안티엘리어싱
-		if (ll)
-		{
+		if (intersect_sphere_shadow(ray, canvas))
 			ray->type = SHADOW;
-			dist = distance_a(add_vector(ray->origin, multiple_vector(ray->t, ray->dir)), canvas.light_orig);
-			dist = mapToRange(dist, 0, 10, 0.5, 1.0);
-			ll = mapToRange(ll, 0.0, 1.0, 1.0, 0.5);
-			ray->color[RED] *= dist * ll;
-			ray->color[GREEN] *= dist * ll;
-			ray->color[BLUE] *= dist * ll;
-		}
+		// ll = intersect_sphere_shadow(ray, canvas, 10); // 그림자 개수 --> 안티엘리어싱
+		// if (ll)
+		// {
+		// 	ray->type = SHADOW;
+		// 	dist = distance_a(add_vector(ray->origin, multiple_vector(ray->t, ray->dir)), canvas.light_orig);
+		// 	dist = mapToRange(dist, 0, 10, 0.5, 1.0);
+		// 	ll = mapToRange(ll, 0.0, 1.0, 1.0, 0.5);
+		// 	ray->color[RED] *= dist * ll;
+		// 	ray->color[GREEN] *= dist * ll;
+		// 	ray->color[BLUE] *= dist * ll;
+		// }
 	}
 }
 

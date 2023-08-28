@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/07 17:27:31 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/25 17:15:23 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,7 @@
 # define STRUCT_H
 
 
-typedef struct s_view
-{
-	void	*mlx;
-	void	*win;
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}	t_view;
+
 
 typedef struct s_vec3
 {
@@ -82,14 +73,23 @@ typedef struct s_cylinder
 	double	height;
 }	t_cylinder;
 
+typedef struct s_light
+{
+	t_vec3			light_orig;
+	double			light_bright;
+	int				light_col[3];
+}	t_light;
+
 typedef struct s_volume
 {
 	int			pl_cnt;
 	int			sp_cnt;
 	int			cy_cnt;
+	int			l_cnt;
 	t_plane		*pl;
 	t_sphere	*sp;
 	t_cylinder	*cy;
+	t_light		*l;
 }	t_volume;
 
 typedef struct s_canvas
@@ -108,6 +108,26 @@ typedef struct s_canvas
 	t_volume		*obj;
 	t_camera		cam;
 }	t_canvas;
+
+typedef	struct Color
+{
+	int	r;
+	int	g;
+	int	b;
+} Color;
+
+typedef struct s_view
+{
+	void	*mlx;
+	void	*win;
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+	struct s_camera	cam;
+	struct s_canvas	can;
+}	t_view;
 
 // bvh
 

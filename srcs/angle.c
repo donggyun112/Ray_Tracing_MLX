@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   angle.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 14:30:31 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/07 16:51:14 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/25 16:56:35 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ double	cos_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas)
 
 	hit = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
 	normal = norm_vec(sub_vector(hit, sp->center));
-	light = norm_vec(sub_vector(canvas.light_orig, hit));
+	light = norm_vec(sub_vector(canvas.obj->l[0].light_orig, hit));
 	angle = scalar_product(normal, light);
 	if (angle < 0.0)
 		return (0.0);
@@ -35,7 +35,7 @@ double	cos_pl(t_plane *pl, t_ray3 *ray, t_canvas canvas)
 	double	angle;
 
 	hit = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
-	light = norm_vec(sub_vector(canvas.light_orig, hit));
+	light = norm_vec(sub_vector(canvas.obj->l[0].light_orig, hit));
 	angle = scalar_product(pl->norm, light);
 	if (angle < 0.0)
 		return (0.0);
@@ -61,7 +61,7 @@ double	ref_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas)
 	double	ret;
 
 	hit = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
-	light = norm_vec(sub_vector(canvas.light_orig, hit));
+	light = norm_vec(sub_vector(canvas.obj->l[0].light_orig, hit));
 	normal = norm_vec(sub_vector(hit, sp->center));
 	reflect = norm_vec(reflection(normal, light));
 	ret = scalar_product(norm_vec(sub_vector(ray->origin, hit)), norm_vec(reflect));
@@ -78,7 +78,7 @@ double	ref_pl(t_plane *pl, t_ray3 *ray, t_canvas canvas)
 	double	ret;
 
 	hit = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
-	light = norm_vec(sub_vector(canvas.light_orig, hit));
+	light = norm_vec(sub_vector(canvas.obj->l[0].light_orig, hit));
 	reflect = norm_vec(reflection(pl->norm, light));
 	ret = scalar_product(norm_vec(sub_vector(ray->origin, hit)), reflect);
 	if (ret < 0.0)

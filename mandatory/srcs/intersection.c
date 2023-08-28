@@ -68,12 +68,23 @@ double mapToRange(double value, double minInput, double maxInput, double minOutp
     return (((logValue) / (log(maxInput - minInput + 1))) * (maxOutput - minOutput) + minOutput);
 }
 
+t_vec3	check_plane_direction(t_plane *pl, t_ray3 *ray)
+{
+	t_vec3	orig_to_pl;
+
+	orig_to_pl = sub_vector(ray->origin, pl->on_plane);
+	if (scalar_product(orig_to_pl, pl->norm) < 0.0)
+		return (multiple_vector(-1.0, pl->norm));
+	else
+		return (pl->norm);
+}
 
 void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 {
 	double	tmp;
 	double	scalar[3];
 
+	pl->norm = check_plane_direction(pl, ray);
 	scalar[0] = scalar_product(pl->on_plane, pl->norm);
 	scalar[1] = scalar_product(ray->origin, pl->norm);
 	scalar[2] = scalar_product(ray->dir, pl->norm);
@@ -86,7 +97,7 @@ void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 		ray->color[GREEN] = pl->color[GREEN];
 		ray->color[BLUE] = pl->color[BLUE];
 		ray->obj = (void *)pl;
-		if (intersect_sphere_shadow(ray, canvas))
+		if (hit_shadow(ray, canvas))
 			ray->type = SHADOW;
 	}
 }
@@ -119,7 +130,7 @@ void	hit_sphere(t_ray3 *ray, t_sphere *sp, t_canvas canvas)
 		ray->color[BLUE] = sp->color[BLUE];
 		ray->type = SP;
 		ray->obj = (void *)sp;
-		if (intersect_sphere_shadow(ray, canvas))
+		if (hit_shadow(ray, canvas))
 			ray->type = SHADOW;
 	}
 }
@@ -202,7 +213,7 @@ void	hit_cap(t_ray3 *ray, t_cylinder *cy, t_plane *cap, t_canvas canvas)
 		ray->color[GREEN] = cap->color[GREEN];
 		ray->color[BLUE] = cap->color[BLUE];
 		ray->obj = (void *)cap;
-		if (intersect_sphere_shadow(ray, canvas))
+		if (hit_shadow(ray, canvas))
 			ray->type = SHADOW;
 	}
 }
@@ -237,7 +248,7 @@ void	hit_cylinder(t_ray3 *ray, t_cylinder *cy, t_canvas canvas)
 		ray->color[BLUE] = cy->color[BLUE];
 		ray->type = CY;
 		ray->obj = (void *)cy;
-		if (intersect_sphere_shadow(ray, canvas))
+		if (hit_shadow(ray, canvas))
 			ray->type = SHADOW;
 	}
 }

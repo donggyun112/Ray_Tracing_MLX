@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   color.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 00:50:37 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/07 16:57:19 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/25 16:49:28 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ int	diff_light(t_canvas canvas, t_ray3 *ray, double angle, int idx)
 {
 	int	ret;
 
-	ret = (double)ray->color[idx] * angle * canvas.light_bright \
-		* ((double)canvas.light_col[idx] / 255.0);
+	ret = (double)ray->color[idx] * angle * canvas.obj->l[0].light_bright \
+		* ((double)canvas.obj->l[0].light_col[idx] / 255.0);
 	return (ret);
 }
 
@@ -35,7 +35,7 @@ int	phong_light(t_canvas canvas, t_ray3 *ray, double angle, int idx)
 	int	ret;
 
 	(void)ray;
-	ret = (double)canvas.light_col[idx] * canvas.light_bright \
+	ret = (double)canvas.obj->l[0].light_col[idx] * canvas.obj->l[0].light_bright \
 		* pow(angle, 30);
 	// printf("%lf\n", pow((angle), (double)ray->color[idx] / 255.0));
 	return (ret);

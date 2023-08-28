@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/04 04:37:13 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/28 18:08:25 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,15 @@ int	win_destroy(t_view *view)
 	return (0);
 }
 
+void	newwin(t_view *view)
+{
+	view->img = mlx_new_image(view->mlx, view->can.width, view->can.height);
+	view->addr = mlx_get_data_addr(view->img, &view->bits_per_pixel, \
+	&view->line_length, &view->endian);
+	make_image(view, (view)->can);
+	mlx_put_image_to_window(view->mlx, view->win, view->img, 0, 0);
+}
+
 int	key_hook(int keycode, t_view *view)
 {
 	if (keycode == 53)
@@ -28,6 +37,43 @@ int	key_hook(int keycode, t_view *view)
 		mlx_destroy_window(view->mlx, view->win);
 		exit (0);
 	}
+	else if (keycode == 125)
+	{
+		view->can.cam_orig.x += 0.5;
+		view->cam = camera(view->can);
+		newwin(view);
+	}
+	else if (keycode == 126)
+	{
+		view->can.cam_orig.x -= 0.5;
+		view->cam = camera(view->can);
+		newwin(view);
+	}
+	if (keycode == 24)
+	{
+		view->can.cam_orig.y -= 2;
+		view->cam = camera(view->can);
+		newwin(view);
+	}
+	if (keycode == 27)
+	{
+		view->can.cam_orig.y += 2;
+		view->cam = camera(view->can);
+		newwin(view);
+	}
+	if (keycode == 37)
+	{
+		view->can.cam_dir.y += 0.05;
+		view->cam = camera(view->can);
+		newwin(view);
+	}
+	if (keycode == 40)
+	{
+		view->can.cam_dir.y -= 0.05;
+		view->cam = camera(view->can);
+		newwin(view);
+	}
+	printf("%d\n", keycode);
 	return (0);
 }
 

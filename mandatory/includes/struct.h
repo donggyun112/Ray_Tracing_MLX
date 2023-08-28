@@ -81,6 +81,8 @@ typedef struct s_cylinder
 	double	radius;
 	double	height;
 	int		color[3];
+	t_plane	*ucap;
+	t_plane	*lcap;
 }	t_cylinder;
 
 typedef struct s_volume

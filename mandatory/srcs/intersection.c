@@ -68,12 +68,23 @@ double mapToRange(double value, double minInput, double maxInput, double minOutp
     return (((logValue) / (log(maxInput - minInput + 1))) * (maxOutput - minOutput) + minOutput);
 }
 
+t_vec3	check_plane_direction(t_plane *pl, t_ray3 *ray)
+{
+	t_vec3	orig_to_pl;
+
+	orig_to_pl = sub_vector(ray->origin, pl->on_plane);
+	if (scalar_product(orig_to_pl, pl->norm) < 0.0)
+		return (multiple_vector(-1.0, pl->norm));
+	else
+		return (pl->norm);
+}
 
 void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 {
 	double	tmp;
 	double	scalar[3];
 
+	pl->norm = check_plane_direction(pl, ray);
 	scalar[0] = scalar_product(pl->on_plane, pl->norm);
 	scalar[1] = scalar_product(ray->origin, pl->norm);
 	scalar[2] = scalar_product(ray->dir, pl->norm);
@@ -86,7 +97,7 @@ void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 		ray->color[GREEN] = pl->color[GREEN];
 		ray->color[BLUE] = pl->color[BLUE];
 		ray->obj = (void *)pl;
-		if (intersect_sphere_shadow(ray, canvas))
+		if (hit_shadow(ray, canvas))
 			ray->type = SHADOW;
 	}
 }
@@ -119,7 +130,7 @@ void	hit_sphere(t_ray3 *ray, t_sphere *sp, t_canvas canvas)
 		ray->color[BLUE] = sp->color[BLUE];
 		ray->type = SP;
 		ray->obj = (void *)sp;
-		if (intersect_sphere_shadow(ray, canvas))
+		if (hit_shadow(ray, canvas))
 			ray->type = SHADOW;
 	}
 }
@@ -162,11 +173,49 @@ int	cy_in_range(t_ray3 *ray, double t, t_cylinder *cy)
 	return (1);
 }
 
-void	hit_cylinder_cap(t_ray3 *ray, t_cylinder *cy, t_canvas canvas)
+void	make_cylinder_cap(t_cylinder *cy)
 {
-	(void)ray;
-	(void)cy;
-	(void)canvas;
+	int	idx;
+
+	idx = 0;
+	cy->ucap = (t_plane *)malloc(sizeof(t_plane));
+	cy->lcap = (t_plane *)malloc(sizeof(t_plane));
+	while (idx < 3)
+	{
+		cy->ucap->color[idx] = cy->color[idx];
+		cy->lcap->color[idx] = cy->color[idx];
+		idx++;
+	}
+	cy->ucap->norm = cy->dir;
+	cy->lcap->norm = multiple_vector(-1.0, cy->dir);
+	cy->ucap->on_plane = add_vector(cy->center, multiple_vector(cy->height / 2.0, cy->dir));
+	cy->lcap->on_plane = add_vector(cy->center, multiple_vector(cy->height / -2.0, cy->dir));
+}
+
+void	hit_cap(t_ray3 *ray, t_cylinder *cy, t_plane *cap, t_canvas canvas)
+{
+	double	tmp;
+	double	scalar[3];
+	t_vec3	hit;
+
+	scalar[0] = scalar_product(cap->on_plane, cap->norm);
+	scalar[1] = scalar_product(ray->origin, cap->norm);
+	scalar[2] = scalar_product(ray->dir, cap->norm);
+	tmp = (scalar[0] - scalar[1]) / scalar[2];
+	hit = add_vector(ray->origin, multiple_vector(tmp, ray->dir));
+	if (size_of_vec2(sub_vector(hit, cap->on_plane)) > cy->radius)
+		return ;
+	if ((ray->t < 0.0 && tmp > 0.0) || (tmp > 0.0 && ray->t > tmp))
+	{
+		ray->t = tmp;
+		ray->type = PL;
+		ray->color[RED] = cap->color[RED];
+		ray->color[GREEN] = cap->color[GREEN];
+		ray->color[BLUE] = cap->color[BLUE];
+		ray->obj = (void *)cap;
+		if (hit_shadow(ray, canvas))
+			ray->type = SHADOW;
+	}
 }
 
 void	hit_cylinder(t_ray3 *ray, t_cylinder *cy, t_canvas canvas)
@@ -176,6 +225,9 @@ void	hit_cylinder(t_ray3 *ray, t_cylinder *cy, t_canvas canvas)
 	double	coef[3];
 	double	tmp;
 
+	make_cylinder_cap(cy);
+	hit_cap(ray, cy, cy->ucap, canvas);
+	hit_cap(ray, cy, cy->lcap, canvas);
 	oc = sub_vector(ray->origin, cy->center);
 	v[0] = vector_product(ray->dir, cy->dir);
 	v[1] = vector_product(oc, cy->dir);
@@ -196,32 +248,7 @@ void	hit_cylinder(t_ray3 *ray, t_cylinder *cy, t_canvas canvas)
 		ray->color[BLUE] = cy->color[BLUE];
 		ray->type = CY;
 		ray->obj = (void *)cy;
-		if (intersect_sphere_shadow(ray, canvas))
+		if (hit_shadow(ray, canvas))
 			ray->type = SHADOW;
 	}
 }
-/*
-void hit_cylinder(t_ray3 *ray, t_cylinder *cy)
-{
-    t_vec3 oc = sub_vector(ray->origin, cyl->center);
-    double a = scalar_product(ray->dir, ray->dir) - pow(scalar_product(ray->dir, cyl->center), 2);
-    double b = 2.0 * (scalar_product(ray->dir, oc) - scalar_product(ray->dir, cyl->center) * scalar_product(oc, cyl->center));
-    double c = scalar_product(oc, oc) - pow(scalar_product(oc, cyl->center), 2) - cyl->radius * cyl->radius;
-    double discriminant = b*b - 4*a*c;
-    if (discriminant > 0) {
-        double t0 = (-b - sqrt(discriminant)) / (2.0*a);
-        double t1 = (-b + sqrt(discriminant)) / (2.0*a);
-        double y0 = ray->origin.y + t0 * ray->dir.y;
-        double y1 = ray->origin.y + t1 * ray->dir.y;
-        if (y0 > cyl->center.y && y0 < cyl->center.y + cyl->height) {
-            update_ray(ray, t0, cyl->color, CYLINDER, cyl);
-            return;
-        }
-        if (y1 > cyl->center.y && y1 < cyl->center.y + cyl->height) {
-            update_ray(ray, t1, cyl->color, CYLINDER, cyl);
-            return;
-        }
-    }
-    // 원기둥의 상단 및 하단 원과의 교차를 처리하는 코드는 여기에 추가될 수 있습니다.
-}
-*/

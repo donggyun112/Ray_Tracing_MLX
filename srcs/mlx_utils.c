@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/25 01:30:40 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/08/28 18:08:25 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	newwin(t_view *view)
 	view->img = mlx_new_image(view->mlx, view->can.width, view->can.height);
 	view->addr = mlx_get_data_addr(view->img, &view->bits_per_pixel, \
 	&view->line_length, &view->endian);
-	make_image(view, (view)->can, (view)->cam);
+	make_image(view, (view)->can);
 	mlx_put_image_to_window(view->mlx, view->win, view->img, 0, 0);
 }
 
@@ -39,25 +39,25 @@ int	key_hook(int keycode, t_view *view)
 	}
 	else if (keycode == 125)
 	{
-		view->can.cam_orig.x += 1;
+		view->can.cam_orig.x += 0.5;
 		view->cam = camera(view->can);
 		newwin(view);
 	}
 	else if (keycode == 126)
 	{
-		view->can.cam_orig.x -= 1;
+		view->can.cam_orig.x -= 0.5;
 		view->cam = camera(view->can);
 		newwin(view);
 	}
 	if (keycode == 24)
 	{
-		view->can.cam_orig.y -= 4;
+		view->can.cam_orig.y -= 2;
 		view->cam = camera(view->can);
 		newwin(view);
 	}
 	if (keycode == 27)
 	{
-		view->can.cam_orig.y += 4;
+		view->can.cam_orig.y += 2;
 		view->cam = camera(view->can);
 		newwin(view);
 	}

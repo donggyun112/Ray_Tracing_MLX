@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/25 16:32:12 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/08/28 17:34:05 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void		hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas);
 //raycasting
 t_ray3		create_ray(t_camera cam, double u, double v);
 t_camera	camera(t_canvas canvas);
-void	make_image(t_view *view, t_canvas canvas, t_camera cam);
+void		make_image(t_view *view, t_canvas canvas);
 
 //angle
 double		cos_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas);

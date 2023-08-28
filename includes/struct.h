@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/25 17:15:23 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/08/28 18:46:42 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,12 +125,12 @@ typedef struct s_view
 	int		bits_per_pixel;
 	int		line_length;
 	int		endian;
+	int		anti_scalar;
+	int		low_scalar;
+	int		quality_scalar;
 	struct s_camera	cam;
 	struct s_canvas	can;
 }	t_view;
-
-// bvh
-
 
 
 

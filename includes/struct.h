@@ -3,28 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/29 20:28:31 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/29 22:15:43 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCT_H
 # define STRUCT_H
 
+typedef struct s_color
+{
+	int	r;
+	int	g;
+	int	b;
+}	t_color;
 
 typedef struct s_texture
 {
-    void    *img;
-    char    *data;
-    int     width;
-    int     height;
-    int     bpp;
-    int     size_line;
-    int     endian;
-} t_texture;
+	void	*img;
+	char	*data;
+	int		width;
+	int		height;
+	int		bpp;
+	int		size_line;
+	int		endian;
+}	t_texture;
 
+typedef struct s_checkerpattern
+{
+	t_color	color_a;
+	t_color	color_b;
+	int		width;
+	int		height;
+}	t_checker;
 
 typedef struct s_vec3
 {
@@ -123,27 +136,20 @@ typedef struct s_canvas
 	t_camera		cam;
 }	t_canvas;
 
-typedef	struct Color
-{
-	int	r;
-	int	g;
-	int	b;
-} Color;
-
 typedef struct s_view
 {
-	void	*mlx;
-	void	*win;
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-	int		anti_scalar;
-	int		low_scalar;
-	int		quality_scalar;
-	struct s_camera	cam;
-	struct s_canvas	can;
+	void		*mlx;
+	void		*win;
+	void		*img;
+	char		*addr;
+	int			bits_per_pixel;
+	int			line_length;
+	int			endian;
+	int			anti_scalar;
+	int			low_scalar;
+	int			quality_scalar;
+	t_camera	cam;
+	t_canvas	can;
 }	t_view;
 
 

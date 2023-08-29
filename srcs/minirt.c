@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/29 20:41:52 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/29 22:06:34 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,35 +39,19 @@ void	intersection(t_ray3 *ray, t_volume *obj, t_canvas canvas)
 void	color_cal(t_view *view, t_canvas canvas, t_ray3 *ray, int pix[])
 {
 	if (ray->t > 0.0)
-	{	
 		ray_color(canvas, ray);
-		// my_mlx_pixel_put(view, pix[0], pix[1], rgb_to_int(ray->color));
-	}
-/*
-		if (ray->type == 111 && ray->color[RED] != 255)
-		{
-			my_mlx_pixel_put(view, pix[0], pix[1], rgb_to_int(ray->color));
-		}
-		else
-		{
-			my_mlx_pixel_put(view, pix[0], pix[1], 0x0000FF00 + 0x000000FF * angle);
-		}
-		if (angle > 0.999)
-			my_mlx_pixel_put(view, pix[0], pix[1], 0xAAFFFFFF);
-	}
-*/
 	else
 		my_mlx_pixel_put(view, pix[0], pix[1], 0x00FFFFFF);
 }
 
 
-Color	anti_aliasing(int pix[2], double vp_idx[2], t_view *view, t_ray3 *ray)
+t_color	anti_aliasing(int pix[2], double vp_idx[2], t_view *view, t_ray3 *ray)
 {
-	Color	color;
-	double offset[2];
-	int	idx[2];
+	t_color	color;
+	double	offset[2];
+	int		idx[2];
 
-	color = (Color){0, 0, 0};
+	color = (t_color){0, 0, 0};
 	idx[0] = -1;
 	while (++idx[0] < view->anti_scalar)
 	{
@@ -76,8 +60,10 @@ Color	anti_aliasing(int pix[2], double vp_idx[2], t_view *view, t_ray3 *ray)
 		{
 			offset[0] = (float)idx[1] / view->anti_scalar;
 			offset[1] = (float)idx[0] / view->anti_scalar;
-			vp_idx[0] = view->can.ratio * 2.0 * ((double)pix[0] + offset[0]) / (double)view->can.width;
-			vp_idx[1] = 2.0 * ((double)pix[1] + offset[1]) / (double)view->can.height;
+			vp_idx[0] = view->can.ratio * 2.0 * ((double)pix[0] + \
+			offset[0]) / (double)view->can.width;
+			vp_idx[1] = 2.0 * ((double)pix[1] + \
+			offset[1]) / (double)view->can.height;
 			*ray = create_ray(view->cam, vp_idx[0], vp_idx[1]);
 			intersection(ray, view->can.obj, view->can);
 			color_cal(view, view->can, ray, pix);
@@ -92,8 +78,8 @@ Color	anti_aliasing(int pix[2], double vp_idx[2], t_view *view, t_ray3 *ray)
 void	low_quality(int scalar, int pix[2], t_ray3 ray, t_canvas canvas, t_view *view)
 {
 	int	offset[2];
-	int new_x;
-	int new_y;
+	int	new_x;
+	int	new_y;
 
 	offset[0] = -1;
 	while (++offset[0] < scalar)
@@ -103,7 +89,8 @@ void	low_quality(int scalar, int pix[2], t_ray3 ray, t_canvas canvas, t_view *vi
 		{
 			new_x = pix[0] + offset[0];
 			new_y = pix[1] + offset[1];
-			if(new_x < canvas.width && new_y < canvas.height) {
+			if (new_x < canvas.width && new_y < canvas.height)
+			{
 				if (ray.t > 0.0)
 					my_mlx_pixel_put(view, new_x, new_y, rgb_to_int(ray.color));
 				else
@@ -137,7 +124,7 @@ void	make_image(t_view *view, t_canvas canvas)
 	int		pix[2];
 	double	vp_idx[2];
 	t_ray3	ray;
-	Color	color;
+	t_color	c;
 
 	pix[1] = 0;
 	set_quality_scalar(view);
@@ -147,10 +134,10 @@ void	make_image(t_view *view, t_canvas canvas)
 		vp_idx[1] = 2.0 * (double)pix[1] / (double)canvas.height;
 		while (pix[0] < canvas.width)
 		{
-			color = anti_aliasing(pix, vp_idx, view, &ray);
-			ray.color[RED] = color.r / (view->anti_scalar * view->anti_scalar);
-			ray.color[GREEN] = color.g / (view->anti_scalar * view->anti_scalar);
-			ray.color[BLUE] = color.b / (view->anti_scalar * view->anti_scalar);
+			c = anti_aliasing(pix, vp_idx, view, &ray);
+			ray.color[RED] = c.r / (view->anti_scalar * view->anti_scalar);
+			ray.color[GREEN] = c.g / (view->anti_scalar * view->anti_scalar);
+			ray.color[BLUE] = c.b / (view->anti_scalar * view->anti_scalar);
 			low_quality(view->low_scalar, pix, ray, canvas, view);
 			pix[0] += view->low_scalar;
 		}
@@ -203,7 +190,7 @@ int	main(int argc, char *argv[])
 	view.addr = mlx_get_data_addr(view.img, &view.bits_per_pixel, \
 		&view.line_length, &view.endian);
 	set_texture(&view, canvas.obj);
-	make_image(&view, canvas); // viewport를 향해서 반복문 사용하여 ray 발사
+	make_image(&view, canvas);
 	mlx_put_image_to_window(view.mlx, view.win, view.img, 0, 0);
 	mlx_hook(view.win, 2, 1L << 0, key_hook, &view);
 	mlx_hook(view.win, 17, 1L << 5, win_destroy, &view);

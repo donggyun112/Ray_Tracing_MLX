@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   color.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 00:50:37 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/29 20:49:28 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/29 22:07:27 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,8 @@ int	phong_light(t_canvas canvas, t_ray3 *ray, double angle, int idx)
 	int	ret;
 
 	(void)ray;
-	ret = (double)canvas.obj->l[0].light_col[idx] * canvas.obj->l[0].light_bright \
-		* pow(angle, 30);
-	// printf("%lf\n", pow((angle), (double)ray->color[idx] / 255.0));
+	ret = (double)canvas.obj->l[0].light_col[idx] * \
+	canvas.obj->l[0].light_bright * pow(angle, 30);
 	return (ret);
 }
 
@@ -47,12 +46,10 @@ int	add_color(t_canvas canvas, t_ray3 *ray, double *angle, int idx)
 
 	color = amb_light(canvas, ray, idx);
 	if (ray->type != SHADOW)
-		color = color + diff_light(canvas, ray, angle[0], idx) + phong_light(canvas, ray, angle[1], idx);
-		// color = color + phong_light(canvas, ray, angle[1], idx);
+		color = color + diff_light(canvas, ray, angle[0], idx) + \
+		phong_light(canvas, ray, angle[1], idx);
 	if (color > 255)
 		color = 255;
-	// if (idx == GREEN)
-		// printf("%d\n", color);
 	return (color);
 }
 

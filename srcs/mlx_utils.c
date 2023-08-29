@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/29 19:02:06 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/29 22:23:08 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,25 +39,25 @@ int	key_hook(int keycode, t_view *view)
 	}
 	else if (keycode == 125)
 	{
-		view->can.cam_orig.x -= 0.5;
+		view->can.cam_orig = sub_vector(view->can.cam_orig, view->can.cam_dir);
 		view->cam = camera(view->can);
 		newwin(view);
 	}
 	else if (keycode == 126)
 	{
-		view->can.cam_orig.x += 0.5;
+		view->can.cam_orig = add_vector(view->can.cam_orig, view->can.cam_dir);
 		view->cam = camera(view->can);
 		newwin(view);
 	}
 	else if (keycode == 123)
 	{
-		view->can.cam_orig.z -= 0.5;
+		view->can.cam_orig = sub_vector(view->can.cam_orig, view->cam.r_norm);
 		view->cam = camera(view->can);
 		newwin(view);
 	}
 	else if (keycode == 124)
 	{
-		view->can.cam_orig.z += 0.5;
+		view->can.cam_orig = add_vector(view->can.cam_orig, view->cam.r_norm);
 		view->cam = camera(view->can);
 		newwin(view);
 	}
@@ -126,26 +126,9 @@ void	my_mlx_pixel_put(t_view *mlx, int x, int y, unsigned int color)
 	*(unsigned int *)dst = color;
 }
 
-int rgb_to_int(int color[])
+int	rgb_to_int(int color[])
 {
 	return ((color[RED] << 16) | (color[GREEN] << 8) \
 	| color[BLUE]);
 }
 
-int my_rand()
-{
-	static unsigned long seed = 123456789;
-
-	seed = (1103515245*seed + 12345) % 2147483648;
-	return (seed);
-}
-
-double my_rand_double()
-{
-	return ((double)my_rand() / 2147483648);
-}
-
-double my_rand_double_range(double min, double max)
-{
-	return min + (max - min) * my_rand_double();
-}

@@ -3,6 +3,7 @@
 		"get_next_line_bonus.h": "c",
 		"stdlib.h": "c",
 		"math.h": "c",
-		"locale": "c"
+		"locale": "c",
+		"minirt.h": "c"
 	}
 }

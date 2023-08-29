@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/28 18:50:19 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/29 19:02:06 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,27 @@ void	make_image(t_view *view, t_canvas canvas)
 	}
 }
 
+void	set_texture(t_view *view, t_volume *obj)
+{
+	int	i;
+
+	i = -1;
+	while (++i < obj->sp_cnt)
+	{
+		if (obj->sp[i].type == TSP)
+			init_texture(&obj->sp[i].texture, view, obj->sp[i].filepath);
+	}
+	i = -1;
+	while (++i < obj->pl_cnt)
+	{
+		if (obj->pl[i].type == TPL)
+			init_texture(&obj->pl[i].texture, view, obj->pl[i].filepath);
+	}
+	view->anti_scalar = 1;
+	view->low_scalar = 1;
+	view->quality_scalar = -2;
+}
+
 int	main(int argc, char *argv[])
 {
 	t_view		view;
@@ -172,9 +193,7 @@ int	main(int argc, char *argv[])
 	view.img = mlx_new_image(view.mlx, canvas.width, canvas.height);
 	view.addr = mlx_get_data_addr(view.img, &view.bits_per_pixel, \
 		&view.line_length, &view.endian);
-	view.anti_scalar = 1;
-	view.low_scalar = 1;
-	view.quality_scalar = 1;
+	set_texture(&view, canvas.obj);
 	make_image(&view, canvas); // viewport를 향해서 반복문 사용하여 ray 발사
 	mlx_put_image_to_window(view.mlx, view.win, view.img, 0, 0);
 	mlx_hook(view.win, 2, 1L << 0, key_hook, &view);

@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/28 18:46:42 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/29 17:07:42 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,16 @@
 # define STRUCT_H
 
 
+typedef struct s_texture
+{
+    void    *img;
+    char    *data;
+    int     width;
+    int     height;
+    int     bpp;
+    int     size_line;
+    int     endian;
+} t_texture;
 
 
 typedef struct s_vec3
@@ -52,14 +62,20 @@ typedef struct s_camera
 
 typedef struct s_plane
 {
-	t_vec3	on_plane;
-	t_vec3	norm;
-	int		color[3];
+	t_vec3			on_plane;
+	t_vec3			norm;
+	int				type;
+	t_texture		texture;
+	char			*filepath;
+	int				color[3];
 }	t_plane;
 
 typedef struct s_sphere
 {
+	int				type;
 	t_aabb			box;
+	t_texture		texture;
+	char			*filepath;
 	t_vec3			center;
 	double			radius;
 	int				color[3];

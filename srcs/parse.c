@@ -53,26 +53,88 @@ int	argument_count(char **tmp)
 	return (i);
 }
 
+void	init_nomal_plane(char **tmp, t_canvas *canvas, int idx)
+{
+	canvas->obj->pl[idx].type = PL;
+	canvas->obj->pl[idx].on_plane.x = ft_strtod(tmp[1]);
+	canvas->obj->pl[idx].on_plane.y = ft_strtod(tmp[2]);
+	canvas->obj->pl[idx].on_plane.z = ft_strtod(tmp[3]);
+	canvas->obj->pl[idx].norm.x = ft_strtod(tmp[4]);
+	canvas->obj->pl[idx].norm.y = ft_strtod(tmp[5]);
+	canvas->obj->pl[idx].norm.z = ft_strtod(tmp[6]);
+	canvas->obj->pl[idx].color[RED] = ft_strtod(tmp[7]);
+	canvas->obj->pl[idx].color[GREEN] = ft_strtod(tmp[8]);
+	canvas->obj->pl[idx].color[BLUE] = ft_strtod(tmp[9]);
+}
+
+void	init_checker_palne(char **tmp, t_canvas *canvas, int idx)
+{
+	canvas->obj->pl[idx].type = CPL;
+	canvas->obj->pl[idx].on_plane.x = ft_strtod(tmp[1]);
+	canvas->obj->pl[idx].on_plane.y = ft_strtod(tmp[2]);
+	canvas->obj->pl[idx].on_plane.z = ft_strtod(tmp[3]);
+	canvas->obj->pl[idx].norm.x = ft_strtod(tmp[4]);
+	canvas->obj->pl[idx].norm.y = ft_strtod(tmp[5]);
+	canvas->obj->pl[idx].norm.z = ft_strtod(tmp[6]);
+}
+
+void	init_texture_plane(char **tmp, t_canvas *canvas, int idx)
+{
+	canvas->obj->pl[idx].type = TPL;
+	canvas->obj->pl[idx].on_plane.x = ft_strtod(tmp[1]);
+	canvas->obj->pl[idx].on_plane.y = ft_strtod(tmp[2]);
+	canvas->obj->pl[idx].on_plane.z = ft_strtod(tmp[3]);
+	canvas->obj->pl[idx].norm.x = ft_strtod(tmp[4]);
+	canvas->obj->pl[idx].norm.y = ft_strtod(tmp[5]);
+	canvas->obj->pl[idx].norm.z = ft_strtod(tmp[6]);
+	canvas->obj->pl[idx].filepath = ft_strdup(tmp[7]);
+}
+
 int	init_plane(char **tmp, t_canvas *canvas, int count)
 {
 	static int	idx;
 
 	if (count == 9 && !ft_strcmp(tmp[0], "pl"))
-	{
-		canvas->obj->pl[idx].on_plane.x = ft_strtod(tmp[1]);
-		canvas->obj->pl[idx].on_plane.y = ft_strtod(tmp[2]);
-		canvas->obj->pl[idx].on_plane.z = ft_strtod(tmp[3]);
-		canvas->obj->pl[idx].norm.x = ft_strtod(tmp[4]);
-		canvas->obj->pl[idx].norm.y = ft_strtod(tmp[5]);
-		canvas->obj->pl[idx].norm.z = ft_strtod(tmp[6]);
-		canvas->obj->pl[idx].color[RED] = ft_strtod(tmp[7]);
-		canvas->obj->pl[idx].color[GREEN] = ft_strtod(tmp[8]);
-		canvas->obj->pl[idx].color[BLUE] = ft_strtod(tmp[9]);
-		idx++;
-	}
+		init_nomal_plane(tmp, canvas, idx);
+	else if (count == 6 && !ft_strcmp(tmp[0], "cpl"))
+		init_checker_palne(tmp, canvas, idx);
+	else if (count == 7 && !ft_strcmp(tmp[0], "tpl"))
+		init_texture_plane(tmp, canvas, idx);
 	else
 		return (-1);
+	idx++;
 	return (0);
+}
+
+void	init_nomal_sphere(t_canvas *canvas, char **tmp, int idx)
+{
+	canvas->obj->sp[idx].type = SP;
+	canvas->obj->sp[idx].center.x = ft_strtod(tmp[1]);
+	canvas->obj->sp[idx].center.y = ft_strtod(tmp[2]);
+	canvas->obj->sp[idx].center.z = ft_strtod(tmp[3]);
+	canvas->obj->sp[idx].radius = ft_strtod(tmp[4]);
+	canvas->obj->sp[idx].color[RED] = ft_strtod(tmp[5]);
+	canvas->obj->sp[idx].color[GREEN] = ft_strtod(tmp[6]);
+	canvas->obj->sp[idx].color[BLUE] = ft_strtod(tmp[7]);
+}
+
+void	init_texture_sphere(t_canvas *canvas, char **tmp, int idx)
+{
+	canvas->obj->sp[idx].type = TSP;
+	canvas->obj->sp[idx].center.x = ft_strtod(tmp[1]);
+	canvas->obj->sp[idx].center.y = ft_strtod(tmp[2]);
+	canvas->obj->sp[idx].center.z = ft_strtod(tmp[3]);
+	canvas->obj->sp[idx].radius = ft_strtod(tmp[4]);
+	canvas->obj->sp[idx].filepath = ft_strdup(tmp[5]);
+}
+
+void	init_checker_sphere(t_canvas *canvas, char **tmp, int idx)
+{
+	canvas->obj->sp[idx].type = CSP;
+	canvas->obj->sp[idx].center.x = ft_strtod(tmp[1]);
+	canvas->obj->sp[idx].center.y = ft_strtod(tmp[2]);
+	canvas->obj->sp[idx].center.z = ft_strtod(tmp[3]);
+	canvas->obj->sp[idx].radius = ft_strtod(tmp[4]);
 }
 
 int	init_sphere(char **tmp, t_canvas *canvas, int count)
@@ -80,18 +142,14 @@ int	init_sphere(char **tmp, t_canvas *canvas, int count)
 	static int	idx;
 
 	if (count == 7 && !ft_strcmp(tmp[0], "sp"))
-	{
-		canvas->obj->sp[idx].center.x = ft_strtod(tmp[1]);
-		canvas->obj->sp[idx].center.y = ft_strtod(tmp[2]);
-		canvas->obj->sp[idx].center.z = ft_strtod(tmp[3]);
-		canvas->obj->sp[idx].radius = ft_strtod(tmp[4]);
-		canvas->obj->sp[idx].color[RED] = ft_strtod(tmp[5]);
-		canvas->obj->sp[idx].color[GREEN] = ft_strtod(tmp[6]);
-		canvas->obj->sp[idx].color[BLUE] = ft_strtod(tmp[7]);
-		idx++;
-	}
+		init_nomal_sphere(canvas, tmp, idx);
+	else if (count == 5 && !ft_strcmp(tmp[0], "tsp"))
+		init_texture_sphere(canvas, tmp, idx);
+	else if (count == 4 && !ft_strcmp(tmp[0], "csp"))
+		init_checker_sphere(canvas, tmp, idx);
 	else
 		return (-1);
+	idx++;
 	return (0);
 }
 
@@ -163,7 +221,27 @@ void	free_split(char **tmp)
 	free(tmp);
 }
 
-void	ft_obj_count(char **av, t_volume *volume)
+void	init_count(t_volume *obj, char **tmp)
+{
+	if (!ft_strcmp(tmp[0], "sp"))
+		obj->sp_cnt++;
+	else if (!ft_strcmp(tmp[0], "pl"))
+		obj->pl_cnt++;
+	else if (!ft_strcmp(tmp[0], "cy"))
+		obj->cy_cnt++;
+	else if (!ft_strcmp(tmp[0], "l"))
+		obj->l_cnt++;
+	else if (!ft_strcmp(tmp[0], "tsp"))
+		obj->sp_cnt++;
+	else if (!ft_strcmp(tmp[0], "csp"))
+		obj->sp_cnt++;
+	else if (!ft_strcmp(tmp[0], "tpl"))
+		obj->pl_cnt++;
+	else if (!ft_strcmp(tmp[0], "cpl"))
+		obj->pl_cnt++;
+}
+
+void	ft_obj_count(char **av, t_volume *obj)
 {
 	int		fd;
 	char	*line;
@@ -177,16 +255,7 @@ void	ft_obj_count(char **av, t_volume *volume)
 			break ;
 		tmp = ft_split(line, " \t\n,");
 		if (tmp && *tmp)
-		{
-			if (!ft_strcmp(tmp[0], "sp"))
-				volume->sp_cnt++;
-			else if (!ft_strcmp(tmp[0], "pl"))
-				volume->pl_cnt++;
-			else if (!ft_strcmp(tmp[0], "cy"))
-				volume->cy_cnt++;
-			else if (!ft_strcmp(tmp[0], "l"))
-				volume->l_cnt++;
-		}
+			init_count(obj, tmp);
 		free_split(tmp);
 		free(line);
 	}

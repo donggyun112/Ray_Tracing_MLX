@@ -8,6 +8,21 @@ typedef struct {
     int height;
 } CheckerPattern;
 
+Color texture_at(t_vec3 point, t_texture texture)
+{
+    int x = (int)(point.z * texture.width) % texture.width;
+    int y = (int)(point.x * texture.height) % texture.height;
+    
+    int index = (y * texture.width + x) * 4;
+    int color = *(int *)(texture.data + index);
+    
+    Color c;
+    c.r = (color >> 16) & 0xFF;
+    c.g = (color >> 8) & 0xFF;
+    c.b = color & 0xFF;
+    return c;
+}
+
 Color checkerTexture(t_vec3 point, float scale) {
     // 체커무늬 패턴의 크기를 조절하기 위해 scale을 사용
     float s = scale;
@@ -50,13 +65,45 @@ Color uv_grid_pattern_at(CheckerPattern pattern, float u, float v)
 		return (pattern.color_b);
 }
 
-Color gridTextureOnSphere(t_vec3 point, CheckerPattern pattern, t_vec3 center)
+Color get_texture_color(t_texture texture, float u, float v)
 {
-	float u;
-	float v;
+    int x = (int)(u * (float)texture.width) % texture.width;
+    int y = (int)(v * (float)texture.height) % texture.height;
+    int offset = (x + y * texture.width) * (texture.bpp / 8);
+    
+    int color = *(int *)(texture.data + offset);
+    Color c;
+	c.r = (color >> 16) & 0xFF;
+	c.g = (color >> 8) & 0xFF;
+	c.b = color & 0xFF;
+    return c;
+}
 
+Color image_texture_on_sphere(t_vec3 point, t_vec3 center, t_texture *texture)
+{
+	float		u;
+	float 		v;
+	spherical_map(point, &u, &v, center);
+	return (get_texture_color(*texture, u, v));
+}
+
+Color grid_texture_on_sphere(t_vec3 point, CheckerPattern pattern, t_vec3 center)
+{
+	float		u;
+	float 		v;
 	spherical_map(point, &u, &v, center);
 	return (uv_grid_pattern_at(pattern, u, v));
+}
+
+void	init_texture(t_texture *texture, t_view *view, char *path)
+{
+	texture->img = mlx_xpm_file_to_image(view->mlx, path, &texture->width, &texture->height);
+	if (!texture->img)
+	{
+		fprintf(stderr, "Failed to load texture: %s\n", path);
+		exit(1);
+    }
+	texture->data = mlx_get_data_addr(texture->img, &texture->bpp, &texture->size_line, &texture->endian);
 }
 
 int	hit_line_sphere(t_ray3 *ray, t_sphere *sp)
@@ -116,6 +163,7 @@ void	hit_sphere(t_ray3 *ray, t_sphere *sp, t_canvas canvas)
 	double	tnc;
 	double	d2;
 	double	tmp;
+	Color c;
     CheckerPattern pattern = {{255, 255, 255}, {100, 100, 0}, 32, 16};
 
 
@@ -139,10 +187,16 @@ void	hit_sphere(t_ray3 *ray, t_sphere *sp, t_canvas canvas)
 		ray->color[GREEN] = sp->color[GREEN];
 		ray->color[BLUE] = sp->color[BLUE];
 		ray->type = SP;
-		Color c = gridTextureOnSphere(add_vector(ray->origin, multiple_vector(ray->t, ray->dir)), pattern, sp->center);
-		ray->color[RED] = c.r;
-		ray->color[GREEN] = c.g;
-		ray->color[BLUE] = c.b;
+		if (sp->type == TSP || sp->type == CSP)
+		{
+			if (sp->type == TSP)
+				c = image_texture_on_sphere(add_vector(ray->origin, multiple_vector(ray->t, ray->dir)), sp->center, &sp->texture);
+			else
+				c = grid_texture_on_sphere(add_vector(ray->origin, multiple_vector(ray->t, ray->dir)), pattern, sp->center);
+			ray->color[RED] = c.r;
+			ray->color[GREEN] = c.g;
+			ray->color[BLUE] = c.b;
+		}
 		ray->obj = (void *)sp;
 		if (intersect_sphere_shadow(ray, canvas))
 			ray->type = SHADOW;
@@ -211,8 +265,7 @@ void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 {
 	double	tmp;
 	double	scalar[3];
-	// double	ll;
-	// double	dist;
+	Color c;
 
 	(void)canvas;
 	scalar[0] = scalar_product(pl->on_plane, pl->norm);
@@ -227,11 +280,16 @@ void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 		ray->color[GREEN] = pl->color[GREEN];
 		ray->color[BLUE] = pl->color[BLUE];
 		ray->obj = (void *)pl;
-
-		Color c = checkerTexture(add_vector(ray->origin, multiple_vector(ray->t, ray->dir)), 1);
-		ray->color[RED] = c.r;
-		ray->color[GREEN] = c.g;
-		ray->color[BLUE] = c.b;
+		if (pl->type == TPL || pl->type == CPL)
+		{
+			if (pl->type == TPL)
+				c = texture_at(add_vector(ray->origin, multiple_vector(ray->t, ray->dir)), pl->texture);
+			else
+				c = checkerTexture(add_vector(ray->origin, multiple_vector(ray->t, ray->dir)), 1);
+			ray->color[RED] = c.r;
+			ray->color[GREEN] = c.g;
+			ray->color[BLUE] = c.b;
+		}
 		if (intersect_sphere_shadow(ray, canvas))
 			ray->type = SHADOW;
 		// ll = intersect_sphere_shadow(ray, canvas, 10); // 그림자 개수 --> 안티엘리어싱

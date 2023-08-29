@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/28 18:08:25 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/29 19:02:06 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,25 @@ int	key_hook(int keycode, t_view *view)
 	}
 	else if (keycode == 125)
 	{
-		view->can.cam_orig.x += 0.5;
+		view->can.cam_orig.x -= 0.5;
 		view->cam = camera(view->can);
 		newwin(view);
 	}
 	else if (keycode == 126)
 	{
-		view->can.cam_orig.x -= 0.5;
+		view->can.cam_orig.x += 0.5;
+		view->cam = camera(view->can);
+		newwin(view);
+	}
+	else if (keycode == 123)
+	{
+		view->can.cam_orig.z -= 0.5;
+		view->cam = camera(view->can);
+		newwin(view);
+	}
+	else if (keycode == 124)
+	{
+		view->can.cam_orig.z += 0.5;
 		view->cam = camera(view->can);
 		newwin(view);
 	}
@@ -61,16 +73,45 @@ int	key_hook(int keycode, t_view *view)
 		view->cam = camera(view->can);
 		newwin(view);
 	}
-	if (keycode == 37)
+	if (keycode == 13)
 	{
 		view->can.cam_dir.y += 0.05;
 		view->cam = camera(view->can);
 		newwin(view);
 	}
-	if (keycode == 40)
+	if (keycode == 1)
 	{
 		view->can.cam_dir.y -= 0.05;
 		view->cam = camera(view->can);
+		newwin(view);
+	}
+	if (keycode == 12)
+	{
+		view->can.cam_dir.z -= 0.05;
+		view->cam = camera(view->can);
+		newwin(view);
+	}
+	if (keycode == 14)
+	{
+		view->can.cam_dir.z += 0.05;
+		view->cam = camera(view->can);
+		newwin(view);
+	}
+	if (keycode == 33)
+	{
+		if (view->quality_scalar >= 6)
+			view->quality_scalar = 6;
+		view->quality_scalar += 1;
+		newwin(view);
+	}
+	if (keycode == 30)
+	{
+		view->quality_scalar -= 1;
+		newwin(view);
+	}
+	if (keycode == 17)
+	{
+		view->quality_scalar = -2;
 		newwin(view);
 	}
 	printf("%d\n", keycode);

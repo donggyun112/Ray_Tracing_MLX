@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/29 22:19:16 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/30 00:10:05 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,9 +80,12 @@ void		ray_color(t_canvas canvas, t_ray3 *ray);
 //pattern
 void	init_texture(t_texture *texture, t_view *view, char *path);
 t_color get_texture_color(t_texture texture, float u, float v);
-void spherical_map(t_vec3 p, float* u, float* v, t_vec3 center);
+void	spherical_map(t_vec3 p, float *u, float *v, t_vec3 center, float ag);
 
 //shadow
 int			hit_shadow(t_ray3 *ray, t_canvas canvas);
 
+
+//
+void	newwin(t_view *view);
 #endif

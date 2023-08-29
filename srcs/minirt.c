@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/29 22:06:34 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/30 00:44:45 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,6 +167,20 @@ void	set_texture(t_view *view, t_volume *obj)
 	view->anti_scalar = 1;
 	view->low_scalar = 1;
 	view->quality_scalar = -2;
+	view->can.obj->ag = 0.0;
+	view->flag = 0;
+}
+
+int	loop_hook(t_view *view)
+{
+	if (view->flag)
+	{
+		view->can.obj->ag += 0.05;
+		if (view->can.obj->ag > 360.0)
+			view->can.obj->ag = 0.0;
+		newwin(view);
+	}
+	return (0);
 }
 
 int	main(int argc, char *argv[])
@@ -194,6 +208,7 @@ int	main(int argc, char *argv[])
 	mlx_put_image_to_window(view.mlx, view.win, view.img, 0, 0);
 	mlx_hook(view.win, 2, 1L << 0, key_hook, &view);
 	mlx_hook(view.win, 17, 1L << 5, win_destroy, &view);
+	mlx_loop_hook(view.mlx, loop_hook, &view);
 	mlx_loop(view.mlx);
 	return (0);
 }

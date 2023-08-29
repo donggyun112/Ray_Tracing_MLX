@@ -6,13 +6,13 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 14:30:31 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/29 22:20:31 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/30 00:40:09 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-t_vec3	bump_sphere(t_sphere *sphere, t_texture bp, t_vec3 hit, double scale)
+t_vec3	bump_sphere(t_sphere *sphere, t_texture bp, t_vec3 hit, t_canvas can)
 {
 	float	u;
 	float	v;
@@ -20,13 +20,13 @@ t_vec3	bump_sphere(t_sphere *sphere, t_texture bp, t_vec3 hit, double scale)
 	t_vec3	bump_normal;
 	t_vec3	normal;
 
-	spherical_map(hit, &u, &v, sphere->center);
+	spherical_map(hit, &u, &v, sphere->center, can.obj->ag);
 	c = get_texture_color(bp, u, v);
 	bump_normal = (t_vec3)
 	{
-		scale * ((c.r / 255.0) - 0.5),
-		scale * ((c.g / 255.0) - 0.5),
-		scale * ((c.b / 255.0) - 0.5)
+		2.0 * ((c.r / 255.0) - 0.5),
+		2.0 * ((c.g / 255.0) - 0.5),
+		2.0 * ((c.b / 255.0) - 0.5)
 	};
 	normal = sub_vector(hit, sphere->center);
 	normal = norm_vec(normal);
@@ -44,7 +44,7 @@ double	cos_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas)
 
 	hit = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
 	if (sp->type == TSP)
-		normal = bump_sphere(sp, sp->bumtexture, hit, 3.0);
+		normal = bump_sphere(sp, sp->bumtexture, hit, canvas);
 	else
 		normal = norm_vec(sub_vector(hit, sp->center));
 	light = norm_vec(sub_vector(canvas.obj->l[0].light_orig, hit));

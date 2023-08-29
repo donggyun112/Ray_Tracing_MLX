@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/29 23:31:13 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/30 00:28:53 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,10 @@ int	key_hook(int keycode, t_view *view)
 		rotate_horizontal(keycode, view);
 	else if (keycode == 33 || keycode == 30 || keycode == 17)
 		quality(keycode, view);
+	else if (keycode == 4)
+	{
+		view->flag = !view->flag;
+	}
 	printf("%d\n", keycode);
 	return (0);
 }

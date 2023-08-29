@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:29:45 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/29 22:03:45 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/30 00:42:55 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_color	checkertexture(t_vec3 point, float scale)
 		return ((t_color){255, 255, 255});
 }
 
-void	spherical_map(t_vec3 p, float *u, float *v, t_vec3 center)
+void	spherical_map(t_vec3 p, float *u, float *v, t_vec3 center, float ag)
 {
 	float	theta;
 	float	vecmagnitude;
@@ -58,9 +58,10 @@ void	spherical_map(t_vec3 p, float *u, float *v, t_vec3 center)
 	vecmagnitude = sqrtf(relative_point.x * relative_point.x + \
 	relative_point.y * relative_point.y + relative_point.z * relative_point.z);
 	phi = acosf(relative_point.y / vecmagnitude);
+	theta += ag;
 	raw_u = theta / (2.0f * M_PI);
 	*u = (raw_u + 0.5f);
-	*v = 1.0f - phi / M_PI;
+	*v = phi / M_PI;
 }
 
 t_color	uv_grid_pattern_at(t_checker pattern, float u, float v)
@@ -88,21 +89,21 @@ t_color	get_texture_color(t_texture texture, float u, float v)
 	return (c);
 }
 
-t_color	image_texture_on_sphere(t_vec3 point, t_vec3 center, t_texture *texture)
+t_color	image_texture_on_sphere(t_vec3 point, t_vec3 center, t_texture *texture, t_canvas can)
 {
 	float	u;
 	float	v;
 
-	spherical_map(point, &u, &v, center);
+	spherical_map(point, &u, &v, center, can.obj->ag);
 	return (get_texture_color(*texture, u, v));
 }
 
-t_color	grid_texture_on_sphere(t_vec3 point, t_checker pattern, t_vec3 center)
+t_color	grid_texture_on_sphere(t_vec3 point, t_checker pattern, t_vec3 center, t_canvas can)
 {
 	float	u;
 	float	v;
 
-	spherical_map(point, &u, &v, center);
+	spherical_map(point, &u, &v, center, can.obj->ag);
 	return (uv_grid_pattern_at(pattern, u, v));
 }
 
@@ -119,7 +120,7 @@ void	init_texture(t_texture *texture, t_view *view, char *path)
 	&texture->bpp, &texture->size_line, &texture->endian);
 }
 
-void	sphere_texture(t_ray3 *ray, t_sphere *sp)
+void	sphere_texture(t_ray3 *ray, t_sphere *sp, t_canvas can)
 {
 	t_color			c;
 	const t_checker	pattern = {{255, 255, 255}, {100, 100, 0}, 32, 16};
@@ -127,9 +128,9 @@ void	sphere_texture(t_ray3 *ray, t_sphere *sp)
 
 	hit = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
 	if (sp->type == TSP)
-		c = image_texture_on_sphere(hit, sp->center, &sp->texture);
+		c = image_texture_on_sphere(hit, sp->center, &sp->texture, can);
 	else
-		c = grid_texture_on_sphere(hit, pattern, sp->center);
+		c = grid_texture_on_sphere(hit, pattern, sp->center, can);
 	ray->type = SP;
 	ray->color[RED] = c.r;
 	ray->color[GREEN] = c.g;
@@ -165,7 +166,7 @@ void	hit_sphere(t_ray3 *ray, t_sphere *sp, t_canvas canvas)
 		ray->t = tmp;
 		ray->obj = (void *)sp;
 		if (sp->type == TSP || sp->type == CSP)
-			sphere_texture(ray, sp);
+			sphere_texture(ray, sp, canvas);
 		else
 			init_sp_color(ray, sp);
 		if (hit_shadow(ray, canvas))

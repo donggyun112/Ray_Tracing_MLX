@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/29 22:15:43 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/30 00:09:30 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ typedef struct s_volume
 	int			sp_cnt;
 	int			cy_cnt;
 	int			l_cnt;
+	float		ag;
 	t_plane		*pl;
 	t_sphere	*sp;
 	t_cylinder	*cy;
@@ -148,6 +149,7 @@ typedef struct s_view
 	int			anti_scalar;
 	int			low_scalar;
 	int			quality_scalar;
+	int			flag;
 	t_camera	cam;
 	t_canvas	can;
 }	t_view;

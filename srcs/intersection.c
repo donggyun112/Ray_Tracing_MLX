@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:29:45 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/30 00:42:55 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/30 01:02:29 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,21 +89,21 @@ t_color	get_texture_color(t_texture texture, float u, float v)
 	return (c);
 }
 
-t_color	image_texture_on_sphere(t_vec3 point, t_vec3 center, t_texture *texture, t_canvas can)
+t_color	image_texture_on_sphere(t_vec3 point, t_sphere *sp, t_texture *texture)
 {
 	float	u;
 	float	v;
 
-	spherical_map(point, &u, &v, center, can.obj->ag);
+	spherical_map(point, &u, &v, sp->center, sp->angle);
 	return (get_texture_color(*texture, u, v));
 }
 
-t_color	grid_texture_on_sphere(t_vec3 point, t_checker pattern, t_vec3 center, t_canvas can)
+t_color	grid_texture_on_sphere(t_vec3 point, t_checker pattern, t_sphere *sp)
 {
 	float	u;
 	float	v;
 
-	spherical_map(point, &u, &v, center, can.obj->ag);
+	spherical_map(point, &u, &v, sp->center, sp->angle);
 	return (uv_grid_pattern_at(pattern, u, v));
 }
 
@@ -120,7 +120,7 @@ void	init_texture(t_texture *texture, t_view *view, char *path)
 	&texture->bpp, &texture->size_line, &texture->endian);
 }
 
-void	sphere_texture(t_ray3 *ray, t_sphere *sp, t_canvas can)
+void	sphere_texture(t_ray3 *ray, t_sphere *sp)
 {
 	t_color			c;
 	const t_checker	pattern = {{255, 255, 255}, {100, 100, 0}, 32, 16};
@@ -128,9 +128,9 @@ void	sphere_texture(t_ray3 *ray, t_sphere *sp, t_canvas can)
 
 	hit = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
 	if (sp->type == TSP)
-		c = image_texture_on_sphere(hit, sp->center, &sp->texture, can);
+		c = image_texture_on_sphere(hit, sp, &sp->texture);
 	else
-		c = grid_texture_on_sphere(hit, pattern, sp->center, can);
+		c = grid_texture_on_sphere(hit, pattern, sp);
 	ray->type = SP;
 	ray->color[RED] = c.r;
 	ray->color[GREEN] = c.g;
@@ -166,7 +166,7 @@ void	hit_sphere(t_ray3 *ray, t_sphere *sp, t_canvas canvas)
 		ray->t = tmp;
 		ray->obj = (void *)sp;
 		if (sp->type == TSP || sp->type == CSP)
-			sphere_texture(ray, sp, canvas);
+			sphere_texture(ray, sp);
 		else
 			init_sp_color(ray, sp);
 		if (hit_shadow(ray, canvas))

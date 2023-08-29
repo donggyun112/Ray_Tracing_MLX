@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/30 00:09:30 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/30 00:56:47 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ typedef struct s_plane
 typedef struct s_sphere
 {
 	int				type;
+	int				rotate;
+	float			angle;
 	t_texture		texture;
 	t_texture		bumtexture;
 	char			*filepath;

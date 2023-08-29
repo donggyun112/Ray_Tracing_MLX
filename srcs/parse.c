@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:24:29 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/29 22:55:04 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/30 00:57:07 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ void	init_nomal_sphere(t_canvas *canvas, char **tmp, int idx)
 	canvas->obj->sp[idx].color[RED] = ft_strtod(tmp[5]);
 	canvas->obj->sp[idx].color[GREEN] = ft_strtod(tmp[6]);
 	canvas->obj->sp[idx].color[BLUE] = ft_strtod(tmp[7]);
+	canvas->obj->sp[idx].angle = 0.0;
 }
 
 void	init_texture_sphere(t_canvas *canvas, char **tmp, int idx, int count)
@@ -146,6 +147,7 @@ void	init_texture_sphere(t_canvas *canvas, char **tmp, int idx, int count)
 	canvas->obj->sp[idx].filepath = ft_strdup(tmp[5]);
 	if (count == 6)
 		canvas->obj->sp[idx].bumppath = ft_strdup(tmp[6]);
+	canvas->obj->sp[idx].angle = 0.0;
 }
 
 void	init_checker_sphere(t_canvas *canvas, char **tmp, int idx)
@@ -155,6 +157,7 @@ void	init_checker_sphere(t_canvas *canvas, char **tmp, int idx)
 	canvas->obj->sp[idx].center.y = ft_strtod(tmp[2]);
 	canvas->obj->sp[idx].center.z = ft_strtod(tmp[3]);
 	canvas->obj->sp[idx].radius = ft_strtod(tmp[4]);
+	canvas->obj->sp[idx].angle = 0.0;
 }
 
 int	init_sphere(char **tmp, t_canvas *canvas, int count)

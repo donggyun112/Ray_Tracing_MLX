@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/30 00:44:45 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/30 01:07:43 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,11 +173,21 @@ void	set_texture(t_view *view, t_volume *obj)
 
 int	loop_hook(t_view *view)
 {
+	int	x;
+
 	if (view->flag)
 	{
-		view->can.obj->ag += 0.05;
-		if (view->can.obj->ag > 360.0)
-			view->can.obj->ag = 0.0;
+		x = 0;
+		while (x < view->can.obj->sp_cnt)
+		{
+			if (view->can.obj->sp[x].type == TSP)
+				view->can.obj->sp[x].angle += 0.05;
+			else if (view->can.obj->sp[x].type == CSP)
+				view->can.obj->sp[x].angle += 0.2;
+			if (view->can.obj->sp[x].angle > 360.0)
+				view->can.obj->sp[x].angle = 0.0;
+			x++;
+		}
 		newwin(view);
 	}
 	return (0);

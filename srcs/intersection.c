@@ -140,7 +140,6 @@ int	intersect_sphere_shadow(t_ray3 *ray, t_canvas canvas)
 
 	idx[0] = -1;
 	p = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
-	// printf("x:%f y:%f z:%f\n", canvas.obj->l->light_orig.x, canvas.obj->l->light_orig.y, canvas.obj->l->light_orig.z);
 	while (++idx[0] < canvas.obj->l_cnt)
 	{
 		g_norm = norm_vec(sub_vector(canvas.obj->l[idx[0]].light_orig, p));

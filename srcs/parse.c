@@ -98,7 +98,7 @@ int	init_plane(char **tmp, t_canvas *canvas, int count)
 		init_nomal_plane(tmp, canvas, idx);
 	else if (count == 6 && !ft_strcmp(tmp[0], "cpl"))
 		init_checker_palne(tmp, canvas, idx);
-	else if (count == 7 && !ft_strcmp(tmp[0], "tpl"))
+	else if ((count == 7 || count == 8) && !ft_strcmp(tmp[0], "tpl"))
 		init_texture_plane(tmp, canvas, idx);
 	else
 		return (-1);
@@ -118,7 +118,7 @@ void	init_nomal_sphere(t_canvas *canvas, char **tmp, int idx)
 	canvas->obj->sp[idx].color[BLUE] = ft_strtod(tmp[7]);
 }
 
-void	init_texture_sphere(t_canvas *canvas, char **tmp, int idx)
+void	init_texture_sphere(t_canvas *canvas, char **tmp, int idx, int count)
 {
 	canvas->obj->sp[idx].type = TSP;
 	canvas->obj->sp[idx].center.x = ft_strtod(tmp[1]);
@@ -126,6 +126,8 @@ void	init_texture_sphere(t_canvas *canvas, char **tmp, int idx)
 	canvas->obj->sp[idx].center.z = ft_strtod(tmp[3]);
 	canvas->obj->sp[idx].radius = ft_strtod(tmp[4]);
 	canvas->obj->sp[idx].filepath = ft_strdup(tmp[5]);
+	if (count == 6)
+		canvas->obj->sp[idx].bumppath = ft_strdup(tmp[6]);
 }
 
 void	init_checker_sphere(t_canvas *canvas, char **tmp, int idx)
@@ -143,8 +145,8 @@ int	init_sphere(char **tmp, t_canvas *canvas, int count)
 
 	if (count == 7 && !ft_strcmp(tmp[0], "sp"))
 		init_nomal_sphere(canvas, tmp, idx);
-	else if (count == 5 && !ft_strcmp(tmp[0], "tsp"))
-		init_texture_sphere(canvas, tmp, idx);
+	else if ((count == 5 || count == 6 )&& !ft_strcmp(tmp[0], "tsp"))
+		init_texture_sphere(canvas, tmp, idx, count);
 	else if (count == 4 && !ft_strcmp(tmp[0], "csp"))
 		init_checker_sphere(canvas, tmp, idx);
 	else

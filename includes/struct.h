@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/29 17:07:42 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/29 19:13:23 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,9 @@ typedef struct s_sphere
 	int				type;
 	t_aabb			box;
 	t_texture		texture;
+	t_texture		bumtexture;
 	char			*filepath;
+	char			*bumppath;
 	t_vec3			center;
 	double			radius;
 	int				color[3];

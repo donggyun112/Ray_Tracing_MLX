@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/29 17:14:17 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/29 19:32:37 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,5 +74,7 @@ int		hit(t_ray3 ray, double t_min, double t_max, t_aabb box);
 void	bounding_sphere(t_sphere *sp);
 //pattern
 void	init_texture(t_texture *texture, t_view *view, char *path);
+Color get_texture_color(t_texture texture, float u, float v);
+void spherical_map(t_vec3 p, float* u, float* v, t_vec3 center);
 
 #endif

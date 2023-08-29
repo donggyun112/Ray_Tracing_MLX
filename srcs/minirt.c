@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/29 19:02:06 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/29 19:50:49 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,10 @@ void	set_texture(t_view *view, t_volume *obj)
 	while (++i < obj->sp_cnt)
 	{
 		if (obj->sp[i].type == TSP)
+		{
 			init_texture(&obj->sp[i].texture, view, obj->sp[i].filepath);
+			init_texture(&obj->sp[i].bumtexture, view, obj->sp[i].bumppath);
+		}
 	}
 	i = -1;
 	while (++i < obj->pl_cnt)

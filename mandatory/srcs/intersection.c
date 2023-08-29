@@ -1,72 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   intersection.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/08/28 21:39:34 by jinhyeop          #+#    #+#             */
+/*   Updated: 2023/08/29 20:48:40 by jinhyeop         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/minirt.h"
-#include <stdio.h> //remove
-
-int	hit_line_sphere(t_ray3 *ray, t_sphere *sp)
-{
-	t_vec3	l;
-	double	tca;
-	double	d2;
-	double	tnc;
-
-
-	// p = p0 + tV
-	l = sub_vector(sp->center, ray->origin); // 원점과 구 중심을 잇는 방향벡터
-	tca = scalar_product(l, ray->dir); // 빛이 구를 향해가고 있는지를 판단
-	if (tca < 0)
-		return (0);
-	d2 = scalar_product(l, l) - (tca * tca); // 원점에서 벡터 사이의 거리가 r^2보다 크면 FALSE d = d^2
-	if (d2 > sp->radius * sp->radius)
-		return (0);
-	tnc = sqrt(sp->radius * sp->radius - d2);
-	if (tca - tnc < 0.0)
-		return (1);
-	else
-		return (1);
-	return (1);
-}
-
-double	distance_a(t_vec3 a, t_vec3 b)
-{
-	double	dx;
-	double	dy;
-	double	dz;
-
-	dx = a.x - b.x;
-	dy = a.y - b.y;
-	dz = a.z - b.z;
-	return (sqrt(dx * dx + dy * dy + dz * dz));
-}
-
-
-int	intersect_sphere_shadow(t_ray3 *ray, t_canvas canvas)
-{
-	t_vec3	p;
-	t_vec3	g_norm;
-	t_ray3	light;
-	int		idx;
-
-	idx = 0;
-	p = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
-	g_norm = norm_vec(sub_vector(canvas.light_orig, p));
-	light.dir = g_norm;
-	light.origin = p;
-	while (idx < canvas.obj->sp_cnt)
-	{
-		if (hit_line_sphere(&light, &canvas.obj->sp[idx]))
-			return (1);
-		idx++;
-	}
-	return (0);
-}
-
-double mapToRange(double value, double minInput, double maxInput, double minOutput, double maxOutput)
-{
-    // 로그 함수를 사용하여 입력값을 [0, ∞) 범위로 매핑
-    double logValue = log(value - minInput + 1);
-
-    // [0, ∞) 범위의 값을 [minOutput, maxOutput] 범위로 선형 변환
-    return (((logValue) / (log(maxInput - minInput + 1))) * (maxOutput - minOutput) + minOutput);
-}
 
 t_vec3	check_plane_direction(t_plane *pl, t_ray3 *ray)
 {
@@ -110,11 +54,11 @@ void	hit_sphere(t_ray3 *ray, t_sphere *sp, t_canvas canvas)
 	double	d2;
 	double	tmp;
 
-	l = sub_vector(sp->center, ray->origin); // 원점과 구 중심을 잇는 방향벡터
-	tca = scalar_product(l, ray->dir); // 빛이 구를 향해가고 있는지를 판단
+	l = sub_vector(sp->center, ray->origin);
+	tca = scalar_product(l, ray->dir);
 	if (tca < 0)
 		return ;
-	d2 = scalar_product(l, l) - (tca * tca); // 원점에서 벡터 사이의 거리가 r^2보다 크면 FALSE d = d^2
+	d2 = scalar_product(l, l) - (tca * tca);
 	if (d2 > sp->radius * sp->radius)
 		return ;
 	tnc = sqrt(sp->radius * sp->radius - d2);
@@ -165,7 +109,8 @@ int	cy_in_range(t_ray3 *ray, double t, t_cylinder *cy)
 
 	hit = add_vector(ray->origin, multiple_vector(t, ray->dir));
 	height[0] = scalar_product(sub_vector(hit, cy->center), cy->dir);
-	height[1] = scalar_product(sub_vector(hit, cy->center), multiple_vector(-1.0, cy->dir));
+	height[1] = scalar_product(sub_vector(hit, cy->center), \
+		multiple_vector(-1.0, cy->dir));
 	if (height[0] > 0 && height[0] > cy->height / 2)
 		return (0);
 	if (height[1] > 0 && height[1] > cy->height / 2)
@@ -188,8 +133,10 @@ void	make_cylinder_cap(t_cylinder *cy)
 	}
 	cy->ucap->norm = cy->dir;
 	cy->lcap->norm = multiple_vector(-1.0, cy->dir);
-	cy->ucap->on_plane = add_vector(cy->center, multiple_vector(cy->height / 2.0, cy->dir));
-	cy->lcap->on_plane = add_vector(cy->center, multiple_vector(cy->height / -2.0, cy->dir));
+	cy->ucap->on_plane = add_vector(cy->center, \
+		multiple_vector(cy->height / 2.0, cy->dir));
+	cy->lcap->on_plane = add_vector(cy->center, \
+		multiple_vector(cy->height / -2.0, cy->dir));
 }
 
 void	hit_cap(t_ray3 *ray, t_cylinder *cy, t_plane *cap, t_canvas canvas)

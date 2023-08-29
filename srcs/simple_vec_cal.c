@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 13:07:58 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/07/31 17:37:26 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/29 20:36:31 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,14 @@ double	size_of_vec(double x, double y, double z)
 	double	size;
 
 	size = sqrt(x * x + y * y + z * z);
+	return (size);
+}
+
+double	size_of_vec2(t_vec3 vec)
+{
+	double	size;
+
+	size = sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
 	return (size);
 }
 

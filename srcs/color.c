@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   color.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 00:50:37 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/25 16:49:28 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/08/29 20:49:28 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,11 @@ void	ray_color(t_canvas canvas, t_ray3 *ray)
 		angle[0] = cos_pl(ray->obj, ray, canvas);
 		angle[1] = ref_pl(ray->obj, ray, canvas);
 	}
+	else if (ray->type == CY)
+	{
+		angle[0] = cos_cy(ray->obj, ray, canvas);
+		angle[1] = ref_cy(ray->obj, ray, canvas);
+	}
 	else
 	{
 		angle[0] = 0.0;
@@ -78,5 +83,4 @@ void	ray_color(t_canvas canvas, t_ray3 *ray)
 	ray->color[RED] = add_color(canvas, ray, angle, RED);
 	ray->color[GREEN] = add_color(canvas, ray, angle, GREEN);
 	ray->color[BLUE] = add_color(canvas, ray, angle, BLUE);
-	// printf("red:%d, green:%d, blue:%d\n";, ray->color[RED], ray->color[GREEN], ray->color[BLUE]);
 }

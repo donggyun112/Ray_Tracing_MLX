@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 00:50:37 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/23 05:11:14 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/28 21:39:19 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ int	phong_light(t_canvas canvas, t_ray3 *ray, double angle, int idx)
 	(void)ray;
 	ret = (double)canvas.light_col[idx] * canvas.light_bright \
 		* pow(angle, 20);
-	// printf("%lf\n", pow((angle), (double)ray->color[idx] / 255.0));
 	return (ret);
 }
 
@@ -47,13 +46,10 @@ int	add_color(t_canvas canvas, t_ray3 *ray, double *angle, int idx)
 
 	color = amb_light(canvas, ray, idx);
 	if (ray->type != SHADOW)
-		color += diff_light(canvas, ray, angle[0], idx) + phong_light(canvas, ray, angle[1], idx);
-		// color += diff_light(canvas, ray, angle[0], idx);
-		// color += phong_light(canvas, ray, angle[1], idx);
+		color += diff_light(canvas, ray, angle[0], idx) \
+			+ phong_light(canvas, ray, angle[1], idx);
 	if (color > 255)
 		color = 255;
-	// if (idx == GREEN)
-		// printf("%d\n", color);
 	return (color);
 }
 
@@ -75,7 +71,6 @@ void	ray_color(t_canvas canvas, t_ray3 *ray)
 	{
 		angle[0] = cos_cy(ray->obj, ray, canvas);
 		angle[1] = ref_cy(ray->obj, ray, canvas);
-		// printf("diff: %lf, ref: %lf\n", angle[0], angle[1]);
 	}
 	else
 	{
@@ -85,5 +80,4 @@ void	ray_color(t_canvas canvas, t_ray3 *ray)
 	ray->color[RED] = add_color(canvas, ray, angle, RED);
 	ray->color[GREEN] = add_color(canvas, ray, angle, GREEN);
 	ray->color[BLUE] = add_color(canvas, ray, angle, BLUE);
-	// printf("red:%d, green:%d, blue:%d\n";, ray->color[RED], ray->color[GREEN], ray->color[BLUE]);
 }

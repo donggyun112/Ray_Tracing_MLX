@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/04 04:37:13 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/28 22:18:35 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,26 +39,8 @@ void	my_mlx_pixel_put(t_view *mlx, int x, int y, unsigned int color)
 	*(unsigned int *)dst = color;
 }
 
-int rgb_to_int(int color[])
+int	rgb_to_int(int color[])
 {
 	return ((color[RED] << 16) | (color[GREEN] << 8) \
 	| color[BLUE]);
-}
-
-int my_rand()
-{
-	static unsigned long seed = 123456789;
-
-	seed = (1103515245*seed + 12345) % 2147483648;
-	return (seed);
-}
-
-double my_rand_double()
-{
-	return ((double)my_rand() / 2147483648);
-}
-
-double my_rand_double_range(double min, double max)
-{
-	return min + (max - min) * my_rand_double();
 }

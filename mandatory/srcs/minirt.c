@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/21 17:46:35 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/28 21:44:15 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,19 +43,6 @@ void	color_cal(t_view *view, t_canvas canvas, t_ray3 *ray, int pix[])
 		ray_color(canvas, ray);
 		my_mlx_pixel_put(view, pix[0], pix[1], rgb_to_int(ray->color));
 	}
-/*
-		if (ray->type == 111 && ray->color[RED] != 255)
-		{
-			my_mlx_pixel_put(view, pix[0], pix[1], rgb_to_int(ray->color));
-		}
-		else
-		{
-			my_mlx_pixel_put(view, pix[0], pix[1], 0x0000FF00 + 0x000000FF * angle);
-		}
-		if (angle > 0.999)
-			my_mlx_pixel_put(view, pix[0], pix[1], 0xAAFFFFFF);
-	}
-*/
 	else
 		my_mlx_pixel_put(view, pix[0], pix[1], 0x00FFFFFF);
 }
@@ -127,7 +114,7 @@ int	main(int argc, char *argv[])
 	view.img = mlx_new_image(view.mlx, canvas.width, canvas.height);
 	view.addr = mlx_get_data_addr(view.img, &view.bits_per_pixel, \
 		&view.line_length, &view.endian);
-	make_image(&view, canvas, cam); // viewport를 향해서 반복문 사용하여 ray 발사
+	make_image(&view, canvas, cam);
 	mlx_put_image_to_window(view.mlx, view.win, view.img, 0, 0);
 	mlx_hook(view.win, 17, 1L << 5, win_destroy, &view);
 	mlx_hook(view.win, 2, 1L << 0, key_hook, &view);

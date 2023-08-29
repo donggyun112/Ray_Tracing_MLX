@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/28 18:46:23 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/08/29 20:37:34 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,6 @@ double		ref_cy(t_cylinder *cy, t_ray3 *ray, t_canvas canvas);
 
 //color
 void		ray_color(t_canvas canvas, t_ray3 *ray);
-
-//bvh
-int		hit(t_ray3 ray, double t_min, double t_max, t_aabb box);
-void	bounding_sphere(t_sphere *sp);
 
 //shadow
 int			hit_shadow(t_ray3 *ray, t_canvas canvas);

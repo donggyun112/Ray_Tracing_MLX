@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/30 01:07:43 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/30 05:24:03 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,12 @@ t_color	anti_aliasing(int pix[2], double vp_idx[2], t_view *view, t_ray3 *ray)
 	return (color);
 }
 
-void	low_quality(int scalar, int pix[2], t_ray3 ray, t_canvas canvas, t_view *view)
+void	low_quality(int scalar, int pix[2], t_ray3 ray, t_view *view)
 {
-	int	offset[2];
-	int	new_x;
-	int	new_y;
+	int		offset[2];
+	int		new_x;
+	int		new_y;
+	t_color	c;
 
 	offset[0] = -1;
 	while (++offset[0] < scalar)
@@ -89,12 +90,18 @@ void	low_quality(int scalar, int pix[2], t_ray3 ray, t_canvas canvas, t_view *vi
 		{
 			new_x = pix[0] + offset[0];
 			new_y = pix[1] + offset[1];
-			if (new_x < canvas.width && new_y < canvas.height)
+			if (new_x < view->can.width && new_y < view->can.height)
 			{
 				if (ray.t > 0.0)
 					my_mlx_pixel_put(view, new_x, new_y, rgb_to_int(ray.color));
 				else
-					my_mlx_pixel_put(view, new_x, new_y, 0x00FFFFFF);
+				{
+					c = get_texture_color(view->back, ((float)pix[0] / view->can.width), ((float)pix[1] / view->can.height));
+					ray.color[RED] = c.r;
+					ray.color[GREEN] = c.g;
+					ray.color[BLUE] = c.b;
+					my_mlx_pixel_put(view, new_x, new_y, rgb_to_int(ray.color));
+				}
 			}
 		}
 	}
@@ -125,7 +132,6 @@ void	make_image(t_view *view, t_canvas canvas)
 	double	vp_idx[2];
 	t_ray3	ray;
 	t_color	c;
-
 	pix[1] = 0;
 	set_quality_scalar(view);
 	while (pix[1] < canvas.height)
@@ -138,7 +144,7 @@ void	make_image(t_view *view, t_canvas canvas)
 			ray.color[RED] = c.r / (view->anti_scalar * view->anti_scalar);
 			ray.color[GREEN] = c.g / (view->anti_scalar * view->anti_scalar);
 			ray.color[BLUE] = c.b / (view->anti_scalar * view->anti_scalar);
-			low_quality(view->low_scalar, pix, ray, canvas, view);
+			low_quality(view->low_scalar, pix, ray, view);
 			pix[0] += view->low_scalar;
 		}
 		pix[1] += view->low_scalar;
@@ -147,9 +153,10 @@ void	make_image(t_view *view, t_canvas canvas)
 
 void	set_texture(t_view *view, t_volume *obj)
 {
-	int	i;
+	int i;
 
 	i = -1;
+	init_texture(&view->back, view, "space.xpm");
 	while (++i < obj->sp_cnt)
 	{
 		if (obj->sp[i].type == TSP)
@@ -167,7 +174,6 @@ void	set_texture(t_view *view, t_volume *obj)
 	view->anti_scalar = 1;
 	view->low_scalar = 1;
 	view->quality_scalar = -2;
-	view->can.obj->ag = 0.0;
 	view->flag = 0;
 }
 
@@ -184,7 +190,7 @@ int	loop_hook(t_view *view)
 				view->can.obj->sp[x].angle += 0.05;
 			else if (view->can.obj->sp[x].type == CSP)
 				view->can.obj->sp[x].angle += 0.2;
-			if (view->can.obj->sp[x].angle > 360.0)
+			if (view->can.obj->sp[x].angle > 360.1)
 				view->can.obj->sp[x].angle = 0.0;
 			x++;
 		}
@@ -197,7 +203,6 @@ int	main(int argc, char *argv[])
 {
 	t_view		view;
 	t_canvas	canvas;
-	t_camera	cam;
 
 	if (argc != 2)
 	{
@@ -205,8 +210,7 @@ int	main(int argc, char *argv[])
 		return (1);
 	}
 	canvas = parse(argv);
-	cam = camera(canvas);
-	view.cam = cam;
+	view.cam = camera(canvas);
 	view.can = canvas;
 	view.mlx = mlx_init();
 	view.win = mlx_new_window(view.mlx, canvas.width, canvas.height, "miniRT");

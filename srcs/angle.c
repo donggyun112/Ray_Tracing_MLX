@@ -3,36 +3,61 @@
 /*                                                        :::      ::::::::   */
 /*   angle.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 14:30:31 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/30 01:00:49 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/30 03:47:37 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-t_vec3	bump_sphere(t_sphere *sphere, t_texture bp, t_vec3 hit)
-{
-	float	u;
-	float	v;
-	t_color	c;
-	t_vec3	bump_normal;
-	t_vec3	normal;
+// t_vec3	bump_sphere(t_sphere *sphere, t_texture bp, t_vec3 hit)
+// {
+// 	float	u;
+// 	float	v;
+// 	t_color	c;
+// 	t_vec3	bump_normal;
+// 	t_vec3	normal;
 
-	spherical_map(hit, &u, &v, sphere->center, sphere->angle);
-	c = get_texture_color(bp, u, v);
-	bump_normal = (t_vec3)
-	{
-		2.0 * ((c.r / 255.0) - 0.5),
-		2.0 * ((c.g / 255.0) - 0.5),
-		2.0 * ((c.b / 255.0) - 0.5)
-	};
-	normal = sub_vector(hit, sphere->center);
-	normal = norm_vec(normal);
-	normal = add_vector(normal, bump_normal);
-	normal = norm_vec(normal);
-	return (normal);
+// 	spherical_map(hit, &u, &v, sphere->center, sphere->angle);
+// 	c = get_texture_color(bp, u, v);
+// 	bump_normal = (t_vec3)
+// 	{
+// 		2.0 * (c.r / 255.0) - 0.5,
+// 		2.0 * (c.g / 255.0) - 0.5,
+// 		2.0 * (c.b / 255.0) - 0.5
+// 	};
+// 	normal = sub_vector(hit, sphere->center);
+// 	normal = norm_vec(normal);
+// 	normal = add_vector(normal, bump_normal);
+// 	normal = norm_vec(normal);
+// 	return (normal);
+// }
+
+t_vec3  bump_sphere(t_sphere *sphere, t_texture bp, t_vec3 hit)
+{
+    float   u;
+    float   v;
+    t_color c;
+    t_vec3  bump_normal;
+    t_vec3  normal, tangent, bitangent, bumped_normal;
+    spherical_map(hit, &u, &v, sphere->center, sphere->angle);
+    c = get_texture_color(bp, u, v);
+    bump_normal = (t_vec3){
+        (c.r / 255.0) - 0.3,
+        (c.g / 255.0) - 0.3,
+        (c.b / 255.0) - 0.3
+    };
+    normal = sub_vector(hit, sphere->center);
+    normal = norm_vec(normal);
+    tangent = norm_vec(vector_product(normal, (t_vec3){0, 1, 0}));
+    bitangent = norm_vec(vector_product(normal, tangent));
+    bumped_normal.x = tangent.x * bump_normal.x + bitangent.x * bump_normal.y + normal.x * bump_normal.z;
+    bumped_normal.y = tangent.y * bump_normal.x + bitangent.y * bump_normal.y + normal.y * bump_normal.z;
+    bumped_normal.z = tangent.z * bump_normal.x + bitangent.z * bump_normal.y + normal.z * bump_normal.z;
+    bumped_normal = norm_vec(bumped_normal);
+    return (bumped_normal);
 }
 
 double	cos_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas)
@@ -43,7 +68,7 @@ double	cos_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas)
 	double	angle;
 
 	hit = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
-	if (sp->type == TSP)
+	if (sp->type == TSP && sp->bumppath != NULL)
 		normal = bump_sphere(sp, sp->bumtexture, hit);
 	else
 		normal = norm_vec(sub_vector(hit, sp->center));
@@ -123,7 +148,10 @@ double	ref_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas)
 
 	hit = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
 	light = norm_vec(sub_vector(canvas.obj->l[0].light_orig, hit));
-	normal = norm_vec(sub_vector(hit, sp->center));
+	if (sp->type == TSP && sp->bumppath != NULL)
+		normal = bump_sphere(sp, sp->bumtexture, hit);
+	else
+		normal = norm_vec(sub_vector(hit, sp->center));
 	reflect = norm_vec(reflection(normal, light));
 	ret = scalar_product(norm_vec(\
 	sub_vector(ray->origin, hit)), norm_vec(reflect));

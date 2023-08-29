@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:24:29 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/30 00:57:07 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/30 01:30:49 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,8 @@ void	init_texture_sphere(t_canvas *canvas, char **tmp, int idx, int count)
 	canvas->obj->sp[idx].filepath = ft_strdup(tmp[5]);
 	if (count == 6)
 		canvas->obj->sp[idx].bumppath = ft_strdup(tmp[6]);
+	else
+		canvas->obj->sp[idx].bumppath = NULL;
 	canvas->obj->sp[idx].angle = 0.0;
 }
 

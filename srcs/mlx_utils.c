@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/29 22:41:35 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/29 23:31:13 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,77 +30,106 @@ void	newwin(t_view *view)
 	mlx_put_image_to_window(view->mlx, view->win, view->img, 0, 0);
 }
 
-int	key_hook(int keycode, t_view *view)
+void	foward_back(int keycode, t_view *view)
 {
-	if (keycode == 53)
-	{
-		mlx_destroy_window(view->mlx, view->win);
-		exit (0);
-	}
-	else if (keycode == 125)
+	if (keycode == 125)
 	{
 		view->can.cam_orig = sub_vector(view->can.cam_orig, view->can.cam_dir);
-		view->quality_scalar = -2;
+		view->quality_scalar = -4;
 		view->cam = camera(view->can);
 		newwin(view);
 	}
 	else if (keycode == 126)
 	{
 		view->can.cam_orig = add_vector(view->can.cam_orig, view->can.cam_dir);
-		view->quality_scalar = -2;
+		view->quality_scalar = -4;
 		view->cam = camera(view->can);
 		newwin(view);
-	}
-	else if (keycode == 123)
+	}	
+}
+
+void	left_right(int keycode, t_view *view)
+{
+	if (keycode == 123)
 	{
 		view->can.cam_orig = sub_vector(view->can.cam_orig, view->cam.r_norm);
-		view->quality_scalar = -2;
+		view->quality_scalar = -4;
 		view->cam = camera(view->can);
 		newwin(view);
 	}
 	else if (keycode == 124)
 	{
 		view->can.cam_orig = add_vector(view->can.cam_orig, view->cam.r_norm);
-		view->quality_scalar = -2;
+		view->quality_scalar = -4;
 		view->cam = camera(view->can);
 		newwin(view);
-	}
+	}	
+}
+
+void	up_down(int keycode, t_view *view)
+{
 	if (keycode == 24)
 	{
-		view->can.cam_orig.y -= 2;
+		view->can.cam_orig.y += 1;
+		view->quality_scalar = -4;
 		view->cam = camera(view->can);
 		newwin(view);
 	}
-	if (keycode == 27)
+	else if (keycode == 27)
 	{
-		view->can.cam_orig.y += 2;
+		view->can.cam_orig.y -= 1;
+		view->quality_scalar = -4;
 		view->cam = camera(view->can);
 		newwin(view);
 	}
-	if (keycode == 13)
+}
+
+void	rotate_horizontal(int keycode, t_view *view)
+{
+	if (keycode == 0)
 	{
-		view->can.cam_dir.y += 0.05;
+		view->can.cam_dir = sub_vector(view->can.cam_dir, \
+			multiple_vector(0.1, view->cam.r_norm));
+		view->can.cam_dir = norm_vec(view->can.cam_dir);
+		view->quality_scalar = -4;
 		view->cam = camera(view->can);
 		newwin(view);
 	}
+	else if (keycode == 2)
+	{
+		view->can.cam_dir = add_vector(view->can.cam_dir, \
+			multiple_vector(0.1, view->cam.r_norm));
+		view->can.cam_dir = norm_vec(view->can.cam_dir);
+		view->quality_scalar = -4;
+		view->cam = camera(view->can);
+		newwin(view);
+	}
+}
+
+void	rotate_vertical(int keycode, t_view *view)
+{
 	if (keycode == 1)
 	{
-		view->can.cam_dir.y -= 0.05;
+		view->can.cam_dir = add_vector(view->can.cam_dir, \
+			multiple_vector(0.09, view->cam.v_norm));
+		view->can.cam_dir = norm_vec(view->can.cam_dir);
+		view->quality_scalar = -4;
 		view->cam = camera(view->can);
 		newwin(view);
 	}
-	if (keycode == 12)
+	else if (keycode == 13)
 	{
-		view->can.cam_dir.z -= 0.05;
+		view->can.cam_dir = sub_vector(view->can.cam_dir, \
+			multiple_vector(0.09, view->cam.v_norm));
+		view->can.cam_dir = norm_vec(view->can.cam_dir);
+		view->quality_scalar = -4;
 		view->cam = camera(view->can);
 		newwin(view);
 	}
-	if (keycode == 14)
-	{
-		view->can.cam_dir.z += 0.05;
-		view->cam = camera(view->can);
-		newwin(view);
-	}
+}
+
+void	quality(int keycode, t_view *view)
+{
 	if (keycode == 33)
 	{
 		if (view->quality_scalar >= 6)
@@ -108,16 +137,37 @@ int	key_hook(int keycode, t_view *view)
 		view->quality_scalar += 1;
 		newwin(view);
 	}
-	if (keycode == 30)
+	else if (keycode == 30)
 	{
 		view->quality_scalar -= 1;
 		newwin(view);
 	}
-	if (keycode == 17)
+	else if (keycode == 17)
 	{
-		view->quality_scalar = -2;
+		view->quality_scalar = 1;
 		newwin(view);
+	}	
+}
+
+int	key_hook(int keycode, t_view *view)
+{
+	if (keycode == 53)
+	{
+		mlx_destroy_window(view->mlx, view->win);
+		exit (0);
 	}
+	else if (keycode == 125 || keycode == 126)
+		foward_back(keycode, view);
+	else if (keycode == 123 || keycode == 124)
+		left_right(keycode, view);
+	else if (keycode == 24 || keycode == 27)
+		up_down(keycode, view);
+	else if (keycode == 13 || keycode == 1)
+		rotate_vertical(keycode, view);
+	else if (keycode == 0 || keycode == 2)
+		rotate_horizontal(keycode, view);
+	else if (keycode == 33 || keycode == 30 || keycode == 17)
+		quality(keycode, view);
 	printf("%d\n", keycode);
 	return (0);
 }

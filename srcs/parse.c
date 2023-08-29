@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:24:29 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/29 22:14:29 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/29 22:55:04 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,7 +163,7 @@ int	init_sphere(char **tmp, t_canvas *canvas, int count)
 
 	if (count == 7 && !ft_strcmp(tmp[0], "sp"))
 		init_nomal_sphere(canvas, tmp, idx);
-	else if ((count == 5 || count == 6 )&& !ft_strcmp(tmp[0], "tsp"))
+	else if ((count == 5 || count == 6) && !ft_strcmp(tmp[0], "tsp"))
 		init_texture_sphere(canvas, tmp, idx, count);
 	else if (count == 4 && !ft_strcmp(tmp[0], "csp"))
 		init_checker_sphere(canvas, tmp, idx);

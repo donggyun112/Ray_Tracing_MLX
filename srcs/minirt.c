@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/31 18:21:30 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/31 18:34:55 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,12 @@ t_color	anti_aliasing(int pix[2], double vp_idx[2], t_view *view, t_ray3 *ray)
 			ray->pix[1] = pix[1];
 			intersection(ray, view->can.obj, view->can);
 			color_cal(view, view->can, ray, pix);
-			color.r += ray->color[RED];
-			color.g += ray->color[GREEN];
-			color.b += ray->color[BLUE];
+			if (ray->type == SP)
+			{
+				color.r += ray->color[RED];
+				color.g += ray->color[GREEN];
+				color.b += ray->color[BLUE];
+			}
 		}
 	}
 	return (color);

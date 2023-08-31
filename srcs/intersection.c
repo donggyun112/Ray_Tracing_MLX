@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:29:45 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/30 01:02:29 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/31 18:22:58 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,7 @@ void	init_pltexture(t_ray3 *ray, t_plane *pl)
 
 	hit = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
 	if (pl->type == TPL)
-		c = texture_at(hit, pl->texture);
+		c = get_texture_color(pl->texture, ((float)ray->pix[0] / pl->texture.width), ((float)ray->pix[1] / pl->texture.height));
 	else
 		c = checkertexture(hit, 1);
 	ray->color[RED] = c.r;

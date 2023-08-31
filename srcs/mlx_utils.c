@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/30 00:28:53 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/31 19:11:29 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ void	newwin(t_view *view)
 	view->img = mlx_new_image(view->mlx, view->can.width, view->can.height);
 	view->addr = mlx_get_data_addr(view->img, &view->bits_per_pixel, \
 	&view->line_length, &view->endian);
-	make_image(view, (view)->can);
+	// make_image(view, (view)->can);
+	multi_rend(view);
 	mlx_put_image_to_window(view->mlx, view->win, view->img, 0, 0);
 }
 

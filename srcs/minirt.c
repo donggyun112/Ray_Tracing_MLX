@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/31 18:34:55 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/31 19:27:05 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,9 @@ t_color	anti_aliasing(int pix[2], double vp_idx[2], t_view *view, t_ray3 *ray)
 			ray->pix[1] = pix[1];
 			intersection(ray, view->can.obj, view->can);
 			color_cal(view, view->can, ray, pix);
-			if (ray->type == SP)
-			{
-				color.r += ray->color[RED];
-				color.g += ray->color[GREEN];
-				color.b += ray->color[BLUE];
-			}
+			color.r += ray->color[RED];
+			color.g += ray->color[GREEN];
+			color.b += ray->color[BLUE];
 		}
 	}
 	return (color);
@@ -131,16 +128,48 @@ void	set_quality_scalar(t_view *view)
 	}
 }
 
-void	make_image(t_view *view, t_canvas canvas)
+// void	make_image(t_view *view, t_canvas canvas)
+// {
+// 	int		pix[2];
+// 	double	vp_idx[2];
+// 	t_ray3	ray;
+// 	t_color	c;
+// 	pix[1] = 0;
+// 	set_quality_scalar(view);
+// 	while (pix[1] < canvas.height)
+// 	{
+// 		pix[0] = 0;
+// 		vp_idx[1] = 2.0 * (double)pix[1] / (double)canvas.height;
+// 		while (pix[0] < canvas.width)
+// 		{
+// 			c = anti_aliasing(pix, vp_idx, view, &ray);
+// 			ray.color[RED] = c.r / (view->anti_scalar * view->anti_scalar);
+// 			ray.color[GREEN] = c.g / (view->anti_scalar * view->anti_scalar);
+// 			ray.color[BLUE] = c.b / (view->anti_scalar * view->anti_scalar);
+// 			low_quality(view->low_scalar, pix, ray, view);
+// 			pix[0] += view->low_scalar;
+// 		}
+// 		pix[1] += view->low_scalar;
+// 	}
+// }
+
+void	*make_image2(void *m)
 {
 	int		pix[2];
 	double	vp_idx[2];
 	t_ray3	ray;
 	t_color	c;
-	pix[1] = 0;
-	set_quality_scalar(view);
+	t_view	*view;
+	t_canvas	canvas;
+	t_thread	*t;
+
+	t = (t_thread *)m;
+	canvas = t->canvas;
+	view = t->view;
+	pix[1] = t->id;
 	while (pix[1] < canvas.height)
 	{
+		printf("%d\n", t->id);
 		pix[0] = 0;
 		vp_idx[1] = 2.0 * (double)pix[1] / (double)canvas.height;
 		while (pix[0] < canvas.width)
@@ -152,8 +181,36 @@ void	make_image(t_view *view, t_canvas canvas)
 			low_quality(view->low_scalar, pix, ray, view);
 			pix[0] += view->low_scalar;
 		}
-		pix[1] += view->low_scalar;
+		pix[1] += (view->low_scalar + 4);
+		if (pix[1] > canvas.height)
+			pix[1] -= 2;
 	}
+	return (NULL);
+}
+
+t_thread	*init_thread(t_view *view)
+{
+	t_thread	*m;
+
+	m = (t_thread *)malloc(sizeof(t_thread) * 5);
+	set_quality_scalar(view);
+	for (int x = 0; x < 5; x++)
+	{
+		m[x].id = x;
+		m[x].view = view;
+		m[x].canvas = view->can;
+	}
+	return (m);
+}
+
+void	multi_rend(t_view *view)
+{
+	t_thread	*m;
+	m = init_thread(view);
+	for (int x = 0; x < 5; x++)
+		pthread_create(&m[x].thread, NULL, make_image2, &m[x]);
+	for (int x = 0; x < 5; x++)
+		pthread_join(m[x].thread, NULL);
 }
 
 void	set_texture(t_view *view, t_volume *obj)
@@ -223,7 +280,8 @@ int	main(int argc, char *argv[])
 	view.addr = mlx_get_data_addr(view.img, &view.bits_per_pixel, \
 		&view.line_length, &view.endian);
 	set_texture(&view, canvas.obj);
-	make_image(&view, canvas);
+	multi_rend(&view);
+	// make_image(&view, canvas);
 	mlx_put_image_to_window(view.mlx, view.win, view.img, 0, 0);
 	mlx_hook(view.win, 2, 1L << 0, key_hook, &view);
 	mlx_hook(view.win, 17, 1L << 5, win_destroy, &view);

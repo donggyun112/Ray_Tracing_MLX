@@ -6,12 +6,14 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/31 18:20:59 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/31 19:05:26 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCT_H
 # define STRUCT_H
+
+# include <pthread.h>
 
 typedef struct s_color
 {
@@ -158,6 +160,15 @@ typedef struct s_view
 	t_texture	back;
 }	t_view;
 
+
+typedef struct s_thread
+{
+	int			id;
+	t_ray3		ray;
+	t_view		*view;
+	t_canvas	canvas;
+	pthread_t	thread;
+}	t_thread;
 
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/30 00:10:05 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/08/31 19:11:22 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,4 +88,5 @@ int			hit_shadow(t_ray3 *ray, t_canvas canvas);
 
 //
 void	newwin(t_view *view);
+void	multi_rend(t_view *view);
 #endif

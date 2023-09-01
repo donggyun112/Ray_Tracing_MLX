@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/31 19:27:05 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/01 15:16:56 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,7 @@ void	*make_image2(void *m)
 	pix[1] = t->id;
 	while (pix[1] < canvas.height)
 	{
-		printf("%d\n", t->id);
+		// printf("%d\n", t->id);
 		pix[0] = 0;
 		vp_idx[1] = 2.0 * (double)pix[1] / (double)canvas.height;
 		while (pix[0] < canvas.width)
@@ -181,9 +181,7 @@ void	*make_image2(void *m)
 			low_quality(view->low_scalar, pix, ray, view);
 			pix[0] += view->low_scalar;
 		}
-		pix[1] += (view->low_scalar + 4);
-		if (pix[1] > canvas.height)
-			pix[1] -= 2;
+		pix[1] += (view->low_scalar + 6);
 	}
 	return (NULL);
 }
@@ -192,9 +190,9 @@ t_thread	*init_thread(t_view *view)
 {
 	t_thread	*m;
 
-	m = (t_thread *)malloc(sizeof(t_thread) * 5);
+	m = (t_thread *)malloc(sizeof(t_thread) * 7);
 	set_quality_scalar(view);
-	for (int x = 0; x < 5; x++)
+	for (int x = 0; x < 7; x++)
 	{
 		m[x].id = x;
 		m[x].view = view;
@@ -207,9 +205,9 @@ void	multi_rend(t_view *view)
 {
 	t_thread	*m;
 	m = init_thread(view);
-	for (int x = 0; x < 5; x++)
+	for (int x = 0; x < 7; x++)
 		pthread_create(&m[x].thread, NULL, make_image2, &m[x]);
-	for (int x = 0; x < 5; x++)
+	for (int x = 0; x < 7; x++)
 		pthread_join(m[x].thread, NULL);
 }
 

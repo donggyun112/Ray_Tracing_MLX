@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/01 15:16:56 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/01 18:27:54 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,30 +128,30 @@ void	set_quality_scalar(t_view *view)
 	}
 }
 
-// void	make_image(t_view *view, t_canvas canvas)
-// {
-// 	int		pix[2];
-// 	double	vp_idx[2];
-// 	t_ray3	ray;
-// 	t_color	c;
-// 	pix[1] = 0;
-// 	set_quality_scalar(view);
-// 	while (pix[1] < canvas.height)
-// 	{
-// 		pix[0] = 0;
-// 		vp_idx[1] = 2.0 * (double)pix[1] / (double)canvas.height;
-// 		while (pix[0] < canvas.width)
-// 		{
-// 			c = anti_aliasing(pix, vp_idx, view, &ray);
-// 			ray.color[RED] = c.r / (view->anti_scalar * view->anti_scalar);
-// 			ray.color[GREEN] = c.g / (view->anti_scalar * view->anti_scalar);
-// 			ray.color[BLUE] = c.b / (view->anti_scalar * view->anti_scalar);
-// 			low_quality(view->low_scalar, pix, ray, view);
-// 			pix[0] += view->low_scalar;
-// 		}
-// 		pix[1] += view->low_scalar;
-// 	}
-// }
+void	make_image(t_view *view, t_canvas canvas)
+{
+	int		pix[2];
+	double	vp_idx[2];
+	t_ray3	ray;
+	t_color	c;
+	pix[1] = 0;
+	set_quality_scalar(view);
+	while (pix[1] < canvas.height)
+	{
+		pix[0] = 0;
+		vp_idx[1] = 2.0 * (double)pix[1] / (double)canvas.height;
+		while (pix[0] < canvas.width)
+		{
+			c = anti_aliasing(pix, vp_idx, view, &ray);
+			ray.color[RED] = c.r / (view->anti_scalar * view->anti_scalar);
+			ray.color[GREEN] = c.g / (view->anti_scalar * view->anti_scalar);
+			ray.color[BLUE] = c.b / (view->anti_scalar * view->anti_scalar);
+			low_quality(view->low_scalar, pix, ray, view);
+			pix[0] += view->low_scalar;
+		}
+		pix[1] += view->low_scalar;
+	}
+}
 
 void	*make_image2(void *m)
 {
@@ -204,7 +204,9 @@ t_thread	*init_thread(t_view *view)
 void	multi_rend(t_view *view)
 {
 	t_thread	*m;
+
 	m = init_thread(view);
+	pthread_mutex_init(&view->mutex, NULL);
 	for (int x = 0; x < 7; x++)
 		pthread_create(&m[x].thread, NULL, make_image2, &m[x]);
 	for (int x = 0; x < 7; x++)
@@ -259,6 +261,36 @@ int	loop_hook(t_view *view)
 	return (0);
 }
 
+void	make_cylinder_cap(t_cylinder *cy)
+{
+	int	idx;
+
+	idx = 0;
+	cy->ucap = (t_plane *)malloc(sizeof(t_plane));
+	cy->lcap = (t_plane *)malloc(sizeof(t_plane));
+	while (idx < 3)
+	{
+		cy->ucap->color[idx] = cy->color[idx];
+		cy->lcap->color[idx] = cy->color[idx];
+		idx++;
+	}
+	cy->ucap->norm = cy->dir;
+	cy->lcap->norm = multiple_vector(-1.0, cy->dir);
+	cy->ucap->on_plane = add_vector(cy->center, \
+		multiple_vector(cy->height / 2.0, cy->dir));
+	cy->lcap->on_plane = add_vector(cy->center, \
+		multiple_vector(cy->height / -2.0, cy->dir));
+}
+
+void	make_obj_cap(t_volume *obj)
+{
+	int	idx;
+
+	idx = 0;
+	while (idx < obj->cy_cnt)
+		make_cylinder_cap(&obj->cy[idx++]);
+}
+
 int	main(int argc, char *argv[])
 {
 	t_view		view;
@@ -270,6 +302,7 @@ int	main(int argc, char *argv[])
 		return (1);
 	}
 	canvas = parse(argv);
+	make_obj_cap(canvas.obj);
 	view.cam = camera(canvas);
 	view.can = canvas;
 	view.mlx = mlx_init();

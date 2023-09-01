@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/31 19:11:22 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/01 22:59:53 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,32 +47,32 @@ int			win_destroy(t_view *view);
 int			key_hook(int keycode, t_view *view);
 void		my_mlx_pixel_put(t_view *mlx, int x, int y, unsigned int color);
 int			rgb_to_int(int color[]);
-double 		my_rand_double();
-double		my_rand_double_range(double min, double max);
+float 		my_rand_float();
+float		my_rand_float_range(float min, float max);
 int 		my_rand();
 
 //intersection
-int			discriminant(double a, double b, double c);
-double		quad_formula(double a, double b, double c);
+int			discriminant(float a, float b, float c);
+float		quad_formula(float a, float b, float c);
 void		hit_sphere(t_ray3 *ray, t_sphere *sp, t_canvas canvas);
 void		hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas);
 void		hit_cylinder(t_ray3 *ray, t_cylinder *cy, t_canvas canvas);
 void		make_cylinder_cap(t_cylinder *cy);
 t_vec3		check_plane_direction(t_plane *pl, t_ray3 *ray);
-int			cy_in_range(t_ray3 *ray, double t, t_cylinder *cy);
+int			cy_in_range(t_ray3 *ray, float t, t_cylinder *cy);
 
 //raycasting
-t_ray3		create_ray(t_camera cam, double u, double v);
+t_ray3		create_ray(t_camera cam, float u, float v);
 t_camera	camera(t_canvas canvas);
 void		make_image(t_view *view, t_canvas canvas);
 
 //angle
-double		cos_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas);
-double		cos_pl(t_plane *pl, t_ray3 *ray, t_canvas canvas);
-double		cos_cy(t_cylinder *cy, t_ray3 *ray, t_canvas canvas);
-double		ref_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas);
-double		ref_pl(t_plane *pl, t_ray3 *ray, t_canvas canvas);
-double		ref_cy(t_cylinder *cy, t_ray3 *ray, t_canvas canvas);
+float		cos_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas);
+float		cos_pl(t_plane *pl, t_ray3 *ray, t_canvas canvas);
+float		cos_cy(t_cylinder *cy, t_ray3 *ray, t_canvas canvas);
+float		ref_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas);
+float		ref_pl(t_plane *pl, t_ray3 *ray, t_canvas canvas);
+float		ref_cy(t_cylinder *cy, t_ray3 *ray, t_canvas canvas);
 
 //color
 void		ray_color(t_canvas canvas, t_ray3 *ray);

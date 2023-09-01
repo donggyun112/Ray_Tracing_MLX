@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/01 17:23:02 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/01 22:59:55 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,16 +43,16 @@ typedef struct s_checkerpattern
 
 typedef struct s_vec3
 {
-	double	x;
-	double	y;
-	double	z;
+	float	x;
+	float	y;
+	float	z;
 }	t_vec3;
 
 typedef struct s_ray3
 {
 	t_vec3			origin;
 	t_vec3			dir;
-	double			t;
+	float			t;
 	int				type;
 	void			*obj;
 	int				pix[2];
@@ -66,8 +66,8 @@ typedef struct s_camera
 	t_vec3	dir;
 	t_vec3	r_norm;
 	t_vec3	v_norm;
-	double	fov;
-	double	focal_len;
+	float	fov;
+	float	focal_len;
 }	t_camera;
 
 typedef struct s_plane
@@ -90,7 +90,7 @@ typedef struct s_sphere
 	char			*filepath;
 	char			*bumppath;
 	t_vec3			center;
-	double			radius;
+	float			radius;
 	int				color[3];
 }	t_sphere;
 
@@ -98,8 +98,8 @@ typedef struct s_cylinder
 {
 	t_vec3	center;
 	t_vec3	dir;
-	double	radius;
-	double	height;
+	float	radius;
+	float	height;
 	int		color[3];
 	t_plane	*ucap;
 	t_plane	*lcap;
@@ -108,7 +108,7 @@ typedef struct s_cylinder
 typedef struct s_light
 {
 	t_vec3			light_orig;
-	double			light_bright;
+	float			light_bright;
 	int				light_col[3];
 }	t_light;
 
@@ -129,14 +129,14 @@ typedef struct s_canvas
 {
 	int				width;
 	int				height;
-	double			ratio;
-	double			amb_bright;
+	float			ratio;
+	float			amb_bright;
 	int				amb_col[3];
 	t_vec3			cam_orig;
 	t_vec3			cam_dir;
 	int				fov;
 	t_vec3			light_orig;
-	double			light_bright;
+	float			light_bright;
 	int				light_col[3];
 	t_volume		*obj;
 	t_camera		cam;

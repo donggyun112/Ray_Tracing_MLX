@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:24:29 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/30 01:30:49 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/01 23:00:11 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	init_view2(t_canvas *canvas, char **tmp)
 {
 	canvas->width = ft_strtod(tmp[1]);
 	canvas->height = ft_strtod(tmp[2]);
-	canvas->ratio = (double)canvas->width / (double)canvas->height;
+	canvas->ratio = (float)canvas->width / (float)canvas->height;
 }
 
 int	init_view(char **tmp, t_canvas *canvas, int count)

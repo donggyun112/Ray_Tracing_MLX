@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 02:07:30 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/08/29 22:15:34 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/01 23:00:14 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-t_vec3	left_upper(t_camera cam, double viewport[])
+t_vec3	left_upper(t_camera cam, float viewport[])
 {
 	t_vec3	left_upper;
 	t_vec3	r_half;
@@ -30,11 +30,11 @@ t_camera	camera(t_canvas canvas)
 {
 	t_camera	cam;
 	t_vec3		up;
-	double		fov_radians;
-	double		viewport[2];
+	float		fov_radians;
+	float		viewport[2];
 
 	cam.origin = canvas.cam_orig;
-	fov_radians = (double)canvas.fov * M_PI / 180.0;
+	fov_radians = (float)canvas.fov * M_PI / 180.0;
 	cam.focal_len = 1.0 / tan(0.5 * fov_radians);
 	viewport[HEIGHT] = 2.0;
 	viewport[WIDTH] = viewport[HEIGHT] * canvas.ratio;
@@ -46,7 +46,7 @@ t_camera	camera(t_canvas canvas)
 	return (cam);
 }
 
-t_ray3	create_ray(t_camera cam, double u, double v)
+t_ray3	create_ray(t_camera cam, float u, float v)
 {
 	t_ray3	ray;
 	t_vec3	on_vp;

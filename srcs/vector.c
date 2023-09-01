@@ -6,14 +6,14 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 11:38:12 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/05 01:30:24 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/01 23:00:35 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/vector.h"
 #include "../includes/struct.h"
 
-t_vec3	vec3(double x, double y, double z)
+t_vec3	vec3(float x, float y, float z)
 {
 	t_vec3	new;
 
@@ -26,7 +26,7 @@ t_vec3	vec3(double x, double y, double z)
 t_vec3	norm_vec(t_vec3 vec)
 {
 	t_vec3	norm;
-	double	size;
+	float	size;
 
 	size = size_of_vec(vec.x, vec.y, vec.z);
 	norm.x = vec.x / size;
@@ -35,9 +35,9 @@ t_vec3	norm_vec(t_vec3 vec)
 	return (norm);
 }
 
-double	scalar_product(t_vec3 v1, t_vec3 v2)
+float	scalar_product(t_vec3 v1, t_vec3 v2)
 {
-	double	res;
+	float	res;
 
 	res = (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z);
 	return (res);

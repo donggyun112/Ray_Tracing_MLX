@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/01 18:27:54 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/01 23:00:44 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,10 @@ void	color_cal(t_view *view, t_canvas canvas, t_ray3 *ray, int pix[])
 }
 
 
-t_color	anti_aliasing(int pix[2], double vp_idx[2], t_view *view, t_ray3 *ray)
+t_color	anti_aliasing(int pix[2], float vp_idx[2], t_view *view, t_ray3 *ray)
 {
 	t_color	color;
-	double	offset[2];
+	float	offset[2];
 	int		idx[2];
 
 	color = (t_color){0, 0, 0};
@@ -60,10 +60,10 @@ t_color	anti_aliasing(int pix[2], double vp_idx[2], t_view *view, t_ray3 *ray)
 		{
 			offset[0] = (float)idx[1] / view->anti_scalar;
 			offset[1] = (float)idx[0] / view->anti_scalar;
-			vp_idx[0] = view->can.ratio * 2.0 * ((double)pix[0] + \
-			offset[0]) / (double)view->can.width;
-			vp_idx[1] = 2.0 * ((double)pix[1] + \
-			offset[1]) / (double)view->can.height;
+			vp_idx[0] = view->can.ratio * 2.0 * ((float)pix[0] + \
+			offset[0]) / (float)view->can.width;
+			vp_idx[1] = 2.0 * ((float)pix[1] + \
+			offset[1]) / (float)view->can.height;
 			*ray = create_ray(view->cam, vp_idx[0], vp_idx[1]);
 			ray->pix[0] = pix[0];
 			ray->pix[1] = pix[1];
@@ -131,7 +131,7 @@ void	set_quality_scalar(t_view *view)
 void	make_image(t_view *view, t_canvas canvas)
 {
 	int		pix[2];
-	double	vp_idx[2];
+	float	vp_idx[2];
 	t_ray3	ray;
 	t_color	c;
 	pix[1] = 0;
@@ -139,7 +139,7 @@ void	make_image(t_view *view, t_canvas canvas)
 	while (pix[1] < canvas.height)
 	{
 		pix[0] = 0;
-		vp_idx[1] = 2.0 * (double)pix[1] / (double)canvas.height;
+		vp_idx[1] = 2.0 * (float)pix[1] / (float)canvas.height;
 		while (pix[0] < canvas.width)
 		{
 			c = anti_aliasing(pix, vp_idx, view, &ray);
@@ -156,7 +156,7 @@ void	make_image(t_view *view, t_canvas canvas)
 void	*make_image2(void *m)
 {
 	int		pix[2];
-	double	vp_idx[2];
+	float	vp_idx[2];
 	t_ray3	ray;
 	t_color	c;
 	t_view	*view;
@@ -171,7 +171,7 @@ void	*make_image2(void *m)
 	{
 		// printf("%d\n", t->id);
 		pix[0] = 0;
-		vp_idx[1] = 2.0 * (double)pix[1] / (double)canvas.height;
+		vp_idx[1] = 2.0 * (float)pix[1] / (float)canvas.height;
 		while (pix[0] < canvas.width)
 		{
 			c = anti_aliasing(pix, vp_idx, view, &ray);

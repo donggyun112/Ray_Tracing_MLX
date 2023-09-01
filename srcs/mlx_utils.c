@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/01 18:12:31 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/01 23:01:16 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,10 +181,8 @@ void	my_mlx_pixel_put(t_view *mlx, int x, int y, unsigned int color)
 {
 	char	*dst;
 
-	pthread_mutex_lock(&mlx->mutex);
 	dst = mlx->addr + (y * mlx->line_length + x * (mlx->bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
-	pthread_mutex_unlock(&mlx->mutex);
 }
 
 int	rgb_to_int(int color[])

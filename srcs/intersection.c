@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   intersection.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:29:45 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/01 17:02:23 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/01 23:00:04 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,10 +146,10 @@ void	init_sp_color(t_ray3 *ray, t_sphere *sp)
 void	hit_sphere(t_ray3 *ray, t_sphere *sp, t_canvas canvas)
 {
 	const t_vec3	l = sub_vector(sp->center, ray->origin);
-	const double	tca = scalar_product(l, ray->dir);
-	const double	d2 = scalar_product(l, l) - (tca * tca);
-	const double	tnc = sqrt(sp->radius * sp->radius - d2);
-	double			tmp;
+	const float	tca = scalar_product(l, ray->dir);
+	const float	d2 = scalar_product(l, l) - (tca * tca);
+	const float	tnc = sqrt(sp->radius * sp->radius - d2);
+	float			tmp;
 
 	if (tca < 0)
 		return ;
@@ -207,8 +207,8 @@ void	init_pltexture(t_ray3 *ray, t_plane *pl)
 
 void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 {
-	double	tmp;
-	double	scalar[3];
+	float	tmp;
+	float	scalar[3];
 
 	(void)canvas;
 	pl->norm = check_plane_direction(pl, ray);
@@ -230,7 +230,7 @@ void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 	}
 }
 
-int	discriminant(double a, double b, double c)
+int	discriminant(float a, float b, float c)
 {
 	if ((b * b) - (4 * a * c) >= 0.0)
 		return (1);
@@ -238,10 +238,10 @@ int	discriminant(double a, double b, double c)
 		return (0);
 }
 
-double	quad_formula(double a, double b, double c)
+float	quad_formula(float a, float b, float c)
 {
-	double	sol1;
-	double	sol2;
+	float	sol1;
+	float	sol2;
 
 	sol1 = ((-1) * b - sqrt(b * b - (4 * a * c))) / (2.0 * a);
 	sol2 = ((-1) * b + sqrt(b * b - (4 * a * c))) / (2.0 * a);
@@ -253,10 +253,10 @@ double	quad_formula(double a, double b, double c)
 		return (-1.0);
 }
 
-int	cy_in_range(t_ray3 *ray, double t, t_cylinder *cy)
+int	cy_in_range(t_ray3 *ray, float t, t_cylinder *cy)
 {
 	t_vec3	hit;
-	double	height[2];
+	float	height[2];
 
 	hit = add_vector(ray->origin, multiple_vector(t, ray->dir));
 	height[0] = scalar_product(sub_vector(hit, cy->center), cy->dir);
@@ -271,8 +271,8 @@ int	cy_in_range(t_ray3 *ray, double t, t_cylinder *cy)
 
 void	hit_cap(t_ray3 *ray, t_cylinder *cy, t_plane *cap, t_canvas canvas)
 {
-	double	tmp;
-	double	scalar[3];
+	float	tmp;
+	float	scalar[3];
 	t_vec3	hit;
 
 	scalar[0] = scalar_product(cap->on_plane, cap->norm);
@@ -295,7 +295,7 @@ void	hit_cap(t_ray3 *ray, t_cylinder *cy, t_plane *cap, t_canvas canvas)
 	}
 }
 
-void	init_cy_color(t_ray3 *ray, t_cylinder *cy, double tmp)
+void	init_cy_color(t_ray3 *ray, t_cylinder *cy, float tmp)
 {
 	ray->t = tmp;
 	ray->color[RED] = cy->color[RED];
@@ -309,8 +309,8 @@ void	hit_cylinder(t_ray3 *ray, t_cylinder *cy, t_canvas canvas)
 {
 	const t_vec3	oc = sub_vector(ray->origin, cy->center);
 	t_vec3			v[2];
-	double			coef[3];
-	double			tmp;
+	float			coef[3];
+	float			tmp;
 
 	hit_cap(ray, cy, cy->ucap, canvas);
 	hit_cap(ray, cy, cy->lcap, canvas);

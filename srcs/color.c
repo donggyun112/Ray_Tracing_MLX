@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   color.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 00:50:37 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/30 03:40:03 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/01 23:00:01 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,31 +16,31 @@ int	amb_light(t_canvas canvas, t_ray3 *ray, int idx)
 {
 	int	ret;
 
-	ret = (double)ray->color[idx] * canvas.amb_bright \
-		* ((double)canvas.amb_col[idx] / 255.0);
+	ret = (float)ray->color[idx] * canvas.amb_bright \
+		* ((float)canvas.amb_col[idx] / 255.0);
 	return (ret);
 }
 
-int	diff_light(t_canvas canvas, t_ray3 *ray, double angle, int idx)
+int	diff_light(t_canvas canvas, t_ray3 *ray, float angle, int idx)
 {
 	int	ret;
 
-	ret = (double)ray->color[idx] * angle * canvas.obj->l[0].light_bright \
-		* ((double)canvas.obj->l[0].light_col[idx] / 255.0);
+	ret = (float)ray->color[idx] * angle * canvas.obj->l[0].light_bright \
+		* ((float)canvas.obj->l[0].light_col[idx] / 255.0);
 	return (ret);
 }
 
-int	phong_light(t_canvas canvas, t_ray3 *ray, double angle, int idx)
+int	phong_light(t_canvas canvas, t_ray3 *ray, float angle, int idx)
 {
 	int	ret;
 
 	(void)ray;
-	ret = (double)canvas.obj->l[0].light_col[idx] * \
+	ret = (float)canvas.obj->l[0].light_col[idx] * \
 	canvas.obj->l[0].light_bright * pow(angle, 30);
 	return (ret);
 }
 
-int	add_color(t_canvas canvas, t_ray3 *ray, double *angle, int idx)
+int	add_color(t_canvas canvas, t_ray3 *ray, float *angle, int idx)
 {
 	int	color;
 
@@ -55,7 +55,7 @@ int	add_color(t_canvas canvas, t_ray3 *ray, double *angle, int idx)
 
 void	ray_color(t_canvas canvas, t_ray3 *ray)
 {
-	double	angle[2];
+	float	angle[2];
 
 	if (ray->type == SP)
 	{

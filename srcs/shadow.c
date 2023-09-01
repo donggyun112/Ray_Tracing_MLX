@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shadow.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 17:48:21 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/01 17:45:46 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/01 23:00:16 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 void	shadow_sphere(t_ray3 *ray, t_sphere *sp)
 {
 	t_vec3	l;
-	double	tca;
-	double	tnc;
-	double	d2;
-	double	tmp;
+	float	tca;
+	float	tnc;
+	float	d2;
+	float	tmp;
 
 	l = sub_vector(sp->center, ray->origin);
 	tca = scalar_product(l, ray->dir);
@@ -38,8 +38,8 @@ void	shadow_sphere(t_ray3 *ray, t_sphere *sp)
 
 void	shadow_plane(t_ray3 *ray, t_plane *pl)
 {
-	double	tmp;
-	double	scalar[3];
+	float	tmp;
+	float	scalar[3];
 
 	// pl->norm = check_plane_direction(pl, ray);
 	scalar[0] = scalar_product(pl->on_plane, pl->norm);
@@ -52,8 +52,8 @@ void	shadow_plane(t_ray3 *ray, t_plane *pl)
 
 void	shadow_cap(t_ray3 *ray, t_cylinder *cy, t_plane *cap)
 {
-	double	tmp;
-	double	scalar[3];
+	float	tmp;
+	float	scalar[3];
 	t_vec3	hit;
 
 	scalar[0] = scalar_product(cap->on_plane, cap->norm);
@@ -71,8 +71,8 @@ void	shadow_cylinder(t_ray3 *ray, t_cylinder *cy)
 {
 	t_vec3	oc;
 	t_vec3	v[2];
-	double	coef[3];
-	double	tmp;
+	float	coef[3];
+	float	tmp;
 
 	shadow_cap(ray, cy, cy->ucap);
 	shadow_cap(ray, cy, cy->lcap);
@@ -111,7 +111,7 @@ int	hit_shadow(t_ray3 *ray, t_canvas canvas)
 {
 	t_ray3	hit;
 	t_vec3	to_light;
-	double	range;
+	float	range;
 
 	hit.origin = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
 	to_light = sub_vector(canvas.obj->l[0].light_orig, hit.origin);

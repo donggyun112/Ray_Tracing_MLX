@@ -6,25 +6,11 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:29:45 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/01 23:00:04 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/02 03:23:55 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
-
-t_color	texture_at(t_vec3 point, t_texture texture)
-{
-	const int	x = (int)(point.z * texture.width) % texture.width;
-	const int	y = (int)(point.x * texture.height) % texture.height;
-	const int	index = (y * texture.width + x) * 4;
-	const int	color = *(int *)(texture.data + index);
-	t_color		c;
-
-	c.r = (color >> 16) & 0xFF;
-	c.g = (color >> 8) & 0xFF;
-	c.b = color & 0xFF;
-	return (c);
-}
 
 t_color	checkertexture(t_vec3 point, float scale)
 {
@@ -255,16 +241,17 @@ float	quad_formula(float a, float b, float c)
 
 int	cy_in_range(t_ray3 *ray, float t, t_cylinder *cy)
 {
-	t_vec3	hit;
-	float	height[2];
+	t_vec3		hit;
+	const float	condition = cy->height / 2;
+	float		height[2];
 
 	hit = add_vector(ray->origin, multiple_vector(t, ray->dir));
 	height[0] = scalar_product(sub_vector(hit, cy->center), cy->dir);
 	height[1] = scalar_product(sub_vector(hit, cy->center), \
 		multiple_vector(-1.0, cy->dir));
-	if (height[0] > 0 && height[0] > cy->height / 2)
+	if (height[0] > 0 && height[0] > condition)
 		return (0);
-	if (height[1] > 0 && height[1] > cy->height / 2)
+	if (height[1] > 0 && height[1] > condition)
 		return (0);
 	return (1);
 }

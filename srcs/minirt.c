@@ -6,11 +6,13 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/01 23:00:44 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/02 03:46:41 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
+
+#define	num_of_thread 1
 
 void	intersection(t_ray3 *ray, t_volume *obj, t_canvas canvas)
 {
@@ -40,8 +42,8 @@ void	color_cal(t_view *view, t_canvas canvas, t_ray3 *ray, int pix[])
 {
 	if (ray->t > 0.0)
 		ray_color(canvas, ray);
-	else
-		my_mlx_pixel_put(view, pix[0], pix[1], 0x00FFFFFF);
+	(void)view;
+	(void)pix;
 }
 
 
@@ -80,15 +82,16 @@ t_color	anti_aliasing(int pix[2], float vp_idx[2], t_view *view, t_ray3 *ray)
 void	low_quality(int scalar, int pix[2], t_ray3 ray, t_view *view)
 {
 	int		offset[2];
+	const float	po[2] = {((float)pix[0] / view->can.width), ((float)pix[1] / view->can.height)};
 	int		new_x;
 	int		new_y;
 	t_color	c;
 
-	offset[0] = -1;
-	while (++offset[0] < scalar)
+	offset[0] = 0;
+	while (offset[0] < scalar)
 	{
-		offset[1] = -1;
-		while (++offset[1] < scalar)
+		offset[1] = 0;
+		while (offset[1] < scalar)
 		{
 			new_x = pix[0] + offset[0];
 			new_y = pix[1] + offset[1];
@@ -98,15 +101,51 @@ void	low_quality(int scalar, int pix[2], t_ray3 ray, t_view *view)
 					my_mlx_pixel_put(view, new_x, new_y, rgb_to_int(ray.color));
 				else
 				{
-					c = get_texture_color(view->back, ((float)pix[0] / view->can.width), ((float)pix[1] / view->can.height));
+					c = get_texture_color(view->back, po[0], po[1]);
 					ray.color[RED] = c.r;
 					ray.color[GREEN] = c.g;
 					ray.color[BLUE] = c.b;
 					my_mlx_pixel_put(view, new_x, new_y, rgb_to_int(ray.color));
 				}
 			}
+			offset[1]++;
+
 		}
+		offset[0]++;
 	}
+}
+
+void	*make_image2(void *m)
+{
+	int		pix[3];
+	float	vp_idx[2];
+	t_ray3	ray;
+	t_color	c;
+	t_thread	*t;
+	int	anti;
+
+	t = (t_thread *)m;
+	anti = t->view->anti_scalar * t->view->anti_scalar;
+	pix[1] = t->id * (t->canvas.height / 7);
+	if (t->id == 6)
+		pix[2] = t->canvas.height;
+	else
+		pix[2] = (t->id + 1) * (t->canvas.height / 7);
+	while (pix[1] < pix[2] && pix[1] < t->canvas.height)
+	{
+		pix[0] = 0;
+		while (pix[0] < t->canvas.width)
+		{
+			c = anti_aliasing(pix, vp_idx, t->view, &ray);
+			ray.color[RED] = c.r / anti;
+			ray.color[GREEN] = c.g / anti;
+			ray.color[BLUE] = c.b / anti;
+			low_quality(t->view->low_scalar, pix, ray, t->view);
+			pix[0] += t->view->low_scalar;
+		}
+		pix[1] += (t->view->low_scalar);
+	}
+	return (NULL);
 }
 
 void	set_quality_scalar(t_view *view)
@@ -134,12 +173,11 @@ void	make_image(t_view *view, t_canvas canvas)
 	float	vp_idx[2];
 	t_ray3	ray;
 	t_color	c;
-	pix[1] = 0;
 	set_quality_scalar(view);
+	pix[1] = 0;
 	while (pix[1] < canvas.height)
 	{
 		pix[0] = 0;
-		vp_idx[1] = 2.0 * (float)pix[1] / (float)canvas.height;
 		while (pix[0] < canvas.width)
 		{
 			c = anti_aliasing(pix, vp_idx, view, &ray);
@@ -151,39 +189,6 @@ void	make_image(t_view *view, t_canvas canvas)
 		}
 		pix[1] += view->low_scalar;
 	}
-}
-
-void	*make_image2(void *m)
-{
-	int		pix[2];
-	float	vp_idx[2];
-	t_ray3	ray;
-	t_color	c;
-	t_view	*view;
-	t_canvas	canvas;
-	t_thread	*t;
-
-	t = (t_thread *)m;
-	canvas = t->canvas;
-	view = t->view;
-	pix[1] = t->id;
-	while (pix[1] < canvas.height)
-	{
-		// printf("%d\n", t->id);
-		pix[0] = 0;
-		vp_idx[1] = 2.0 * (float)pix[1] / (float)canvas.height;
-		while (pix[0] < canvas.width)
-		{
-			c = anti_aliasing(pix, vp_idx, view, &ray);
-			ray.color[RED] = c.r / (view->anti_scalar * view->anti_scalar);
-			ray.color[GREEN] = c.g / (view->anti_scalar * view->anti_scalar);
-			ray.color[BLUE] = c.b / (view->anti_scalar * view->anti_scalar);
-			low_quality(view->low_scalar, pix, ray, view);
-			pix[0] += view->low_scalar;
-		}
-		pix[1] += (view->low_scalar + 6);
-	}
-	return (NULL);
 }
 
 t_thread	*init_thread(t_view *view)

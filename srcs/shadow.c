@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 17:48:21 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/29 21:10:37 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/01 17:45:46 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	shadow_plane(t_ray3 *ray, t_plane *pl)
 	double	tmp;
 	double	scalar[3];
 
-	pl->norm = check_plane_direction(pl, ray);
+	// pl->norm = check_plane_direction(pl, ray);
 	scalar[0] = scalar_product(pl->on_plane, pl->norm);
 	scalar[1] = scalar_product(ray->origin, pl->norm);
 	scalar[2] = scalar_product(ray->dir, pl->norm);
@@ -74,7 +74,6 @@ void	shadow_cylinder(t_ray3 *ray, t_cylinder *cy)
 	double	coef[3];
 	double	tmp;
 
-	make_cylinder_cap(cy);
 	shadow_cap(ray, cy, cy->ucap);
 	shadow_cap(ray, cy, cy->lcap);
 	oc = sub_vector(ray->origin, cy->center);
@@ -117,7 +116,7 @@ int	hit_shadow(t_ray3 *ray, t_canvas canvas)
 	hit.origin = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
 	to_light = sub_vector(canvas.obj->l[0].light_orig, hit.origin);
 	hit.dir = norm_vec(to_light);
-	hit.origin = add_vector(hit.origin, multiple_vector(0.01, hit.dir));
+	hit.origin = add_vector(hit.origin, multiple_vector(0.1, hit.dir));
 	range = size_of_vec2(to_light);
 	hit.t = -1.0;
 	hit.type = 0;

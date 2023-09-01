@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   intersection.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:29:45 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/31 18:22:58 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/01 17:02:23 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
-
-
 
 t_color	texture_at(t_vec3 point, t_texture texture)
 {
@@ -271,27 +269,6 @@ int	cy_in_range(t_ray3 *ray, double t, t_cylinder *cy)
 	return (1);
 }
 
-void	make_cylinder_cap(t_cylinder *cy)
-{
-	int	idx;
-
-	idx = 0;
-	cy->ucap = (t_plane *)malloc(sizeof(t_plane));
-	cy->lcap = (t_plane *)malloc(sizeof(t_plane));
-	while (idx < 3)
-	{
-		cy->ucap->color[idx] = cy->color[idx];
-		cy->lcap->color[idx] = cy->color[idx];
-		idx++;
-	}
-	cy->ucap->norm = cy->dir;
-	cy->lcap->norm = multiple_vector(-1.0, cy->dir);
-	cy->ucap->on_plane = add_vector(cy->center, \
-		multiple_vector(cy->height / 2.0, cy->dir));
-	cy->lcap->on_plane = add_vector(cy->center, \
-		multiple_vector(cy->height / -2.0, cy->dir));
-}
-
 void	hit_cap(t_ray3 *ray, t_cylinder *cy, t_plane *cap, t_canvas canvas)
 {
 	double	tmp;
@@ -335,7 +312,6 @@ void	hit_cylinder(t_ray3 *ray, t_cylinder *cy, t_canvas canvas)
 	double			coef[3];
 	double			tmp;
 
-	make_cylinder_cap(cy);
 	hit_cap(ray, cy, cy->ucap, canvas);
 	hit_cap(ray, cy, cy->lcap, canvas);
 	v[0] = vector_product(ray->dir, cy->dir);

@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/02 02:43:24 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/03 01:33:40 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,7 @@ typedef struct s_canvas
 	t_vec3			light_orig;
 	float			light_bright;
 	int				light_col[3];
+	char			*bgt_filepath;
 	t_volume		*obj;
 	t_camera		cam;
 }	t_canvas;
@@ -155,6 +156,8 @@ typedef struct s_view
 	int			low_scalar;
 	int			quality_scalar;
 	int			flag;
+	int			focus;
+	int			stop;
 	t_camera	cam;
 	t_canvas	can;
 	t_texture	back;

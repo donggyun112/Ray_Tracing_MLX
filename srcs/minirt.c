@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/02 03:46:41 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/03 01:38:36 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	low_quality(int scalar, int pix[2], t_ray3 ray, t_view *view)
 			{
 				if (ray.t > 0.0)
 					my_mlx_pixel_put(view, new_x, new_y, rgb_to_int(ray.color));
-				else
+				else if (view->can.bgt_filepath)
 				{
 					c = get_texture_color(view->back, po[0], po[1]);
 					ray.color[RED] = c.r;
@@ -107,6 +107,8 @@ void	low_quality(int scalar, int pix[2], t_ray3 ray, t_view *view)
 					ray.color[BLUE] = c.b;
 					my_mlx_pixel_put(view, new_x, new_y, rgb_to_int(ray.color));
 				}
+				else
+					my_mlx_pixel_put(view, new_x, new_y, 0xFFFFFF);
 			}
 			offset[1]++;
 
@@ -223,7 +225,8 @@ void	set_texture(t_view *view, t_volume *obj)
 	int i;
 
 	i = -1;
-	init_texture(&view->back, view, "space.xpm");
+	if (view->can.bgt_filepath)
+		init_texture(&view->back, view, view->can.bgt_filepath);
 	while (++i < obj->sp_cnt)
 	{
 		if (obj->sp[i].type == TSP)
@@ -242,13 +245,15 @@ void	set_texture(t_view *view, t_volume *obj)
 	view->low_scalar = 1;
 	view->quality_scalar = -2;
 	view->flag = 0;
+	view->focus = 0;
+	view->stop = 1;
 }
 
 int	loop_hook(t_view *view)
 {
 	int	x;
 
-	if (view->flag)
+	if (view->flag && view->stop)
 	{
 		x = 0;
 		while (x < view->can.obj->sp_cnt)
@@ -262,7 +267,11 @@ int	loop_hook(t_view *view)
 			x++;
 		}
 		newwin(view);
+		move_focus(5, view, 0.007);
+		view->focus = 1;
 	}
+	else
+		view->focus = 0;
 	return (0);
 }
 
@@ -296,6 +305,32 @@ void	make_obj_cap(t_volume *obj)
 		make_cylinder_cap(&obj->cy[idx++]);
 }
 
+int mouse_motion(int x, int y, t_view *view)
+{
+	static int	pos[2];
+
+	mlx_mouse_get_pos(view->win, &x, &y);
+	if ((pos[0] != x || pos[1] != y) && view->stop)
+	{
+		view->quality_scalar = -4;
+		if (view->focus == 0)
+			move_focus(10, view, 0.007);
+		else
+			move_focus(30, view, 0.007);
+	}
+	pos[0] = x;
+	pos[1] = y;
+    return (0);
+}
+
+
+int	key_release(int keycode, t_view *view)
+{
+	if (keycode == 13 || keycode == 1 || keycode == 0 || keycode == 2)
+		view->focus = 0;
+	return (0);
+}
+
 int	main(int argc, char *argv[])
 {
 	t_view		view;
@@ -317,11 +352,14 @@ int	main(int argc, char *argv[])
 		&view.line_length, &view.endian);
 	set_texture(&view, canvas.obj);
 	multi_rend(&view);
-	// make_image(&view, canvas);
+	mlx_mouse_hide();
+	mlx_mouse_move(view.win, view.can.width / 2, view.can.height / 2);
 	mlx_put_image_to_window(view.mlx, view.win, view.img, 0, 0);
 	mlx_hook(view.win, 2, 1L << 0, key_hook, &view);
+	mlx_hook(view.win, 3, 1L << 1, key_release, &view);
 	mlx_hook(view.win, 17, 1L << 5, win_destroy, &view);
+	mlx_hook(view.win, 6, 1L << 7, mouse_motion, &view);
 	mlx_loop_hook(view.mlx, loop_hook, &view);
 	mlx_loop(view.mlx);
-	return (0);
+	exit(0);
 }

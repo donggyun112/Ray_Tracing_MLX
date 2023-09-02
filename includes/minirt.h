@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/01 22:59:53 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/03 02:48:02 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,15 @@ int			win_destroy(t_view *view);
 int			key_hook(int keycode, t_view *view);
 void		my_mlx_pixel_put(t_view *mlx, int x, int y, unsigned int color);
 int			rgb_to_int(int color[]);
-float 		my_rand_float();
-float		my_rand_float_range(float min, float max);
-int 		my_rand();
+t_vec3 rotate_around_z(t_vec3 vec, float angle);
+t_vec3 rotate_around_y(t_vec3 vec, float angle);
+void	rotate_vertical(int keycode, t_view *view);
+void	rotate_horizontal(int keycode, t_view *view);
+void	up_down(int keycode, t_view *view);
+void	left_right(int keycode, t_view *view);
+void	foward_back(int keycode, t_view *view);
+void	quality(int keycode, t_view *view);
+void	move_focus(int scalra, t_view *view, float sensitivity);
 
 //intersection
 int			discriminant(float a, float b, float c);

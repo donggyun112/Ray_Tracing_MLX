@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:24:29 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/01 23:00:11 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/03 01:35:46 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ int	init_view(char **tmp, t_canvas *canvas, int count)
 {
 	if (count == 2 && !ft_strcmp(tmp[0], "R"))
 		init_view2(canvas, tmp);
+	else if (count == 1 && !ft_strcmp(tmp[0], "bg"))
+		canvas->bgt_filepath = ft_strdup(tmp[1]);
 	else if (count == 4 && !ft_strcmp(tmp[0], "A"))
 	{
 		canvas->amb_bright = ft_strtod(tmp[1]);
@@ -325,6 +327,7 @@ t_canvas	parse(char *av[])
 
 	obj = init_volume(av);
 	data.obj = obj;
+	data.bgt_filepath = NULL;
 	fd = open(av[1], O_RDONLY);
 	while (1)
 	{

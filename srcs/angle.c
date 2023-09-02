@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 14:30:31 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/02 03:28:54 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/03 02:30:48 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ t_vec3  bump_sphere(t_sphere *sphere, t_texture bp, t_vec3 hit)
     spherical_map(hit, &u, &v, sphere->center, sphere->angle);
     c = get_texture_color(bp, u, v);
     bump_normal = (t_vec3){
-        (c.r / 255.0) - 0.3,
-        (c.g / 255.0) - 0.3,
-        (c.b / 255.0) - 0.3
+        (c.r / 127.5) - 1.0,
+        (c.g / 127.5) - 1.0,
+        (c.b / 127.5) - 1.0
     };
     normal = sub_vector(hit, sphere->center);
     normal = norm_vec(normal);
@@ -59,6 +59,7 @@ t_vec3  bump_sphere(t_sphere *sphere, t_texture bp, t_vec3 hit)
     bumped_normal = norm_vec(bumped_normal);
     return (bumped_normal);
 }
+
 
 float	cos_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas)
 {

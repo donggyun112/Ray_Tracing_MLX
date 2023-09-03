@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/03 19:00:40 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/04 01:25:23 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,21 +251,29 @@ void	set_texture(t_view *view, t_volume *obj)
 
 t_vec3 rotate_around_specific_point(t_vec3 vec, t_vec3 center, float angle)
 {
+	// 1. 이동 단계: 회전 중심 좌표를 원점으로 이동
 	t_vec3 translated_vec;
-	t_vec3	rotate_vec;
-
 	translated_vec.x = vec.x - center.x;
 	translated_vec.y = vec.y - center.y;
 	translated_vec.z = vec.z - center.z;
-	rotate_vec.x = translated_vec.x * cos(angle) - translated_vec.z * sin(angle);
-	rotate_vec.y = translated_vec.y;
-	rotate_vec.z = translated_vec.x * sin(angle) + translated_vec.z * cos(angle);
-	rotate_vec.x += center.x;
-	rotate_vec.y += center.y;
-	rotate_vec.z += center.z;
 
-	return rotate_vec;
+	// 2. 회전 단계: 원점을 중심으로 벡터를 Y축 방향으로 회전
+	const float cos_angle = cos(angle);
+	const float sin_angle = sin(angle);
+
+	t_vec3 rotated_vec;
+	rotated_vec.x = translated_vec.x * cos_angle - translated_vec.z * sin_angle;
+	rotated_vec.y = translated_vec.y;  // Y축을 중심으로 회전하기 때문에 Y 값은 변하지 않습니다.
+	rotated_vec.z = translated_vec.x * sin_angle + translated_vec.z * cos_angle;
+
+	// 3. 복원 단계: 원래 위치로 벡터를 이동
+	rotated_vec.x += center.x;
+	rotated_vec.y += center.y;
+	rotated_vec.z += center.z;
+
+	return rotated_vec;
 }
+
 
 int	loop_hook(t_view *view)
 {
@@ -284,7 +292,18 @@ int	loop_hook(t_view *view)
 				view->can.obj->sp[x].angle = 0.0;
 			x++;
 		}
-		view->can.obj->sp[2].center = rotate_around_specific_point(view->can.obj->sp[2].center,view->can.obj->sp[1].center, 0.05);
+		view->can.obj->sp[2].center = sub_vector(view->can.obj->sp[2].center, view->can.obj->sp[1].center);
+	
+		view->can.obj->sp[1].center = sub_vector(view->can.obj->sp[1].center, view->can.obj->sp[0].center);
+		view->can.obj->sp[1].center = rotate_around_axis(view->can.obj->sp[1].center, (t_vec3){0.0f, -1.0f, 0.0f}, 0.05);
+		view->can.obj->sp[1].center = add_vector(view->can.obj->sp[1].center, view->can.obj->sp[0].center);
+		// view->can.obj->sp[1].center = rotate_around_specific_point(view->can.obj->sp[1].center, view->can.obj->sp[0].center, 0.05);
+	
+		view->can.obj->sp[2].center = add_vector(view->can.obj->sp[2].center, view->can.obj->sp[1].center);
+		view->can.obj->sp[2].center = sub_vector(view->can.obj->sp[2].center, view->can.obj->sp[1].center);
+		view->can.obj->sp[2].center = rotate_around_axis(view->can.obj->sp[2].center, (t_vec3){0.0f, -1.0f, 0.0f}, 0.05);
+		// view->can.obj->sp[2].center = rotate_around_specific_point(view->can.obj->sp[2].center, view->can.obj->sp[1].center, 0.05);
+		view->can.obj->sp[2].center = add_vector(view->can.obj->sp[2].center, view->can.obj->sp[1].center);
 		newwin(view);
 		move_focus(0, view, 0.007);
 		view->focus = 1;

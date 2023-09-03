@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/03 02:48:02 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/03 18:31:00 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,7 @@ int			win_destroy(t_view *view);
 int			key_hook(int keycode, t_view *view);
 void		my_mlx_pixel_put(t_view *mlx, int x, int y, unsigned int color);
 int			rgb_to_int(int color[]);
-t_vec3 rotate_around_z(t_vec3 vec, float angle);
-t_vec3 rotate_around_y(t_vec3 vec, float angle);
+t_vec3		rotate_around_axis(t_vec3 vec, t_vec3 axis, float angle);
 void	rotate_vertical(int keycode, t_view *view);
 void	rotate_horizontal(int keycode, t_view *view);
 void	up_down(int keycode, t_view *view);

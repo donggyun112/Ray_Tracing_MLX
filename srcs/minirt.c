@@ -6,13 +6,14 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/03 15:29:59 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/03 19:00:40 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
+#include <OpenGL/OpenGL.h>
 
-#define	num_of_thread 1
+#define	num_of_thread 7
 
 void	intersection(t_ray3 *ray, t_volume *obj, t_canvas canvas)
 {
@@ -128,11 +129,11 @@ void	*make_image2(void *m)
 
 	t = (t_thread *)m;
 	anti = t->view->anti_scalar * t->view->anti_scalar;
-	pix[1] = t->id * (t->canvas.height / 7);
-	if (t->id == 6)
+	pix[1] = t->id * (t->canvas.height / num_of_thread);
+	if (t->id == num_of_thread - 1)
 		pix[2] = t->canvas.height;
 	else
-		pix[2] = (t->id + 1) * (t->canvas.height / 7);
+		pix[2] = (t->id + 1) * (t->canvas.height / num_of_thread);
 	while (pix[1] < pix[2] && pix[1] < t->canvas.height)
 	{
 		pix[0] = 0;
@@ -197,9 +198,9 @@ t_thread	*init_thread(t_view *view)
 {
 	t_thread	*m;
 
-	m = (t_thread *)malloc(sizeof(t_thread) * 7);
+	m = (t_thread *)malloc(sizeof(t_thread) * num_of_thread);
 	set_quality_scalar(view);
-	for (int x = 0; x < 7; x++)
+	for (int x = 0; x < num_of_thread; x++)
 	{
 		m[x].id = x;
 		m[x].view = view;
@@ -213,9 +214,9 @@ void	multi_rend(t_view *view)
 	t_thread	*m;
 
 	m = init_thread(view);
-	for (int x = 0; x < 7; x++)
+	for (int x = 0; x < num_of_thread; x++)
 		pthread_create(&m[x].thread, NULL, make_image2, &m[x]);
-	for (int x = 0; x < 7; x++)
+	for (int x = 0; x < num_of_thread; x++)
 		pthread_join(m[x].thread, NULL);
 }
 
@@ -248,6 +249,24 @@ void	set_texture(t_view *view, t_volume *obj)
 	view->stop = 1;
 }
 
+t_vec3 rotate_around_specific_point(t_vec3 vec, t_vec3 center, float angle)
+{
+	t_vec3 translated_vec;
+	t_vec3	rotate_vec;
+
+	translated_vec.x = vec.x - center.x;
+	translated_vec.y = vec.y - center.y;
+	translated_vec.z = vec.z - center.z;
+	rotate_vec.x = translated_vec.x * cos(angle) - translated_vec.z * sin(angle);
+	rotate_vec.y = translated_vec.y;
+	rotate_vec.z = translated_vec.x * sin(angle) + translated_vec.z * cos(angle);
+	rotate_vec.x += center.x;
+	rotate_vec.y += center.y;
+	rotate_vec.z += center.z;
+
+	return rotate_vec;
+}
+
 int	loop_hook(t_view *view)
 {
 	int	x;
@@ -265,8 +284,9 @@ int	loop_hook(t_view *view)
 				view->can.obj->sp[x].angle = 0.0;
 			x++;
 		}
+		view->can.obj->sp[2].center = rotate_around_specific_point(view->can.obj->sp[2].center,view->can.obj->sp[1].center, 0.05);
 		newwin(view);
-		move_focus(5, view, 0.007);
+		move_focus(0, view, 0.007);
 		view->focus = 1;
 	}
 	else

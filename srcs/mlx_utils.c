@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/03 03:33:50 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/03 15:39:20 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,7 +234,6 @@ int	key_hook(int keycode, t_view *view)
 		view->focus = 1;
 		move_focus(0, view, 0.007);
 	}
-	printf("%d\n", keycode);
 	return (0);
 }
 

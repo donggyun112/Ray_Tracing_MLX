@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/03 01:38:36 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/03 15:29:59 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,7 +213,6 @@ void	multi_rend(t_view *view)
 	t_thread	*m;
 
 	m = init_thread(view);
-	pthread_mutex_init(&view->mutex, NULL);
 	for (int x = 0; x < 7; x++)
 		pthread_create(&m[x].thread, NULL, make_image2, &m[x]);
 	for (int x = 0; x < 7; x++)

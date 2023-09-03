@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/03 01:33:40 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/03 15:30:07 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,10 +158,10 @@ typedef struct s_view
 	int			flag;
 	int			focus;
 	int			stop;
+	int			fd[2];
 	t_camera	cam;
 	t_canvas	can;
 	t_texture	back;
-	pthread_mutex_t	mutex;
 }	t_view;
 
 

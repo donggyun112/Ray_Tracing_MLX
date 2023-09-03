@@ -6,13 +6,13 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:29:45 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/02 03:23:55 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/03 15:39:11 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-t_color	checkertexture(t_vec3 point, float scale)
+t_color	checkertexture(t_vec3 point, float scale, t_plane *pl)
 {
 	int		checkerx;
 	int		checkery;
@@ -23,7 +23,9 @@ t_color	checkertexture(t_vec3 point, float scale)
 	checkerx = (int)(point.x * scale) % 2;
 	checkery = (int)(point.y * scale) % 2;
 	checkerz = (int)(point.z * scale) % 2;
-	if ((checkerx + checkery + checkerz) % 2 == 0)
+	if (pl->norm.z == 1.0 && (checkerx + checkery) % 2 == 0)
+		return ((t_color){0, 0, 0});
+	else if (pl->norm.z != 1.0 && (checkerx + checkery + checkerz) % 2 == 0)
 		return ((t_color){0, 0, 0});
 	else
 		return ((t_color){255, 255, 255});
@@ -185,7 +187,7 @@ void	init_pltexture(t_ray3 *ray, t_plane *pl)
 	if (pl->type == TPL)
 		c = get_texture_color(pl->texture, ((float)ray->pix[0] / pl->texture.width), ((float)ray->pix[1] / pl->texture.height));
 	else
-		c = checkertexture(hit, 1);
+		c = checkertexture(hit, 1, pl);
 	ray->color[RED] = c.r;
 	ray->color[GREEN] = c.g;
 	ray->color[BLUE] = c.b;

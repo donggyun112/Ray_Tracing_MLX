@@ -7,8 +7,13 @@ l	0.0,30.0,0.0			0.9		255,255,255
 
 tsp	20.0,2.0,1.0		2.0				earthmap.xpm qwe.xpm
 csp	11.0,2.0,3.0		1.0				
-sp	10.0,-0.5,6.0		1.0				0,100,255
-sp	10.0,0.0,7.0		1.0				0,255,255
+tsp	10.0,-0.5,6.0		1.0				/Users/seodong-gyun/Downloads/moon_texture.xpm	/Users/seodong-gyun/Downloads/moon_normal.xpm
+tsp	10.0,3.0,8.0		1.0				/Users/seodong-gyun/Downloads/earth.xpm	/Users/seodong-gyun/Downloads/earthnormal.xpm
+tsp	10.0,3.0,2.0		1.0				/Users/seodong-gyun/Downloads/mars.xpm	/Users/seodong-gyun/Downloads/mars_normal.xpm
 cy	12.0,0.0,-3.0	0.3,1.0,0.1		1.0		3		0,255,0
 
 tpl	0.0,-1.5,0.0 0.0,1.0,0.0			space.xpm
+# tpl	0.0,0.0,-8.0 0.0,0.0,1.0			space.xpm
+# tpl	20.0,0.0,-8.0 1.0,0.0,0.0			space.xpm
+
+bg	space.xpm

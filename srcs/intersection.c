@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:29:45 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/04 21:07:35 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/04 22:40:30 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ void	init_sp_color(t_ray3 *ray, t_sphere *sp)
 	ray->color[BLUE] = sp->color[BLUE];
 }
 
-void	hit_sphere(t_ray3 *ray, t_sphere *sp, t_canvas canvas)
+void	hit_sphere(t_ray3 *ray, t_sphere *sp)
 {
 	const t_vec3	l = sub_vector(sp->center, ray->origin);
 	const float	tca = scalar_product(l, ray->dir);
@@ -155,8 +155,6 @@ void	hit_sphere(t_ray3 *ray, t_sphere *sp, t_canvas canvas)
 			sphere_texture(ray, sp);
 		else
 			init_sp_color(ray, sp);
-		if (hit_shadow(ray, canvas))
-			ray->type = SHADOW;
 	}
 }
 
@@ -193,7 +191,7 @@ void	init_pltexture(t_ray3 *ray, t_plane *pl)
 	ray->color[BLUE] = c.b;
 }
 
-void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
+void	hit_plane(t_ray3 *ray, t_plane *pl)
 {
 	float	tmp;
 	float	scalar[3];
@@ -211,8 +209,6 @@ void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 			init_pltexture(ray, pl);
 		else
 			init_pl_color(ray, pl);
-		if (hit_shadow(ray, canvas))
-			ray->type = SHADOW;
 	}
 }
 
@@ -256,7 +252,7 @@ int	cy_in_range(t_ray3 *ray, float t, t_cylinder *cy)
 	return (1);
 }
 
-void	hit_cap(t_ray3 *ray, t_cylinder *cy, t_plane *cap, t_canvas canvas)
+void	hit_cap(t_ray3 *ray, t_cylinder *cy, t_plane *cap)
 {
 	float	tmp;
 	float	scalar[3];
@@ -277,8 +273,6 @@ void	hit_cap(t_ray3 *ray, t_cylinder *cy, t_plane *cap, t_canvas canvas)
 		ray->color[GREEN] = cap->color[GREEN];
 		ray->color[BLUE] = cap->color[BLUE];
 		ray->obj = (void *)cap;
-		if (hit_shadow(ray, canvas))
-			ray->type = SHADOW;
 	}
 }
 
@@ -292,15 +286,15 @@ void	init_cy_color(t_ray3 *ray, t_cylinder *cy, float tmp)
 	ray->obj = (void *)cy;
 }
 
-void	hit_cylinder(t_ray3 *ray, t_cylinder *cy, t_canvas canvas)
+void	hit_cylinder(t_ray3 *ray, t_cylinder *cy)
 {
 	const t_vec3	oc = sub_vector(ray->origin, cy->center);
 	t_vec3			v[2];
 	float			coef[3];
 	float			tmp;
 
-	hit_cap(ray, cy, cy->ucap, canvas);
-	hit_cap(ray, cy, cy->lcap, canvas);
+	hit_cap(ray, cy, cy->ucap);
+	hit_cap(ray, cy, cy->lcap);
 	v[0] = vector_product(ray->dir, cy->dir);
 	v[1] = vector_product(oc, cy->dir);
 	coef[0] = scalar_product(v[0], v[0]);
@@ -313,9 +307,5 @@ void	hit_cylinder(t_ray3 *ray, t_cylinder *cy, t_canvas canvas)
 	if (tmp >= 0.0 && cy_in_range(ray, tmp, cy) == 0)
 		return ;
 	if ((ray->t < 0.0 && tmp > 0.0) || (tmp > 0.0 && ray->t > tmp))
-	{
 		init_cy_color(ray, cy, tmp);
-		if (hit_shadow(ray, canvas))
-			ray->type = SHADOW;
-	}
 }

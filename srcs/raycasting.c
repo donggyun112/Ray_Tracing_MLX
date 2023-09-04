@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 02:07:30 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/01 23:00:14 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/04 23:23:01 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,13 @@ t_ray3	create_ray(t_camera cam, float u, float v)
 	multiple_vector(v, cam.v_norm));
 	ray.dir = norm_vec(on_vp);
 	ray.t = -1.0;
+	ray.color[RED] = 0;
+	ray.color[GREEN] = 0;
+	ray.color[BLUE] = 0;
+	ray.real[RED] = 0;
+	ray.real[GREEN] = 0;
+	ray.real[BLUE] = 0;
+	ray.angle[DIFF] = 0.0;
+	ray.angle[REF] = 0.0;
 	return (ray);
 }

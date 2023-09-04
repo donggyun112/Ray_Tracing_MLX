@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   color.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 00:50:37 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/03 02:24:51 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/05 00:22:00 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,63 +21,59 @@ int	amb_light(t_canvas canvas, t_ray3 *ray, int idx)
 	return (ret);
 }
 
-int	diff_light(t_canvas canvas, t_ray3 *ray, float angle, int idx)
+int	diff_light(t_canvas canvas, t_ray3 *ray, int idx, int light)
 {
 	int	ret;
 
-	ret = (float)ray->color[idx] * angle * canvas.obj->l[0].light_bright \
-		* ((float)canvas.obj->l[0].light_col[idx] / 255.0);
+	ret = (float)ray->color[idx] * ray->angle[DIFF] \
+		* canvas.obj->l[light].light_bright \
+		* ((float)canvas.obj->l[light].light_col[idx] / 255.0);
 	return (ret);
 }
 
-int	phong_light(t_canvas canvas, t_ray3 *ray, float angle, int idx)
+int	phong_light(t_canvas canvas, t_ray3 *ray, int idx, int light)
 {
 	int	ret;
 
-	(void)ray;
-	ret = (float)canvas.obj->l[0].light_col[idx] * \
-	canvas.obj->l[0].light_bright * pow(angle, 30);
+	ret = (float)canvas.obj->l[light].light_col[idx] * \
+		canvas.obj->l[light].light_bright * pow(ray->angle[REF], 30);
 	return (ret);
 }
 
-int	add_color(t_canvas canvas, t_ray3 *ray, float *angle, int idx)
+int	add_color(t_canvas canvas, t_ray3 *ray, int idx, int light)
 {
 	int	color;
 
-	color = amb_light(canvas, ray, idx);
-	if (ray->type != SHADOW)
-		color = color + diff_light(canvas, ray, angle[0], idx) + \
-		phong_light(canvas, ray, angle[1], idx);
-	if (color > 255)
-		color = 255;
+	color = 0;
+	if (hit_shadow(ray, canvas, light) == 0)
+		color = diff_light(canvas, ray, idx, light) + \
+		phong_light(canvas, ray, idx, light);
 	return (color);
 }
 
-void	ray_color(t_canvas canvas, t_ray3 *ray)
+void	ray_color(t_canvas canvas, t_ray3 *ray, int light)
 {
-	float	angle[2];
-
 	if (ray->type == SP)
 	{
-		angle[0] = cos_sp(ray->obj, ray, canvas);
-		angle[1] = ref_sp(ray->obj, ray, canvas);
+		ray->angle[DIFF] = cos_sp(ray->obj, ray, canvas, light);
+		ray->angle[REF] = ref_sp(ray->obj, ray, canvas, light);
 	}
 	else if (ray-> type == PL)
 	{
-		angle[0] = cos_pl(ray->obj, ray, canvas);
-		angle[1] = ref_pl(ray->obj, ray, canvas);
+		ray->angle[DIFF] = cos_pl(ray->obj, ray, canvas, light);
+		ray->angle[REF] = ref_pl(ray->obj, ray, canvas, light);
 	}
 	else if (ray->type == CY)
 	{
-		angle[0] = cos_cy(ray->obj, ray, canvas);
-		angle[1] = ref_cy(ray->obj, ray, canvas);
+		ray->angle[DIFF] = cos_cy(ray->obj, ray, canvas, light);
+		ray->angle[REF] = ref_cy(ray->obj, ray, canvas, light);
 	}
 	else
 	{
-		angle[0] = 0.0;
-		angle[1] = 0.0;
+		ray->angle[DIFF] = 0.0;
+		ray->angle[REF] = 0.0;
 	}
-	ray->color[RED] = add_color(canvas, ray, angle, RED);
-	ray->color[GREEN] = add_color(canvas, ray, angle, GREEN);
-	ray->color[BLUE] = add_color(canvas, ray, angle, BLUE);
+	ray->real[RED] += add_color(canvas, ray, RED, light);
+	ray->real[GREEN] += add_color(canvas, ray, GREEN, light);
+	ray->real[BLUE] += add_color(canvas, ray, BLUE, light);
 }

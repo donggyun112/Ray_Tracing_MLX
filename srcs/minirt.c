@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/04 13:35:26 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/05 00:05:27 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,38 +15,53 @@
 
 #define	num_of_thread 7
 
-void	intersection(t_ray3 *ray, t_volume *obj, t_canvas canvas)
+void	intersection(t_ray3 *ray, t_volume *obj)
 {
 	int	idx;
 
 	idx = 0;
 	while (idx < obj->sp_cnt)
 	{
-		hit_sphere(ray, &obj->sp[idx], canvas);
+		hit_sphere(ray, &obj->sp[idx]);
 		idx++;
 	}
 	idx = 0;
 	while (idx < obj->pl_cnt)
 	{
-		hit_plane(ray, &obj->pl[idx], canvas);
+		hit_plane(ray, &obj->pl[idx]);
 		idx++;
 	}
 	idx = 0;
 	while (idx < obj->cy_cnt)
 	{
-		hit_cylinder(ray, &obj->cy[idx], canvas);
+		hit_cylinder(ray, &obj->cy[idx]);
 		idx++;
 	}
 }
 
-void	color_cal(t_view *view, t_canvas canvas, t_ray3 *ray, int pix[])
+void	color_cal(t_canvas canvas, t_ray3 *ray)
 {
-	if (ray->t > 0.0)
-		ray_color(canvas, ray);
-	(void)view;
-	(void)pix;
-}
+	int	light;
+	int	idx;
 
+	light = 0;
+	idx = 0;
+	if (ray->t > 0.0)
+	{
+		while (light < canvas.obj->l_cnt)
+		{
+			ray_color(canvas, ray, light);
+			light++;
+		}
+		while (idx < 3)
+		{
+			ray->real[idx] += amb_light(canvas, ray, idx);
+			if (ray->real[idx] > 255)
+				ray->real[idx] = 255;
+			idx++;
+		}
+	}
+}
 
 t_color	anti_aliasing(int pix[2], float vp_idx[2], t_view *view, t_ray3 *ray)
 {
@@ -70,11 +85,11 @@ t_color	anti_aliasing(int pix[2], float vp_idx[2], t_view *view, t_ray3 *ray)
 			*ray = create_ray(view->cam, vp_idx[0], vp_idx[1]);
 			ray->pix[0] = pix[0];
 			ray->pix[1] = pix[1];
-			intersection(ray, view->can.obj, view->can);
-			color_cal(view, view->can, ray, pix);
-			color.r += ray->color[RED];
-			color.g += ray->color[GREEN];
-			color.b += ray->color[BLUE];
+			intersection(ray, view->can.obj);
+			color_cal(view->can, ray);
+			color.r += ray->real[RED];
+			color.g += ray->real[GREEN];
+			color.b += ray->real[BLUE];
 		}
 	}
 	return (color);
@@ -99,13 +114,13 @@ void	low_quality(int scalar, int pix[2], t_ray3 ray, t_view *view)
 			if (new_x < view->can.width && new_y < view->can.height)
 			{
 				if (ray.t > 0.0)
-					my_mlx_pixel_put(view, new_x, new_y, rgb_to_int(ray.color));
+					my_mlx_pixel_put(view, new_x, new_y, rgb_to_int(ray.real));
 				else if (view->can.bgt_filepath)
 				{
 					c = get_texture_color(view->back, po[0], po[1]);
-					ray.color[RED] = c.r;
-					ray.color[GREEN] = c.g;
-					ray.color[BLUE] = c.b;
+					ray.real[RED] = c.r;
+					ray.real[GREEN] = c.g;
+					ray.real[BLUE] = c.b;
 					my_mlx_pixel_put(view, new_x, new_y, rgb_to_int(ray.color));
 				}
 				else
@@ -140,9 +155,9 @@ void	*make_image2(void *m)
 		while (pix[0] < t->canvas.width)
 		{
 			c = anti_aliasing(pix, vp_idx, t->view, &ray);
-			ray.color[RED] = c.r / anti;
-			ray.color[GREEN] = c.g / anti;
-			ray.color[BLUE] = c.b / anti;
+			ray.real[RED] = c.r / anti;
+			ray.real[GREEN] = c.g / anti;
+			ray.real[BLUE] = c.b / anti;
 			low_quality(t->view->low_scalar, pix, ray, t->view);
 			pix[0] += t->view->low_scalar;
 		}
@@ -176,6 +191,7 @@ void	make_image(t_view *view, t_canvas canvas)
 	float	vp_idx[2];
 	t_ray3	ray;
 	t_color	c;
+
 	set_quality_scalar(view);
 	pix[1] = 0;
 	while (pix[1] < canvas.height)
@@ -184,9 +200,9 @@ void	make_image(t_view *view, t_canvas canvas)
 		while (pix[0] < canvas.width)
 		{
 			c = anti_aliasing(pix, vp_idx, view, &ray);
-			ray.color[RED] = c.r / (view->anti_scalar * view->anti_scalar);
-			ray.color[GREEN] = c.g / (view->anti_scalar * view->anti_scalar);
-			ray.color[BLUE] = c.b / (view->anti_scalar * view->anti_scalar);
+			ray.real[RED] = c.r / (view->anti_scalar * view->anti_scalar);
+			ray.real[GREEN] = c.g / (view->anti_scalar * view->anti_scalar);
+			ray.real[BLUE] = c.b / (view->anti_scalar * view->anti_scalar);
 			low_quality(view->low_scalar, pix, ray, view);
 			pix[0] += view->low_scalar;
 		}

@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 14:30:31 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/04 21:09:01 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/04 23:31:46 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,10 @@ t_vec3  bump_sphere(t_sphere *sphere, t_texture bp, t_vec3 hit)
 }
 
 
-float	cos_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas)
+float	cos_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas, int light)
 {
 	t_vec3	normal;
-	t_vec3	light;
+	t_vec3	l_vec;
 	t_vec3	hit;
 	float	angle;
 
@@ -73,24 +73,24 @@ float	cos_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas)
 		normal = bump_sphere(sp, sp->bumtexture, hit);
 	else
 		normal = norm_vec(sub_vector(hit, sp->center));
-	light = norm_vec(sub_vector(canvas.obj->l[0].light_orig, hit));
-	angle = scalar_product(normal, light);
+	l_vec = norm_vec(sub_vector(canvas.obj->l[light].light_orig, hit));
+	angle = scalar_product(normal, l_vec);
 	if (angle < 0.0)
 		return (0.0);
 	return (angle);
 }
 
-float	cos_pl(t_plane *pl, t_ray3 *ray, t_canvas canvas)
+float	cos_pl(t_plane *pl, t_ray3 *ray, t_canvas canvas, int light)
 {
 	t_vec3	hit;
-	t_vec3	light;
+	t_vec3	l_vec;
 	t_vec3	norm;
 	float	angle;
 
 	norm = check_plane_direction(pl, ray);
 	hit = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
-	light = norm_vec(sub_vector(canvas.obj->l[0].light_orig, hit));
-	angle = scalar_product(norm, light);
+	l_vec = norm_vec(sub_vector(canvas.obj->l[light].light_orig, hit));
+	angle = scalar_product(norm, l_vec);
 	if (angle < 0.0)
 		return (0.0);
 	return (angle);
@@ -113,10 +113,10 @@ float	get_hit_height(t_cylinder *cy, t_vec3 hit)
 		return (hit_height);
 }
 
-float	cos_cy(t_cylinder *cy, t_ray3 *ray, t_canvas canvas)
+float	cos_cy(t_cylinder *cy, t_ray3 *ray, t_canvas canvas, int light)
 {
 	t_vec3	normal;
-	t_vec3	light;
+	t_vec3	l_vec;
 	t_vec3	hit;
 	float	angle;
 
@@ -124,8 +124,8 @@ float	cos_cy(t_cylinder *cy, t_ray3 *ray, t_canvas canvas)
 	normal = sub_vector(hit, add_vector(cy->center, \
 		multiple_vector(get_hit_height(cy, hit), cy->dir)));
 	normal = norm_vec(normal);
-	light = norm_vec(sub_vector(canvas.obj->l[0].light_orig, hit));
-	angle = scalar_product(normal, light);
+	l_vec = norm_vec(sub_vector(canvas.obj->l[light].light_orig, hit));
+	angle = scalar_product(normal, l_vec);
 	if (angle < 0.0)
 		return (0.0);
 	return (angle);
@@ -141,21 +141,21 @@ t_vec3	reflection(t_vec3 normal, t_vec3 light)
 	return (ret);
 }
 
-float	ref_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas)
+float	ref_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas, int light)
 {
 	t_vec3	normal;
-	t_vec3	light;
+	t_vec3	l_vec;
 	t_vec3	hit;
 	t_vec3	reflect;
 	float	ret;
 
 	hit = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
-	light = norm_vec(sub_vector(canvas.obj->l[0].light_orig, hit));
+	l_vec = norm_vec(sub_vector(canvas.obj->l[light].light_orig, hit));
 	if (sp->type == TSP && sp->bumppath != NULL)
 		normal = bump_sphere(sp, sp->bumtexture, hit);
 	else
 		normal = norm_vec(sub_vector(hit, sp->center));
-	reflect = norm_vec(reflection(normal, light));
+	reflect = norm_vec(reflection(normal, l_vec));
 	ret = scalar_product(norm_vec(\
 	sub_vector(ray->origin, hit)), norm_vec(reflect));
 	if (ret < 0.0)
@@ -163,9 +163,9 @@ float	ref_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas)
 	return (ret);
 }
 
-float	ref_pl(t_plane *pl, t_ray3 *ray, t_canvas canvas)
+float	ref_pl(t_plane *pl, t_ray3 *ray, t_canvas canvas, int light)
 {
-	t_vec3	light;
+	t_vec3	l_vec;
 	t_vec3	hit;
 	t_vec3	reflect;
 	t_vec3	norm;
@@ -173,28 +173,28 @@ float	ref_pl(t_plane *pl, t_ray3 *ray, t_canvas canvas)
 
 	norm = check_plane_direction(pl, ray);
 	hit = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
-	light = norm_vec(sub_vector(canvas.obj->l[0].light_orig, hit));
-	reflect = norm_vec(reflection(norm, light));
+	l_vec = norm_vec(sub_vector(canvas.obj->l[light].light_orig, hit));
+	reflect = norm_vec(reflection(norm, l_vec));
 	ret = scalar_product(norm_vec(sub_vector(ray->origin, hit)), reflect);
 	if (ret < 0.0)
 		ret = 0.0;
 	return (ret);
 }
 
-float	ref_cy(t_cylinder *cy, t_ray3 *ray, t_canvas canvas)
+float	ref_cy(t_cylinder *cy, t_ray3 *ray, t_canvas canvas, int light)
 {
-	t_vec3	light;
+	t_vec3	l_vec;
 	t_vec3	hit;
 	t_vec3	reflect;
 	t_vec3	normal;
 	float	ret;
 
 	hit = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
-	light = norm_vec(sub_vector(canvas.obj->l[0].light_orig, hit));
+	l_vec = norm_vec(sub_vector(canvas.obj->l[light].light_orig, hit));
 	normal = sub_vector(hit, add_vector(cy->center, \
 		multiple_vector(get_hit_height(cy, hit), cy->dir)));
 	normal = norm_vec(normal);
-	reflect = norm_vec(reflection(normal, light));
+	reflect = norm_vec(reflection(normal, l_vec));
 	ret = scalar_product(norm_vec(sub_vector(ray->origin, hit)), reflect);
 	if (ret < 0.0)
 		ret = 0.0;

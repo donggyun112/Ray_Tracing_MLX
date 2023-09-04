@@ -6,10 +6,10 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:29:45 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 01:45:50 by seodong-gyu      ###   ########.fr       */
-/*   Updated: 2023/09/04 22:40:30 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/05 02:06:02 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../includes/minirt.h"
 
@@ -327,8 +327,6 @@ void	hit_cap(t_ray3 *ray, t_cylinder *cy, t_plane *cap)
 			cap_texture(hit, cy, cap, ray);
 		else
 			init_cap_color(ray, cap);
-		if (hit_shadow(ray, canvas))
-			ray->type = SHADOW;
 	}
 }
 
@@ -423,7 +421,5 @@ void	hit_cylinder(t_ray3 *ray, t_cylinder *cy)
 			cylinder_texture(ray, cy);
 		else
 			init_cy_color(ray, cy, tmp);
-		if (hit_shadow(ray, canvas))
-			ray->type = SHADOW;
 	}
 }

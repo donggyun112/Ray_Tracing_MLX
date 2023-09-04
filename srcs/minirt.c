@@ -3,13 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 01:44:40 by seodong-gyu      ###   ########.fr       */
-/*   Updated: 2023/09/05 00:05:27 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/05 02:06:29 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../includes/minirt.h"
 #include <OpenGL/OpenGL.h>
@@ -323,7 +323,7 @@ int	loop_hook(t_view *view)
 			{
 				if (view->can.obj->cy[x].type == TCY)
 					view->can.obj->cy[x].angle += 0.05;
-				else if (view->can.obj->sp[x].type == CCY)
+				else if (view->can.obj->cy[x].type == CCY)
 					view->can.obj->cy[x].angle += 0.2;
 				if (view->can.obj->cy[x].angle > 360.1)
 					view->can.obj->cy[x].angle = 0.0;

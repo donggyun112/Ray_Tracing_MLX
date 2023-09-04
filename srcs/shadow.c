@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 17:48:21 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/04 21:06:57 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/04 23:38:58 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,14 +106,14 @@ void	shadow_check(t_ray3 *ray, t_canvas canvas)
 		shadow_cylinder(ray, &canvas.obj->cy[idx++]);
 }
 
-int	hit_shadow(t_ray3 *ray, t_canvas canvas)
+int	hit_shadow(t_ray3 *ray, t_canvas canvas, int light)
 {
 	t_ray3	hit;
 	t_vec3	to_light;
 	float	range;
 
 	hit.origin = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
-	to_light = sub_vector(canvas.obj->l[0].light_orig, hit.origin);
+	to_light = sub_vector(canvas.obj->l[light].light_orig, hit.origin);
 	hit.dir = norm_vec(to_light);
 	hit.origin = add_vector(hit.origin, multiple_vector(0.1, hit.dir));
 	range = size_of_vec2(to_light);

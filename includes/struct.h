@@ -7,6 +7,10 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
 /*   Updated: 2023/09/04 21:34:03 by dongkseo         ###   ########.fr       */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
+/*   Updated: 2023/09/04 23:26:04 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +61,8 @@ typedef struct s_ray3
 	void			*obj;
 	int				pix[2];
 	int				color[3];
+	int				real[3];
+	float			angle[2];
 }	t_ray3;
 
 typedef struct s_camera

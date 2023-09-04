@@ -7,6 +7,7 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:29:45 by jinhyeop          #+#    #+#             */
 /*   Updated: 2023/09/05 01:45:50 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/04 22:40:30 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +140,7 @@ void	init_sp_color(t_ray3 *ray, t_sphere *sp)
 	ray->color[BLUE] = sp->color[BLUE];
 }
 
-void	hit_sphere(t_ray3 *ray, t_sphere *sp, t_canvas canvas)
+void	hit_sphere(t_ray3 *ray, t_sphere *sp)
 {
 	const t_vec3	l = sub_vector(sp->center, ray->origin);
 	const float	tca = scalar_product(l, ray->dir);
@@ -163,8 +164,6 @@ void	hit_sphere(t_ray3 *ray, t_sphere *sp, t_canvas canvas)
 			sphere_texture(ray, sp);
 		else
 			init_sp_color(ray, sp);
-		if (hit_shadow(ray, canvas))
-			ray->type = SHADOW;
 	}
 }
 
@@ -201,7 +200,7 @@ void	init_pltexture(t_ray3 *ray, t_plane *pl)
 	ray->color[BLUE] = c.b;
 }
 
-void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
+void	hit_plane(t_ray3 *ray, t_plane *pl)
 {
 	float	tmp;
 	float	scalar[3];
@@ -219,8 +218,6 @@ void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 			init_pltexture(ray, pl);
 		else
 			init_pl_color(ray, pl);
-		if (hit_shadow(ray, canvas))
-			ray->type = SHADOW;
 	}
 }
 
@@ -307,7 +304,7 @@ void	init_cap_color(t_ray3 *ray, t_plane *cap)
 	ray->color[BLUE] = cap->color[BLUE];
 }
 
-void	hit_cap(t_ray3 *ray, t_cylinder *cy, t_plane *cap, t_canvas canvas)
+void	hit_cap(t_ray3 *ray, t_cylinder *cy, t_plane *cap)
 {
 	float	tmp;
 	float	scalar[3];
@@ -398,15 +395,15 @@ void	cylinder_texture(t_ray3 *ray, t_cylinder *cy)
 	ray->type = CY;
 }
 
-void	hit_cylinder(t_ray3 *ray, t_cylinder *cy, t_canvas canvas)
+void	hit_cylinder(t_ray3 *ray, t_cylinder *cy)
 {
 	const t_vec3	oc = sub_vector(ray->origin, cy->center);
 	t_vec3			v[2];
 	float			coef[3];
 	float			tmp;
 
-	hit_cap(ray, cy, cy->ucap, canvas);
-	hit_cap(ray, cy, cy->lcap, canvas);
+	hit_cap(ray, cy, cy->ucap);
+	hit_cap(ray, cy, cy->lcap);
 	v[0] = vector_product(ray->dir, cy->dir);
 	v[1] = vector_product(oc, cy->dir);
 	coef[0] = scalar_product(v[0], v[0]);

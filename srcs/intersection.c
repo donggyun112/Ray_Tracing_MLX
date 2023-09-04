@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   intersection.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:29:45 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/04 23:37:39 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/05 01:13:45 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,6 +287,28 @@ t_color checker_pattern(t_vec3 p, t_vec3 center, float radius, float tile_size)
         return (t_color){255, 255, 0}; // black
 }
 
+void	cap_texture(t_vec3 point, t_cylinder *cy, t_plane *cap, t_ray3 *ray)
+{
+	t_color	c;
+
+	if (cy->type == CCY)
+		c = checkertexture(point, 5.0, cap, 1);
+	else
+		c = get_texture_color(cy->texture, fabs(point.x), fabs(point.z));
+	ray->color[RED] = c.r;
+	ray->color[GREEN] = c.g;
+	ray->color[BLUE] = c.b;
+}
+
+void	init_cap_color(int tmp, t_ray3 *ray, t_plane *cap)
+{
+	ray->t = tmp;
+	ray->type = PL;
+	ray->color[RED] = cap->color[RED];
+	ray->color[GREEN] = cap->color[GREEN];
+	ray->color[BLUE] = cap->color[BLUE];
+	ray->obj = (void *)cap;
+}
 
 void	hit_cap(t_ray3 *ray, t_cylinder *cy, t_plane *cap, t_canvas canvas)
 {
@@ -303,19 +325,11 @@ void	hit_cap(t_ray3 *ray, t_cylinder *cy, t_plane *cap, t_canvas canvas)
 		return ;
 	if ((ray->t < 0.0 && tmp > 0.0) || (tmp > 0.0 && ray->t > tmp))
 	{
-		ray->t = tmp;
-		ray->type = PL;
-		ray->color[RED] = cap->color[RED];
-		ray->color[GREEN] = cap->color[GREEN];
-		ray->color[BLUE] = cap->color[BLUE];
-		ray->obj = (void *)cap;
-		if (cy->type == CCY)
-		{
-			t_color c = checkertexture(hit, 5.0, cap, 1);
-			ray->color[RED] = c.r;
-			ray->color[GREEN] = c.g;
-			ray->color[BLUE] = c.b;
-		}
+		
+		// if (cy->type == CCY || cy->type == TCY)
+		// 	cap_texture(hit, cy, cap, ray);
+		// else
+			init_cap_color(tmp, ray, cap);
 		if (hit_shadow(ray, canvas))
 			ray->type = SHADOW;
 	}
@@ -407,9 +421,9 @@ void	hit_cylinder(t_ray3 *ray, t_cylinder *cy, t_canvas canvas)
 	{
 		ray->t = tmp;
 		ray->obj = (void *)cy;
-		if (cy->type == CCY)
-			cylinder_texture(ray, cy);
-		else
+		// if (cy->type == CCY || cy->type == TCY)
+		// 	cylinder_texture(ray, cy);
+		// else
 			init_cy_color(ray, cy, tmp);
 		if (hit_shadow(ray, canvas))
 			ray->type = SHADOW;

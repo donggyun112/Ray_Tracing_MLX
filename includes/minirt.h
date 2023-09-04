@@ -3,6 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
+/*   Updated: 2023/09/04 21:34:24 by dongkseo         ###   ########.fr       */
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
@@ -38,6 +42,8 @@
 # define CPL 5
 # define TPL 6
 # define SHADOW 100
+# define TCY 7
+# define CCY 8
 
 //parse
 t_canvas	parse(char *av[]);

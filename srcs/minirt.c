@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 02:06:29 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/05 02:16:31 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,8 +263,8 @@ void	set_texture(t_view *view, t_volume *obj)
 	{
 		if (obj->cy[i].type == TCY)
 		{
-			printf("%s\n", obj->cy[i].filepath);
 			init_texture(&obj->cy[i].texture, view, obj->cy[i].filepath);
+			init_texture(&obj->cy[i].bumtexture, view, obj->cy[i].bumppath);
 		}
 	}
 	view->anti_scalar = 1;

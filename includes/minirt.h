@@ -3,13 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/04 21:34:24 by dongkseo         ###   ########.fr       */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
+/*   Updated: 2023/09/05 02:18:48 by seodong-gyu      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /*   Updated: 2023/09/05 00:02:44 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -73,6 +73,7 @@ void		hit_cylinder(t_ray3 *ray, t_cylinder *cy);
 void		make_cylinder_cap(t_cylinder *cy);
 t_vec3		check_plane_direction(t_plane *pl, t_ray3 *ray);
 int			cy_in_range(t_ray3 *ray, float t, t_cylinder *cy);
+void cylindrical_map(t_vec3 p, float *u, float *v, t_cylinder *cy);
 
 //raycasting
 t_ray3		create_ray(t_camera cam, float u, float v);

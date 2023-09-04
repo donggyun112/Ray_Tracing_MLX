@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   angle.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 14:30:31 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/04 23:31:46 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/05 02:21:17 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,30 @@ t_vec3  bump_sphere(t_sphere *sphere, t_texture bp, t_vec3 hit)
     return (bumped_normal);
 }
 
+t_vec3  bump_sylinder(t_cylinder *cy, t_texture bp, t_vec3 hit)
+{
+    float   u;
+    float   v;
+    t_color c;
+    t_vec3  bump_normal;
+    t_vec3  normal, tangent, bitangent, bumped_normal;
+    cylindrical_map(hit, &u, &v, cy);
+    c = get_texture_color(bp, u, v);
+    bump_normal = (t_vec3){
+        (c.r / 127.5) - 1.0,
+        (c.g / 127.5) - 1.0,
+        (c.b / 127.5) - 1.0
+    };
+    normal = sub_vector(hit, cy->center);
+    normal = norm_vec(normal);
+    tangent = norm_vec(vector_product(normal, (t_vec3){0, 1, 0}));
+    bitangent = norm_vec(vector_product(normal, tangent));
+    bumped_normal.x = tangent.x * bump_normal.x + bitangent.x * bump_normal.y + normal.x * bump_normal.z;
+    bumped_normal.y = tangent.y * bump_normal.x + bitangent.y * bump_normal.y + normal.y * bump_normal.z;
+    bumped_normal.z = tangent.z * bump_normal.x + bitangent.z * bump_normal.y + normal.z * bump_normal.z;
+    bumped_normal = norm_vec(bumped_normal);
+    return (bumped_normal);
+}
 
 float	cos_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas, int light)
 {
@@ -123,7 +147,10 @@ float	cos_cy(t_cylinder *cy, t_ray3 *ray, t_canvas canvas, int light)
 	hit = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
 	normal = sub_vector(hit, add_vector(cy->center, \
 		multiple_vector(get_hit_height(cy, hit), cy->dir)));
-	normal = norm_vec(normal);
+	if (cy->type == TCY && cy->bumppath != NULL)
+		normal = bump_sylinder(cy, cy->bumtexture, hit);
+	else
+		normal = norm_vec(sub_vector(hit, cy->center));
 	l_vec = norm_vec(sub_vector(canvas.obj->l[light].light_orig, hit));
 	angle = scalar_product(normal, l_vec);
 	if (angle < 0.0)
@@ -193,7 +220,10 @@ float	ref_cy(t_cylinder *cy, t_ray3 *ray, t_canvas canvas, int light)
 	l_vec = norm_vec(sub_vector(canvas.obj->l[light].light_orig, hit));
 	normal = sub_vector(hit, add_vector(cy->center, \
 		multiple_vector(get_hit_height(cy, hit), cy->dir)));
-	normal = norm_vec(normal);
+	if (cy->type == TCY && cy->bumppath != NULL)
+		normal = bump_sylinder(cy, cy->bumtexture, hit);
+	else
+		normal = norm_vec(sub_vector(hit, cy->center));
 	reflect = norm_vec(reflection(normal, l_vec));
 	ret = scalar_product(norm_vec(sub_vector(ray->origin, hit)), reflect);
 	if (ret < 0.0)

@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:24:29 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 01:13:56 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/05 01:37:58 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,7 @@ int	init_sphere(char **tmp, t_canvas *canvas, int count)
 	return (0);
 }
 
-void	init_texture_cylinder(char **tmp, t_canvas *canvas, int idx)
+void	init_texture_cylinder(char **tmp, t_canvas *canvas, int idx, int count)
 {
 	canvas->obj->cy[idx].type = TCY;
 	canvas->obj->cy[idx].center.x = ft_strtod(tmp[1]);
@@ -192,9 +192,10 @@ void	init_texture_cylinder(char **tmp, t_canvas *canvas, int idx)
 	canvas->obj->cy[idx].radius = ft_strtod(tmp[7]);
 	canvas->obj->cy[idx].height = ft_strtod(tmp[8]);
 	canvas->obj->cy[idx].filepath = ft_strdup(tmp[9]);
-	canvas->obj->cy[idx].dir = norm_vec(canvas->obj->cy[idx].dir);
-	canvas->obj->cy[idx].ucap = NULL;
-	canvas->obj->cy[idx].lcap = NULL;
+	if (count == 10)
+		canvas->obj->cy[idx].bumppath = ft_strdup(tmp[9]);
+	else
+		canvas->obj->cy[idx].bumppath = NULL;
 }
 
 void	init_normal_cylinder(char **tmp, t_canvas *canvas, int idx)
@@ -212,8 +213,7 @@ void	init_normal_cylinder(char **tmp, t_canvas *canvas, int idx)
 	canvas->obj->cy[idx].color[GREEN] = ft_strtod(tmp[10]);
 	canvas->obj->cy[idx].color[BLUE] = ft_strtod(tmp[11]);
 	canvas->obj->cy[idx].dir = norm_vec(canvas->obj->cy[idx].dir);
-	canvas->obj->cy[idx].ucap = NULL;
-	canvas->obj->cy[idx].lcap = NULL;
+	
 }
 
 void	init_checker_cylinder(char **tmp, t_canvas *canvas, int idx)
@@ -227,9 +227,6 @@ void	init_checker_cylinder(char **tmp, t_canvas *canvas, int idx)
 	canvas->obj->cy[idx].dir.z = ft_strtod(tmp[6]);
 	canvas->obj->cy[idx].radius = ft_strtod(tmp[7]);
 	canvas->obj->cy[idx].height = ft_strtod(tmp[8]);
-	canvas->obj->cy[idx].dir = norm_vec(canvas->obj->cy[idx].dir);
-	canvas->obj->cy[idx].ucap = NULL;
-	canvas->obj->cy[idx].lcap = NULL;
 }
 
 int	init_cylinder(char **tmp, t_canvas *canvas, int count)
@@ -240,10 +237,14 @@ int	init_cylinder(char **tmp, t_canvas *canvas, int count)
 		init_normal_cylinder(tmp, canvas, idx);
 	else if (count == 8 && !ft_strcmp(tmp[0], "ccy"))
 		init_checker_cylinder(tmp, canvas, idx);
-	else if (count == 9 && !ft_strcmp(tmp[0], "tcy"))
-		init_texture_cylinder(tmp, canvas, idx);
+	else if ((count == 9 || count == 10) && !ft_strcmp(tmp[0], "tcy"))
+		init_texture_cylinder(tmp, canvas, idx, count);
 	else
 		return (-1);
+	canvas->obj->cy[idx].dir = norm_vec(canvas->obj->cy[idx].dir);
+	canvas->obj->cy[idx].ucap = NULL;
+	canvas->obj->cy[idx].lcap = NULL;
+	canvas->obj->cy[idx].angle = 0.0;
 	idx++;
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:29:45 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 01:13:45 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/05 01:45:50 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -300,14 +300,11 @@ void	cap_texture(t_vec3 point, t_cylinder *cy, t_plane *cap, t_ray3 *ray)
 	ray->color[BLUE] = c.b;
 }
 
-void	init_cap_color(int tmp, t_ray3 *ray, t_plane *cap)
+void	init_cap_color(t_ray3 *ray, t_plane *cap)
 {
-	ray->t = tmp;
-	ray->type = PL;
 	ray->color[RED] = cap->color[RED];
 	ray->color[GREEN] = cap->color[GREEN];
 	ray->color[BLUE] = cap->color[BLUE];
-	ray->obj = (void *)cap;
 }
 
 void	hit_cap(t_ray3 *ray, t_cylinder *cy, t_plane *cap, t_canvas canvas)
@@ -326,10 +323,13 @@ void	hit_cap(t_ray3 *ray, t_cylinder *cy, t_plane *cap, t_canvas canvas)
 	if ((ray->t < 0.0 && tmp > 0.0) || (tmp > 0.0 && ray->t > tmp))
 	{
 		
-		// if (cy->type == CCY || cy->type == TCY)
-		// 	cap_texture(hit, cy, cap, ray);
-		// else
-			init_cap_color(tmp, ray, cap);
+		ray->t = tmp;
+		ray->type = PL;
+		ray->obj = (void *)cap;
+		if (cy->type == CCY || cy->type == TCY)
+			cap_texture(hit, cy, cap, ray);
+		else
+			init_cap_color(ray, cap);
 		if (hit_shadow(ray, canvas))
 			ray->type = SHADOW;
 	}
@@ -345,26 +345,27 @@ void	init_cy_color(t_ray3 *ray, t_cylinder *cy, float tmp)
 	ray->obj = (void *)cy;
 }
 
-void cylindrical_map(t_vec3 p, float *u, float *v, t_vec3 center, float height)
+void cylindrical_map(t_vec3 p, float *u, float *v, t_cylinder *cy)
 {
 	t_vec3	relative_point;
 	float	theta;
 
-	relative_point = (t_vec3){p.x - center.x, p.y - center.y, p.z - center.z};
+	relative_point = (t_vec3){p.x - cy->center.x, p.y - cy->center.y, p.z - cy->center.z};
 	theta = atan2f(relative_point.x, relative_point.z); 
+	theta += cy->angle;
 	*u = (theta + M_PI) / (2.0f * M_PI);
-	*v = (p.y - center.y + height/2) / height;
+	*v = (p.y - cy->center.y + cy->height / 2) / cy->height;
 }
 
 
-t_color get_checker_pattern(t_vec3 p, t_vec3 center, float height)
+t_color get_checker_pattern(t_vec3 p, t_cylinder *cy)
 {
     float	u; 
 	float	v;
 	int		u_checker;
 	int		v_checker;
 
-	cylindrical_map(p, &u, &v, center, height);
+	cylindrical_map(p, &u, &v, cy);
     u_checker = (int)(u * 32);
     v_checker = (int)(v * 16);
     if ((u_checker + v_checker) % 2 == 0)
@@ -378,7 +379,7 @@ t_color	image_textur_on_cylinder(t_vec3 point, t_cylinder *cy, t_texture *textur
 	float	u;
 	float	v;
 
-	cylindrical_map(point, &u, &v, cy->center, cy->height);
+	cylindrical_map(point, &u, &v, cy);
 	return (get_texture_color(*texture, u, v));
 }
 
@@ -388,7 +389,7 @@ void	cylinder_texture(t_ray3 *ray, t_cylinder *cy)
 	t_color			c;
 
 	if (cy->type == CCY)
-		c = get_checker_pattern(hit, cy->center, cy->height);
+		c = get_checker_pattern(hit, cy);
 	else
 		c = image_textur_on_cylinder(hit, cy, &cy->texture);
 	ray->color[RED] = c.r;
@@ -421,9 +422,9 @@ void	hit_cylinder(t_ray3 *ray, t_cylinder *cy, t_canvas canvas)
 	{
 		ray->t = tmp;
 		ray->obj = (void *)cy;
-		// if (cy->type == CCY || cy->type == TCY)
-		// 	cylinder_texture(ray, cy);
-		// else
+		if (cy->type == CCY || cy->type == TCY)
+			cylinder_texture(ray, cy);
+		else
 			init_cy_color(ray, cy, tmp);
 		if (hit_shadow(ray, canvas))
 			ray->type = SHADOW;

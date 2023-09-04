@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 00:52:32 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/05 01:44:40 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,14 +291,26 @@ int	loop_hook(t_view *view)
 	if (view->flag && view->stop)
 	{
 		x = 0;
-		while (x < view->can.obj->sp_cnt)
+		while (x < view->can.obj->sp_cnt || x < view->can.obj->cy_cnt)
 		{
-			if (view->can.obj->sp[x].type == TSP)
-				view->can.obj->sp[x].angle += 0.05;
-			else if (view->can.obj->sp[x].type == CSP)
-				view->can.obj->sp[x].angle += 0.2;
-			if (view->can.obj->sp[x].angle > 360.1)
-				view->can.obj->sp[x].angle = 0.0;
+			if (x < view->can.obj->sp_cnt)
+			{
+				if (view->can.obj->sp[x].type == TSP)
+					view->can.obj->sp[x].angle += 0.05;
+				else if (view->can.obj->sp[x].type == CSP)
+					view->can.obj->sp[x].angle += 0.2;
+				if (view->can.obj->sp[x].angle > 360.1)
+					view->can.obj->sp[x].angle = 0.0;
+			}
+			if (x < view->can.obj->cy_cnt)
+			{
+				if (view->can.obj->cy[x].type == TCY)
+					view->can.obj->cy[x].angle += 0.05;
+				else if (view->can.obj->sp[x].type == CCY)
+					view->can.obj->cy[x].angle += 0.2;
+				if (view->can.obj->cy[x].angle > 360.1)
+					view->can.obj->cy[x].angle = 0.0;
+			}
 			x++;
 		}
 		// view->can.obj->sp[2].center = sub_vector(view->can.obj->sp[2].center, view->can.obj->sp[1].center);

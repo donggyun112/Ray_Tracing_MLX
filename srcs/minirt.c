@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
 /*   Updated: 2023/09/05 03:17:53 by seodong-gyu      ###   ########.fr       */
@@ -122,7 +122,7 @@ void	low_quality(int scalar, int pix[2], t_ray3 ray, t_view *view)
 					ray.real[RED] = c.r;
 					ray.real[GREEN] = c.g;
 					ray.real[BLUE] = c.b;
-					my_mlx_pixel_put(view, new_x, new_y, rgb_to_int(ray.color));
+					my_mlx_pixel_put(view, new_x, new_y, rgb_to_int(ray.real));
 				}
 				else
 					my_mlx_pixel_put(view, new_x, new_y, 0xFFFFFF);

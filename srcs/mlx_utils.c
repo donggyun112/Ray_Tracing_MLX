@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/03 15:39:20 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/04 20:46:41 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	up_down(int keycode, t_view *view)
 
 void	rotate_horizontal(int keycode, t_view *view)
 {
-	if (keycode == 124)
+	if (keycode == 123)
 	{
 		view->can.cam_dir = sub_vector(view->can.cam_dir, \
 			multiple_vector(0.1, view->cam.r_norm));
@@ -96,7 +96,7 @@ void	rotate_horizontal(int keycode, t_view *view)
 		view->cam = camera(view->can);
 		newwin(view);
 	}
-	else if (keycode == 123)
+	else if (keycode == 124)
 	{
 		view->can.cam_dir = add_vector(view->can.cam_dir, \
 			multiple_vector(0.1, view->cam.r_norm));
@@ -109,7 +109,7 @@ void	rotate_horizontal(int keycode, t_view *view)
 
 void	rotate_vertical(int keycode, t_view *view)
 {
-	if (keycode == 126)
+	if (keycode == 125)
 	{
 		view->can.cam_dir = add_vector(view->can.cam_dir, \
 			multiple_vector(0.09, view->cam.v_norm));
@@ -118,7 +118,7 @@ void	rotate_vertical(int keycode, t_view *view)
 		view->cam = camera(view->can);
 		newwin(view);
 	}
-	else if (keycode == 125)
+	else if (keycode == 126)
 	{
 		view->can.cam_dir = sub_vector(view->can.cam_dir, \
 			multiple_vector(0.09, view->cam.v_norm));

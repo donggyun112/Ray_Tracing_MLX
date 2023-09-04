@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   angle.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 14:30:31 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/03 02:30:48 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/04 21:09:01 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,13 @@ float	cos_pl(t_plane *pl, t_ray3 *ray, t_canvas canvas)
 {
 	t_vec3	hit;
 	t_vec3	light;
+	t_vec3	norm;
 	float	angle;
 
+	norm = check_plane_direction(pl, ray);
 	hit = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
 	light = norm_vec(sub_vector(canvas.obj->l[0].light_orig, hit));
-	angle = scalar_product(pl->norm, light);
+	angle = scalar_product(norm, light);
 	if (angle < 0.0)
 		return (0.0);
 	return (angle);
@@ -166,11 +168,13 @@ float	ref_pl(t_plane *pl, t_ray3 *ray, t_canvas canvas)
 	t_vec3	light;
 	t_vec3	hit;
 	t_vec3	reflect;
+	t_vec3	norm;
 	float	ret;
 
+	norm = check_plane_direction(pl, ray);
 	hit = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
 	light = norm_vec(sub_vector(canvas.obj->l[0].light_orig, hit));
-	reflect = norm_vec(reflection(pl->norm, light));
+	reflect = norm_vec(reflection(norm, light));
 	ret = scalar_product(norm_vec(sub_vector(ray->origin, hit)), reflect);
 	if (ret < 0.0)
 		ret = 0.0;

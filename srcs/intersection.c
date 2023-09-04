@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   intersection.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:29:45 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/03 15:39:11 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/04 21:07:35 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,8 +198,6 @@ void	hit_plane(t_ray3 *ray, t_plane *pl, t_canvas canvas)
 	float	tmp;
 	float	scalar[3];
 
-	(void)canvas;
-	pl->norm = check_plane_direction(pl, ray);
 	scalar[0] = scalar_product(pl->on_plane, pl->norm);
 	scalar[1] = scalar_product(ray->origin, pl->norm);
 	scalar[2] = scalar_product(ray->dir, pl->norm);

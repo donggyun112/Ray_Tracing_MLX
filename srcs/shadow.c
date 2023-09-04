@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shadow.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 17:48:21 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/01 23:00:16 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/04 21:06:57 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void	shadow_plane(t_ray3 *ray, t_plane *pl)
 	float	tmp;
 	float	scalar[3];
 
-	// pl->norm = check_plane_direction(pl, ray);
 	scalar[0] = scalar_product(pl->on_plane, pl->norm);
 	scalar[1] = scalar_product(ray->origin, pl->norm);
 	scalar[2] = scalar_product(ray->dir, pl->norm);

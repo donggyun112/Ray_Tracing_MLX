@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/03 15:30:07 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/04 21:34:03 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ typedef struct s_plane
 typedef struct s_sphere
 {
 	int				type;
-	int				rotate;
 	float			angle;
 	t_texture		texture;
 	t_texture		bumtexture;
@@ -96,13 +95,19 @@ typedef struct s_sphere
 
 typedef struct s_cylinder
 {
-	t_vec3	center;
-	t_vec3	dir;
-	float	radius;
-	float	height;
-	int		color[3];
-	t_plane	*ucap;
-	t_plane	*lcap;
+	int			type;
+	float		angle;
+	t_texture	texture;
+	t_texture	bumtexture;
+	char		*filepath;
+	char		*bumppath;
+	t_vec3		center;
+	t_vec3		dir;
+	float		radius;
+	float		height;
+	int			color[3];
+	t_plane		*ucap;
+	t_plane		*lcap;
 }	t_cylinder;
 
 typedef struct s_light

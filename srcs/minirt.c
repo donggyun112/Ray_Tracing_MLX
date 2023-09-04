@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/04 13:35:26 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/04 23:38:59 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,6 +240,14 @@ void	set_texture(t_view *view, t_volume *obj)
 	{
 		if (obj->pl[i].type == TPL)
 			init_texture(&obj->pl[i].texture, view, obj->pl[i].filepath);
+	}
+	while (++i < obj->cy_cnt)
+	{
+		if (obj->cy[i].type == TCY)
+		{
+			printf("%s\n", obj->cy[i].filepath);
+			init_texture(&obj->cy[i].texture, view, obj->cy[i].filepath);
+		}
 	}
 	view->anti_scalar = 1;
 	view->low_scalar = 1;

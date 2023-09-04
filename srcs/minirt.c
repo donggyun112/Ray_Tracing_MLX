@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/04 01:25:23 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/04 13:35:26 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,18 +292,21 @@ int	loop_hook(t_view *view)
 				view->can.obj->sp[x].angle = 0.0;
 			x++;
 		}
-		view->can.obj->sp[2].center = sub_vector(view->can.obj->sp[2].center, view->can.obj->sp[1].center);
+		// view->can.obj->sp[2].center = sub_vector(view->can.obj->sp[2].center, view->can.obj->sp[1].center);
+
+		
 	
 		view->can.obj->sp[1].center = sub_vector(view->can.obj->sp[1].center, view->can.obj->sp[0].center);
-		view->can.obj->sp[1].center = rotate_around_axis(view->can.obj->sp[1].center, (t_vec3){0.0f, -1.0f, 0.0f}, 0.05);
+		view->can.obj->sp[1].center = rotate_around_axis(view->can.obj->sp[1].center, (t_vec3){0.0f, 1.0f, 0.0f}, 0.05);
 		view->can.obj->sp[1].center = add_vector(view->can.obj->sp[1].center, view->can.obj->sp[0].center);
+
+		// view->can.obj->sp[2].center = sub_vector(view->can.obj->sp[2].center, view->can.obj->sp[1].center);
+		// view->can.obj->sp[2].center = rotate_around_axis(view->can.obj->sp[2].center, (t_vec3){0.0f, 1.0f, 0.0f}, 0.05);
+		// view->can.obj->sp[2].center = add_vector(view->can.obj->sp[2].center, view->can.obj->sp[1].center);
 		// view->can.obj->sp[1].center = rotate_around_specific_point(view->can.obj->sp[1].center, view->can.obj->sp[0].center, 0.05);
 	
-		view->can.obj->sp[2].center = add_vector(view->can.obj->sp[2].center, view->can.obj->sp[1].center);
-		view->can.obj->sp[2].center = sub_vector(view->can.obj->sp[2].center, view->can.obj->sp[1].center);
-		view->can.obj->sp[2].center = rotate_around_axis(view->can.obj->sp[2].center, (t_vec3){0.0f, -1.0f, 0.0f}, 0.05);
+		// view->can.obj->sp[2].center = add_vector(view->can.obj->sp[2].center, view->can.obj->sp[1].center);
 		// view->can.obj->sp[2].center = rotate_around_specific_point(view->can.obj->sp[2].center, view->can.obj->sp[1].center, 0.05);
-		view->can.obj->sp[2].center = add_vector(view->can.obj->sp[2].center, view->can.obj->sp[1].center);
 		newwin(view);
 		move_focus(0, view, 0.007);
 		view->focus = 1;

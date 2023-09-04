@@ -5,15 +5,15 @@ c	-3.0,0.0,2.0	1.0,0.0,0.0		40
 l	5.0,30.0,30.0			0.9		255,255,255
 l	0.0,30.0,0.0			0.9		255,255,255
 
-csp	11.0,1.0,3.0		1.0				
+csp	7.0,1.0,3.0		1.0				
 tsp	15.0,1.0,10.0		4.0				earthmap.xpm qwe.xpm
-tsp	12.0,1.0,15.0		1.0				/Users/seodong-gyun/Downloads/moon_texture.xpm	/Users/seodong-gyun/Downloads/moon_normal.xpm
-# tsp	10.0,3.0,8.0		1.0				/Users/seodong-gyun/Downloads/earth.xpm	/Users/seodong-gyun/Downloads/earthnormal.xpm
-# tsp	10.0,3.0,2.0		1.0				/Users/seodong-gyun/Downloads/mars.xpm	/Users/seodong-gyun/Downloads/mars_normal.xpm
-# cy	12.0,0.0,-3.0	0.3,1.0,0.1		1.0		3		0,255,0
+tsp	12.0,1.0,5.0		1.0				/Users/seodong-gyun/Downloads/moon_texture.xpm	/Users/seodong-gyun/Downloads/moon_normal.xpm
+tsp	10.0,3.0,8.0		1.0				/Users/seodong-gyun/Downloads/earth.xpm	/Users/seodong-gyun/Downloads/earthnormal.xpm
+tsp	10.0,3.0,2.0		1.0				/Users/seodong-gyun/Downloads/mars.xpm	/Users/seodong-gyun/Downloads/mars_normal.xpm
+cy	12.0,0.0,-3.0	0.3,1.0,0.1		1.0		3		0,255,0
 
-# tpl	0.0,-1.5,0.0 0.0,1.0,0.0			space.xpm
-# tpl	0.0,0.0,-8.0 0.0,0.0,1.0			space.xpm
-# tpl	20.0,0.0,-8.0 1.0,0.0,0.0			space.xpm
+cpl	0.0,-1.5,0.0 0.0,1.0,0.0			
+tpl	0.0,0.0,-8.0 0.0,0.0,1.0			space.xpm
+tpl	20.0,0.0,-8.0 1.0,0.0,0.0			space.xpm
 
 bg	space.xpm

@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:29:45 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 02:06:02 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/05 02:55:24 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,25 +263,25 @@ int	cy_in_range(t_ray3 *ray, float t, t_cylinder *cy)
 
 void endcap_map(t_vec3 p, float *u, float *v, t_vec3 center, float radius)
 {
-    t_vec3 relative_point = (t_vec3){p.z - center.z, p.x - center.x, 0};
+	t_vec3 relative_point = (t_vec3){p.z - center.z, p.x - center.x, 0};
 
-    *u = relative_point.x / (2.0 * radius) + 0.5; // Mapping x to U with normalization
-    *v = relative_point.z / (2.0 * radius) + 0.5; // Mapping z to V with normalization
+	*u = relative_point.x / (2.0 * radius) + 0.5; // Mapping x to U with normalization
+	*v = relative_point.z / (2.0 * radius) + 0.5; // Mapping z to V with normalization
 }
 
 t_color checker_pattern(t_vec3 p, t_vec3 center, float radius, float tile_size)
 {
-    float u, v;
-    endcap_map(p, &u, &v, center, radius);
+	float u, v;
+	endcap_map(p, &u, &v, center, radius);
 
-    int u_checker = (int)(u * tile_size);
-    int v_checker = (int)(v * tile_size);
+	int u_checker = (int)(u * tile_size);
+	int v_checker = (int)(v * tile_size);
 
-    // Decide color based on UV coordinates
-    if ((u_checker + v_checker) % 2)
-        return (t_color){255, 255, 255}; // white
-    else
-        return (t_color){255, 255, 0}; // black
+	// Decide color based on UV coordinates
+	if ((u_checker + v_checker) % 2)
+		return (t_color){255, 255, 255}; // white
+	else
+		return (t_color){255, 255, 0}; // black
 }
 
 void	cap_texture(t_vec3 point, t_cylinder *cy, t_plane *cap, t_ray3 *ray)
@@ -342,31 +342,35 @@ void	init_cy_color(t_ray3 *ray, t_cylinder *cy, float tmp)
 
 void cylindrical_map(t_vec3 p, float *u, float *v, t_cylinder *cy)
 {
-	t_vec3	relative_point;
-	float	theta;
+	t_vec3			relative_point = sub_vector(p, cy->center);
+	float			projected_y;
+	float			theta;
+	const t_vec3	proj = sub_vector(relative_point, multiple_vector\
+	(scalar_product(relative_point, cy->dir), cy->dir));
 
-	relative_point = (t_vec3){p.x - cy->center.x, p.y - cy->center.y, p.z - cy->center.z};
-	theta = atan2f(relative_point.x, relative_point.z); 
+	theta = atan2f(proj.z, proj.x);
 	theta += cy->angle;
+	theta = fmod(theta + 2.0f * M_PI, 2.0f * M_PI);
 	*u = (theta + M_PI) / (2.0f * M_PI);
-	*v = (p.y - cy->center.y + cy->height / 2) / cy->height;
+	projected_y = scalar_product(relative_point, cy->dir);
+	*v = (projected_y + cy->height / 2) / cy->height;
 }
 
 
 t_color get_checker_pattern(t_vec3 p, t_cylinder *cy)
 {
-    float	u; 
+	float	u; 
 	float	v;
 	int		u_checker;
 	int		v_checker;
 
 	cylindrical_map(p, &u, &v, cy);
-    u_checker = (int)(u * 32);
-    v_checker = (int)(v * 16);
-    if ((u_checker + v_checker) % 2 == 0)
-        return ((t_color){0, 0, 0});
-    else
-        return ((t_color){255, 255, 255});
+	u_checker = (int)(u * 32);
+	v_checker = (int)(v * 16);
+	if ((u_checker + v_checker) % 2 == 0)
+		return ((t_color){0, 0, 0});
+	else
+		return ((t_color){255, 255, 255});
 }
 
 t_color	image_textur_on_cylinder(t_vec3 point, t_cylinder *cy, t_texture *texture)

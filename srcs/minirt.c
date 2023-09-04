@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 02:16:31 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/05 03:01:40 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -333,10 +333,12 @@ int	loop_hook(t_view *view)
 		// view->can.obj->sp[2].center = sub_vector(view->can.obj->sp[2].center, view->can.obj->sp[1].center);
 
 		
-	
-		view->can.obj->sp[1].center = sub_vector(view->can.obj->sp[1].center, view->can.obj->sp[0].center);
-		view->can.obj->sp[1].center = rotate_around_axis(view->can.obj->sp[1].center, (t_vec3){0.0f, 1.0f, 0.0f}, 0.05);
-		view->can.obj->sp[1].center = add_vector(view->can.obj->sp[1].center, view->can.obj->sp[0].center);
+		if (view->can.obj->sp_cnt >= 3)
+		{
+			view->can.obj->sp[1].center = sub_vector(view->can.obj->sp[1].center, view->can.obj->sp[0].center);
+			view->can.obj->sp[1].center = rotate_around_axis(view->can.obj->sp[1].center, (t_vec3){0.0f, 1.0f, 0.0f}, 0.05);
+			view->can.obj->sp[1].center = add_vector(view->can.obj->sp[1].center, view->can.obj->sp[0].center);
+		}
 
 		// view->can.obj->sp[2].center = sub_vector(view->can.obj->sp[2].center, view->can.obj->sp[1].center);
 		// view->can.obj->sp[2].center = rotate_around_axis(view->can.obj->sp[2].center, (t_vec3){0.0f, 1.0f, 0.0f}, 0.05);
@@ -410,12 +412,37 @@ int	key_release(int keycode, t_view *view)
 	return (0);
 }
 
+int	is_valid_file_type(char *file_path)
+{
+	char	**path;
+	int		answer;
+	int		i;
+
+	answer = 0;
+	i = 0;
+	path = ft_split(file_path, ".");
+	if (!path)
+		return (0);
+	while (path[i] != 0)
+		i++;
+	if (ft_strncmp(path[i - 1], "rt", 2) == 0)
+		answer = 1;
+	i = 0;
+	while (path[i])
+	{
+		free(path[i]);
+		i++;
+	}
+	free(path);
+	return (answer);
+}
+
 int	main(int argc, char *argv[])
 {
 	t_view		view;
 	t_canvas	canvas;
 
-	if (argc != 2)
+	if (argc != 2 || !is_valid_file_type(argv[1]))
 	{
 		printf("Error\nInput mapfile(*.rt) as argument\n");
 		return (1);

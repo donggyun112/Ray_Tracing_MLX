@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 03:01:40 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/05 03:17:53 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,8 +316,7 @@ int	loop_hook(t_view *view)
 					view->can.obj->sp[x].angle += 0.05;
 				else if (view->can.obj->sp[x].type == CSP)
 					view->can.obj->sp[x].angle += 0.2;
-				if (view->can.obj->sp[x].angle > 360.1)
-					view->can.obj->sp[x].angle = 0.0;
+				view->can.obj->sp[x].angle = fmod(view->can.obj->sp[x].angle, 2.0 * M_PI);
 			}
 			if (x < view->can.obj->cy_cnt)
 			{
@@ -325,8 +324,7 @@ int	loop_hook(t_view *view)
 					view->can.obj->cy[x].angle += 0.05;
 				else if (view->can.obj->cy[x].type == CCY)
 					view->can.obj->cy[x].angle += 0.2;
-				if (view->can.obj->cy[x].angle > 360.1)
-					view->can.obj->cy[x].angle = 0.0;
+				view->can.obj->cy[x].angle = fmod(view->can.obj->cy[x].angle, 2.0 * M_PI);
 			}
 			x++;
 		}

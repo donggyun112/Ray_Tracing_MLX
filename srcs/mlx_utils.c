@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 00:43:02 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/06 06:02:58 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,22 @@
 
 #include "../includes/minirt.h"
 
+void	leaks(void) //remove
+{
+	system("leaks --list minirt");
+}
+
 int	win_destroy(t_view *view)
 {
 	mlx_destroy_window(view->mlx, view->win);
+	atexit(leaks); //remove
 	exit(0);
 	return (0);
 }
 
 void	newwin(t_view *view)
 {
+	mlx_destroy_image(view->mlx, view->img);
 	view->img = mlx_new_image(view->mlx, view->can.width, view->can.height);
 	view->addr = mlx_get_data_addr(view->img, &view->bits_per_pixel, \
 	&view->line_length, &view->endian);
@@ -210,10 +217,7 @@ void	pasue_system(t_view *view)
 int	key_hook(int keycode, t_view *view)
 {
 	if (keycode == 53)
-	{
-		mlx_destroy_window(view->mlx, view->win);
-		exit (0);
-	}
+		win_destroy(view);
 	else if (keycode == 125 || keycode == 126)
 		rotate_vertical(keycode, view);
 	else if (keycode == 24 || keycode == 27)

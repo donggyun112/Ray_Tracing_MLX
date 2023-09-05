@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:24:29 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 03:20:06 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/05 13:03:44 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,9 +110,34 @@ void	init_texture_plane(char **tmp, t_canvas *canvas, int idx)
 	canvas->obj->pl[idx].norm = norm_vec(canvas->obj->pl[idx].norm);
 }
 
+void	init_rotate_sphere(t_canvas *canvas, char **tmp, int idx)
+{
+	static int	ridx;
+
+	canvas->obj->sp[idx].type = TSP;
+	canvas->obj->sp[idx].center.x = ft_strtod(tmp[1]);
+	canvas->obj->sp[idx].center.y = ft_strtod(tmp[2]);
+	canvas->obj->sp[idx].center.z = ft_strtod(tmp[3]);
+	canvas->obj->sp[idx].radius = ft_strtod(tmp[4]);
+	canvas->obj->rsp[ridx].r_center.x = ft_strtod(tmp[5]);
+	canvas->obj->rsp[ridx].r_center.y = ft_strtod(tmp[6]);
+	canvas->obj->rsp[ridx].r_center.z = ft_strtod(tmp[7]);
+	canvas->obj->rsp[ridx].r_axis.x = ft_strtod(tmp[8]);
+	canvas->obj->rsp[ridx].r_axis.y = ft_strtod(tmp[9]);
+	canvas->obj->rsp[ridx].r_axis.z = ft_strtod(tmp[10]);
+	canvas->obj->sp[idx].filepath = ft_strdup(tmp[11]);
+	canvas->obj->sp[idx].bumppath = ft_strdup(tmp[12]);
+	canvas->obj->rsp[ridx].sp = &canvas->obj->sp[idx];
+	canvas->obj->rsp[ridx].r_axis = norm_vec(canvas->obj->rsp[ridx].r_axis);
+	canvas->obj->rsp[ridx].r_radius = size_of_vec2(sub_vector(canvas->obj->sp[idx].center, canvas->obj->rsp[ridx].r_center));
+	canvas->obj->sp[idx].angle = 0.000000;
+	ridx++;
+}
+
 int	init_plane(char **tmp, t_canvas *canvas, int count)
 {
 	static int	idx;
+	
 
 	if (count == 9 && !ft_strcmp(tmp[0], "pl"))
 		init_nomal_plane(tmp, canvas, idx);
@@ -174,6 +199,8 @@ int	init_sphere(char **tmp, t_canvas *canvas, int count)
 		init_texture_sphere(canvas, tmp, idx, count);
 	else if (count == 4 && !ft_strcmp(tmp[0], "csp"))
 		init_checker_sphere(canvas, tmp, idx);
+	else if (!ft_strcmp(tmp[0], "rsp") && count == 12)
+		init_rotate_sphere(canvas, tmp, idx);
 	else
 		return (-1);
 	idx++;
@@ -300,18 +327,16 @@ void	free_split(char **tmp)
 
 void	init_count(t_volume *obj, char **tmp)
 {
-	if (!ft_strcmp(tmp[0], "sp"))
+	if (!ft_strcmp(tmp[0], "rsp"))
+		obj->rsp_cnt++;
+	if (!ft_strcmp(tmp[0], "sp") || !ft_strcmp(tmp[0], "tsp") || !ft_strcmp(tmp[0], "csp") || !ft_strcmp(tmp[0], "rsp"))
 		obj->sp_cnt++;
-	else if (!ft_strcmp(tmp[0], "pl"))
-		obj->pl_cnt++;
 	else if (!ft_strcmp(tmp[0], "cy") || !ft_strcmp(tmp[0], "ccy") || !ft_strcmp(tmp[0], "tcy"))
 		obj->cy_cnt++;
+	else if (!ft_strcmp(tmp[0], "pl"))
+		obj->pl_cnt++;
 	else if (!ft_strcmp(tmp[0], "l"))
 		obj->l_cnt++;
-	else if (!ft_strcmp(tmp[0], "tsp"))
-		obj->sp_cnt++;
-	else if (!ft_strcmp(tmp[0], "csp"))
-		obj->sp_cnt++;
 	else if (!ft_strcmp(tmp[0], "tpl"))
 		obj->pl_cnt++;
 	else if (!ft_strcmp(tmp[0], "cpl"))
@@ -348,6 +373,7 @@ t_volume	*init_volume(char **av)
 	obj->pl_cnt = 0;
 	obj->sp_cnt = 0;
 	obj->l_cnt = 0;
+	obj->rsp_cnt = 0;
 	obj->cy = NULL;
 	obj->pl = NULL;
 	obj->sp = NULL;
@@ -356,6 +382,7 @@ t_volume	*init_volume(char **av)
 	obj->sp = (t_sphere *)malloc(sizeof(t_sphere) * obj->sp_cnt);
 	obj->pl = (t_plane *)malloc(sizeof(t_plane) * obj->pl_cnt);
 	obj->cy = (t_cylinder *)malloc(sizeof(t_cylinder) * obj->cy_cnt);
+	obj->rsp = (t_rsphere *)malloc(sizeof(t_rsphere) * obj->rsp_cnt);
 	return (obj);
 }
 

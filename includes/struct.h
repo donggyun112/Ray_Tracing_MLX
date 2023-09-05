@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 10:04:24 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/05 12:10:26 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,16 +102,10 @@ typedef struct s_sphere
 typedef struct s_rsphere
 {
 	int				type;
-	float			angle;
-	t_texture		texture;
-	t_texture		bumtexture;
-	char			*filepath;
-	char			*bumppath;
-	t_vec3			center; //구의 중심점
-	float			radius; //구의 반지름
+	t_sphere		*sp;
 	t_vec3			r_center; //공전하는 축의 시작좌표
 	t_vec3			r_axis; //공전하는 축의 방향좌표
-	t_vec3			r_radius; //구의 중심점과 r_center사이의 거리
+	float			r_radius; //구의 중심점과 r_center사이의 거리
 }	t_rsphere;
 
 typedef struct s_cylinder
@@ -144,11 +138,13 @@ typedef struct s_volume
 	int			sp_cnt;
 	int			cy_cnt;
 	int			l_cnt;
+	int			rsp_cnt;
 	float		ag;
 	t_plane		*pl;
 	t_sphere	*sp;
 	t_cylinder	*cy;
 	t_light		*l;
+	t_rsphere	*rsp;
 }	t_volume;
 
 typedef struct s_canvas

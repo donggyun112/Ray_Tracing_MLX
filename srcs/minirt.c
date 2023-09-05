@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 03:17:53 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/05 13:08:26 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -331,11 +331,12 @@ int	loop_hook(t_view *view)
 		// view->can.obj->sp[2].center = sub_vector(view->can.obj->sp[2].center, view->can.obj->sp[1].center);
 
 		
-		if (view->can.obj->sp_cnt >= 3)
+
+		if (view->can.obj->rsp_cnt > 0)
 		{
-			view->can.obj->sp[1].center = sub_vector(view->can.obj->sp[1].center, view->can.obj->sp[0].center);
-			view->can.obj->sp[1].center = rotate_around_axis(view->can.obj->sp[1].center, (t_vec3){0.0f, 1.0f, 0.0f}, 0.05);
-			view->can.obj->sp[1].center = add_vector(view->can.obj->sp[1].center, view->can.obj->sp[0].center);
+			view->can.obj->rsp[0].sp->center = sub_vector(view->can.obj->rsp[0].sp->center, view->can.obj->rsp[0].r_center);
+			view->can.obj->rsp[0].sp->center = rotate_around_axis(view->can.obj->rsp[0].sp->center, view->can.obj->rsp[0].r_axis, 0.05);
+			view->can.obj->rsp[0].sp->center = add_vector(view->can.obj->rsp[0].sp->center, view->can.obj->rsp[0].r_center);
 		}
 
 		// view->can.obj->sp[2].center = sub_vector(view->can.obj->sp[2].center, view->can.obj->sp[1].center);

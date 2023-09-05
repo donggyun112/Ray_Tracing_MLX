@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 06:02:56 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/06 07:08:05 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,22 +18,13 @@ void	intersection(t_ray3 *ray, t_volume *obj)
 
 	idx = 0;
 	while (idx < obj->sp_cnt)
-	{
-		hit_sphere(ray, &obj->sp[idx]);
-		idx++;
-	}
+		hit_sphere(ray, &obj->sp[idx++]);
 	idx = 0;
 	while (idx < obj->pl_cnt)
-	{
-		hit_plane(ray, &obj->pl[idx]);
-		idx++;
-	}
+		hit_plane(ray, &obj->pl[idx++]);
 	idx = 0;
 	while (idx < obj->cy_cnt)
-	{
-		hit_cylinder(ray, &obj->cy[idx]);
-		idx++;
-	}
+		hit_cylinder(ray, &obj->cy[idx++]);
 }
 
 void	color_cal(t_canvas canvas, t_ray3 *ray, t_color *color)

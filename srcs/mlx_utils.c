@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 06:42:58 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/06 07:43:55 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	leaks(void) //remove
 int	win_destroy(t_view *view)
 {
 	mlx_destroy_window(view->mlx, view->win);
-	atexit(leaks); //remove
+	// atexit(leaks); //remove
 	exit(0);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 02:07:30 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/05 22:15:25 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/06 07:26:24 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ t_camera	camera(t_canvas canvas)
 	viewport[WIDTH] = viewport[HEIGHT] * canvas.ratio;
 	cam.dir = canvas.cam_dir;
 	up = vec3(0.0, 1.0, 0.0);
-	cam.r_norm = vector_product(cam.dir, up);
-	cam.v_norm = vector_product(cam.dir, cam.r_norm);
+	cam.r_norm = norm_vec(vector_product(cam.dir, up));
+	cam.v_norm = norm_vec(vector_product(cam.dir, cam.r_norm));
 	cam.left_upper = left_upper(cam, viewport);
 	return (cam);
 }

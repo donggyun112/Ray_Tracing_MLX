@@ -3,13 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/04 21:34:03 by dongkseo         ###   ########.fr       */
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
+/*   Updated: 2023/09/05 10:04:24 by jinhyeop         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /*   Updated: 2023/09/04 23:26:04 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -98,6 +98,21 @@ typedef struct s_sphere
 	float			radius;
 	int				color[3];
 }	t_sphere;
+
+typedef struct s_rsphere
+{
+	int				type;
+	float			angle;
+	t_texture		texture;
+	t_texture		bumtexture;
+	char			*filepath;
+	char			*bumppath;
+	t_vec3			center; //구의 중심점
+	float			radius; //구의 반지름
+	t_vec3			r_center; //공전하는 축의 시작좌표
+	t_vec3			r_axis; //공전하는 축의 방향좌표
+	t_vec3			r_radius; //구의 중심점과 r_center사이의 거리
+}	t_rsphere;
 
 typedef struct s_cylinder
 {

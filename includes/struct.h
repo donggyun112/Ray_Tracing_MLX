@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 12:10:26 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/05 19:32:23 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,7 @@ typedef struct s_volume
 	int			cy_cnt;
 	int			l_cnt;
 	int			rsp_cnt;
+	int			error_flag[3];
 	float		ag;
 	t_plane		*pl;
 	t_sphere	*sp;

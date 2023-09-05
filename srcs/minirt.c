@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 13:08:26 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/05 19:11:17 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -316,7 +316,8 @@ int	loop_hook(t_view *view)
 					view->can.obj->sp[x].angle += 0.05;
 				else if (view->can.obj->sp[x].type == CSP)
 					view->can.obj->sp[x].angle += 0.2;
-				view->can.obj->sp[x].angle = fmod(view->can.obj->sp[x].angle, 2.0 * M_PI);
+				else
+					view->can.obj->sp[x].angle = fmod(view->can.obj->sp[x].angle, 2.0 * M_PI);
 			}
 			if (x < view->can.obj->cy_cnt)
 			{
@@ -328,24 +329,12 @@ int	loop_hook(t_view *view)
 			}
 			x++;
 		}
-		// view->can.obj->sp[2].center = sub_vector(view->can.obj->sp[2].center, view->can.obj->sp[1].center);
-
-		
-
 		if (view->can.obj->rsp_cnt > 0)
 		{
 			view->can.obj->rsp[0].sp->center = sub_vector(view->can.obj->rsp[0].sp->center, view->can.obj->rsp[0].r_center);
 			view->can.obj->rsp[0].sp->center = rotate_around_axis(view->can.obj->rsp[0].sp->center, view->can.obj->rsp[0].r_axis, 0.05);
 			view->can.obj->rsp[0].sp->center = add_vector(view->can.obj->rsp[0].sp->center, view->can.obj->rsp[0].r_center);
 		}
-
-		// view->can.obj->sp[2].center = sub_vector(view->can.obj->sp[2].center, view->can.obj->sp[1].center);
-		// view->can.obj->sp[2].center = rotate_around_axis(view->can.obj->sp[2].center, (t_vec3){0.0f, 1.0f, 0.0f}, 0.05);
-		// view->can.obj->sp[2].center = add_vector(view->can.obj->sp[2].center, view->can.obj->sp[1].center);
-		// view->can.obj->sp[1].center = rotate_around_specific_point(view->can.obj->sp[1].center, view->can.obj->sp[0].center, 0.05);
-	
-		// view->can.obj->sp[2].center = add_vector(view->can.obj->sp[2].center, view->can.obj->sp[1].center);
-		// view->can.obj->sp[2].center = rotate_around_specific_point(view->can.obj->sp[2].center, view->can.obj->sp[1].center, 0.05);
 		newwin(view);
 		move_focus(0, view, 0.007);
 		view->focus = 1;

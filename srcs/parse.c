@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:24:29 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 13:03:44 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/05 20:17:24 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ int	ft_strcmp(char *s1, char *s2)
 
 void	init_view2(t_canvas *canvas, char **tmp)
 {
-	canvas->width = ft_strtod(tmp[1]);
-	canvas->height = ft_strtod(tmp[2]);
+	canvas->width =  fabs(ft_strtod(tmp[1]));
+	canvas->height = fabs(ft_strtod(tmp[2]));
 	canvas->ratio = (float)canvas->width / (float)canvas->height;
 }
 
@@ -35,7 +35,7 @@ int	init_view(char **tmp, t_canvas *canvas, int count)
 {
 	if (count == 2 && !ft_strcmp(tmp[0], "R"))
 		init_view2(canvas, tmp);
-	else if (count == 1 && !ft_strcmp(tmp[0], "bg"))
+	if (count == 1 && !ft_strcmp(tmp[0], "bg"))
 		canvas->bgt_filepath = ft_strdup(tmp[1]);
 	else if (count == 4 && !ft_strcmp(tmp[0], "A"))
 	{
@@ -137,7 +137,6 @@ void	init_rotate_sphere(t_canvas *canvas, char **tmp, int idx)
 int	init_plane(char **tmp, t_canvas *canvas, int count)
 {
 	static int	idx;
-	
 
 	if (count == 9 && !ft_strcmp(tmp[0], "pl"))
 		init_nomal_plane(tmp, canvas, idx);
@@ -296,14 +295,56 @@ int	init_light(char **tmp, t_canvas *canvas, int count)
 	return (0);
 }
 
+void	error_print(char *tmp, int expected, int input_count)
+{
+	fprintf(stderr, \
+	"Error: [%s] Expected \
+%d arguments, but got %d. Please check your input.\n"\
+	, tmp, expected, input_count);
+	exit(1);
+}
+
+void	find_problem(char **tmp, int count)
+{
+	if (!ft_strcmp(tmp[0], "l") && count != 7)
+		error_print(tmp[0], 7, count);
+	else if (count != 11 && !ft_strcmp(tmp[0], "cy"))
+		error_print(tmp[0], 11, count);
+	else if (count != 8 && !ft_strcmp(tmp[0], "ccy"))
+		error_print(tmp[0], 8, count);
+	else if (count != 10 && !ft_strcmp(tmp[0], "tcy"))
+		error_print(tmp[0], 10, count);
+	if (count != 7 && !ft_strcmp(tmp[0], "sp"))
+		error_print(tmp[0], 7, count);
+	else if (count != 6 && !ft_strcmp(tmp[0], "tsp"))
+		error_print(tmp[0], 6, count);
+	else if (count != 4 && !ft_strcmp(tmp[0], "csp"))
+		error_print(tmp[0], 4, count);
+	else if (!ft_strcmp(tmp[0], "rsp") && count != 12)
+		error_print(tmp[0], 12, count);
+	else if (count != 9 && !ft_strcmp(tmp[0], "pl"))
+		error_print(tmp[0], 9, count);
+	else if (count != 6 && !ft_strcmp(tmp[0], "cpl"))
+		error_print(tmp[0], 6, count);
+	else if (count != 2 && !ft_strcmp(tmp[0], "R"))
+		error_print(tmp[0], 2, count);
+	else if (count != 1 && !ft_strcmp(tmp[0], "bg"))
+		error_print(tmp[0], 1, count);
+	else if (count != 4 && !ft_strcmp(tmp[0], "A"))
+		error_print(tmp[0], 4, count);
+	else if (count != 7 && (!ft_strcmp(tmp[0], "c") || !ft_strcmp(tmp[0], "tpl")))
+		error_print(tmp[0], 7, count);
+}
+
 int	init_data(char **tmp, t_canvas *canvas)
 {
-	int	count;
+	int			count;
 
 	count = 0;
 	if (!tmp || !*tmp)
 		return (1);
 	count = argument_count(tmp);
+	find_problem(tmp, count - 1);
 	if (init_view(tmp, canvas, count - 1) == -1)
 		if (init_light(tmp, canvas, count - 1) == -1)
 			if (init_plane(tmp, canvas, count - 1) == -1)
@@ -329,9 +370,11 @@ void	init_count(t_volume *obj, char **tmp)
 {
 	if (!ft_strcmp(tmp[0], "rsp"))
 		obj->rsp_cnt++;
-	if (!ft_strcmp(tmp[0], "sp") || !ft_strcmp(tmp[0], "tsp") || !ft_strcmp(tmp[0], "csp") || !ft_strcmp(tmp[0], "rsp"))
+	if (!ft_strcmp(tmp[0], "sp") || !ft_strcmp(tmp[0], "tsp") || \
+	!ft_strcmp(tmp[0], "csp") || !ft_strcmp(tmp[0], "rsp"))
 		obj->sp_cnt++;
-	else if (!ft_strcmp(tmp[0], "cy") || !ft_strcmp(tmp[0], "ccy") || !ft_strcmp(tmp[0], "tcy"))
+	else if (!ft_strcmp(tmp[0], "cy") || !ft_strcmp(tmp[0], "ccy") || \
+	!ft_strcmp(tmp[0], "tcy"))
 		obj->cy_cnt++;
 	else if (!ft_strcmp(tmp[0], "pl"))
 		obj->pl_cnt++;
@@ -341,6 +384,12 @@ void	init_count(t_volume *obj, char **tmp)
 		obj->pl_cnt++;
 	else if (!ft_strcmp(tmp[0], "cpl"))
 		obj->pl_cnt++;
+	else if (!ft_strcmp(tmp[0], "R"))
+		obj->error_flag[0] = 1;
+	else if (!ft_strcmp(tmp[0], "A"))
+		obj->error_flag[1] = 1;
+	else if (!ft_strcmp(tmp[0], "c"))
+		obj->error_flag[2] = 1;
 }
 
 void	ft_obj_count(char **av, t_volume *obj)
@@ -361,6 +410,11 @@ void	ft_obj_count(char **av, t_volume *obj)
 		free_split(tmp);
 		free(line);
 	}
+	if (obj->error_flag[0] == 0 || obj->error_flag[1] == 0 || obj->error_flag[2] == 0)
+	{
+		fprintf(stderr, "Error: Missing required argument. [ R, A, c ]\n");
+		exit(1);
+	}
 	close(fd);
 }
 
@@ -374,6 +428,9 @@ t_volume	*init_volume(char **av)
 	obj->sp_cnt = 0;
 	obj->l_cnt = 0;
 	obj->rsp_cnt = 0;
+	obj->error_flag[0] = 0;
+	obj->error_flag[1] = 0;
+	obj->error_flag[2] = 0;
 	obj->cy = NULL;
 	obj->pl = NULL;
 	obj->sp = NULL;

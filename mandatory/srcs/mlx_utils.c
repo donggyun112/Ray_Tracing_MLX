@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/28 22:18:35 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/06 03:08:58 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,13 @@ int	rgb_to_int(int color[])
 {
 	return ((color[RED] << 16) | (color[GREEN] << 8) \
 	| color[BLUE]);
+}
+
+void	make_obj_cap(t_volume *obj)
+{
+	int	idx;
+
+	idx = 0;
+	while (idx < obj->cy_cnt)
+		make_cylinder_cap(&obj->cy[idx++]);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 02:07:30 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/06 01:12:22 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/06 03:15:07 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_vec3	left_upper(t_camera cam, double viewport[])
 
 t_camera	camera(t_canvas canvas)
 {
-	t_camera	cam; 
+	t_camera	cam;
 	t_vec3		up;
 	double		fov_radians;
 	double		viewport[2];
@@ -52,7 +52,7 @@ t_ray3	create_ray(t_camera cam, double u, double v)
 	t_vec3	on_vp;
 
 	ray.origin = cam.origin;
-	on_vp = add_three_vector(cam.left_upper, multiple_vector(u, cam.r_norm),\
+	on_vp = add_three_vector(cam.left_upper, multiple_vector(u, cam.r_norm), \
 		multiple_vector(v, cam.v_norm));
 	ray.dir = norm_vec(on_vp);
 	ray.t = -1.0;

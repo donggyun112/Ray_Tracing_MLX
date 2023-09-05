@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   calculate_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 00:50:51 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/06 00:51:13 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/06 03:14:37 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

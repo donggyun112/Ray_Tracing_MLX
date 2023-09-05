@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/25 16:14:18 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/06 03:16:18 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCT_H
 # define STRUCT_H
-
 
 typedef struct s_view
 {
@@ -110,10 +109,5 @@ typedef struct s_canvas
 	int				light_col[3];
 	t_volume		*obj;
 }	t_canvas;
-
-// bvh
-
-
-
 
 #endif

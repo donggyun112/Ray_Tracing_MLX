@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:24:29 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 20:17:24 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/05 20:40:16 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	ft_strcmp(char *s1, char *s2)
 
 void	init_view2(t_canvas *canvas, char **tmp)
 {
-	canvas->width =  fabs(ft_strtod(tmp[1]));
+	canvas->width = fabs(ft_strtod(tmp[1]));
 	canvas->height = fabs(ft_strtod(tmp[2]));
 	canvas->ratio = (float)canvas->width / (float)canvas->height;
 }
@@ -110,30 +110,6 @@ void	init_texture_plane(char **tmp, t_canvas *canvas, int idx)
 	canvas->obj->pl[idx].norm = norm_vec(canvas->obj->pl[idx].norm);
 }
 
-void	init_rotate_sphere(t_canvas *canvas, char **tmp, int idx)
-{
-	static int	ridx;
-
-	canvas->obj->sp[idx].type = TSP;
-	canvas->obj->sp[idx].center.x = ft_strtod(tmp[1]);
-	canvas->obj->sp[idx].center.y = ft_strtod(tmp[2]);
-	canvas->obj->sp[idx].center.z = ft_strtod(tmp[3]);
-	canvas->obj->sp[idx].radius = ft_strtod(tmp[4]);
-	canvas->obj->rsp[ridx].r_center.x = ft_strtod(tmp[5]);
-	canvas->obj->rsp[ridx].r_center.y = ft_strtod(tmp[6]);
-	canvas->obj->rsp[ridx].r_center.z = ft_strtod(tmp[7]);
-	canvas->obj->rsp[ridx].r_axis.x = ft_strtod(tmp[8]);
-	canvas->obj->rsp[ridx].r_axis.y = ft_strtod(tmp[9]);
-	canvas->obj->rsp[ridx].r_axis.z = ft_strtod(tmp[10]);
-	canvas->obj->sp[idx].filepath = ft_strdup(tmp[11]);
-	canvas->obj->sp[idx].bumppath = ft_strdup(tmp[12]);
-	canvas->obj->rsp[ridx].sp = &canvas->obj->sp[idx];
-	canvas->obj->rsp[ridx].r_axis = norm_vec(canvas->obj->rsp[ridx].r_axis);
-	canvas->obj->rsp[ridx].r_radius = size_of_vec2(sub_vector(canvas->obj->sp[idx].center, canvas->obj->rsp[ridx].r_center));
-	canvas->obj->sp[idx].angle = 0.000000;
-	ridx++;
-}
-
 int	init_plane(char **tmp, t_canvas *canvas, int count)
 {
 	static int	idx;
@@ -188,6 +164,29 @@ void	init_checker_sphere(t_canvas *canvas, char **tmp, int idx)
 	canvas->obj->sp[idx].angle = 0.000000;
 }
 
+void	init_rotate_sphere(t_canvas *canvas, char **tmp, int idx)
+{
+	static int	ridx;
+
+	init_checker_sphere(canvas, tmp, idx);
+	canvas->obj->sp[idx].type = TSP;
+	canvas->obj->rsp[ridx].r_center.x = ft_strtod(tmp[5]);
+	canvas->obj->rsp[ridx].r_center.y = ft_strtod(tmp[6]);
+	canvas->obj->rsp[ridx].r_center.z = ft_strtod(tmp[7]);
+	canvas->obj->rsp[ridx].r_axis.x = ft_strtod(tmp[8]);
+	canvas->obj->rsp[ridx].r_axis.y = ft_strtod(tmp[9]);
+	canvas->obj->rsp[ridx].r_axis.z = ft_strtod(tmp[10]);
+	canvas->obj->sp[idx].filepath = ft_strdup(tmp[11]);
+	canvas->obj->sp[idx].bumppath = ft_strdup(tmp[12]);
+	canvas->obj->rsp[ridx].sp = &canvas->obj->sp[idx];
+	canvas->obj->rsp[ridx].r_axis = norm_vec(canvas->obj->rsp[ridx].r_axis);
+	canvas->obj->rsp[ridx].r_radius = \
+	size_of_vec2(sub_vector(canvas->obj->sp[idx].center, \
+	canvas->obj->rsp[ridx].r_center));
+	canvas->obj->sp[idx].angle = 0.000000;
+	ridx++;
+}
+
 int	init_sphere(char **tmp, t_canvas *canvas, int count)
 {
 	static int	idx;
@@ -239,7 +238,6 @@ void	init_normal_cylinder(char **tmp, t_canvas *canvas, int idx)
 	canvas->obj->cy[idx].color[GREEN] = ft_strtod(tmp[10]);
 	canvas->obj->cy[idx].color[BLUE] = ft_strtod(tmp[11]);
 	canvas->obj->cy[idx].dir = norm_vec(canvas->obj->cy[idx].dir);
-	
 }
 
 void	init_checker_cylinder(char **tmp, t_canvas *canvas, int idx)
@@ -304,6 +302,16 @@ void	error_print(char *tmp, int expected, int input_count)
 	exit(1);
 }
 
+void	find_problem2(char **tmp, int count)
+{
+	if (count != 7 && (!ft_strcmp(tmp[0], "c") || !ft_strcmp(tmp[0], "tpl")))
+		error_print(tmp[0], 7, count);
+	else if (count != 4 && !ft_strcmp(tmp[0], "A"))
+		error_print(tmp[0], 4, count);
+	else if (count != 1 && !ft_strcmp(tmp[0], "bg"))
+		error_print(tmp[0], 1, count);
+}
+
 void	find_problem(char **tmp, int count)
 {
 	if (!ft_strcmp(tmp[0], "l") && count != 7)
@@ -328,12 +336,7 @@ void	find_problem(char **tmp, int count)
 		error_print(tmp[0], 6, count);
 	else if (count != 2 && !ft_strcmp(tmp[0], "R"))
 		error_print(tmp[0], 2, count);
-	else if (count != 1 && !ft_strcmp(tmp[0], "bg"))
-		error_print(tmp[0], 1, count);
-	else if (count != 4 && !ft_strcmp(tmp[0], "A"))
-		error_print(tmp[0], 4, count);
-	else if (count != 7 && (!ft_strcmp(tmp[0], "c") || !ft_strcmp(tmp[0], "tpl")))
-		error_print(tmp[0], 7, count);
+	find_problem2(tmp, count);
 }
 
 int	init_data(char **tmp, t_canvas *canvas)
@@ -410,7 +413,8 @@ void	ft_obj_count(char **av, t_volume *obj)
 		free_split(tmp);
 		free(line);
 	}
-	if (obj->error_flag[0] == 0 || obj->error_flag[1] == 0 || obj->error_flag[2] == 0)
+	if (obj->error_flag[0] == 0 || \
+	obj->error_flag[1] == 0 || obj->error_flag[2] == 0)
 	{
 		fprintf(stderr, "Error: Missing required argument. [ R, A, c ]\n");
 		exit(1);

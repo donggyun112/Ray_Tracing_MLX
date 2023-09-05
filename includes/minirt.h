@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 02:18:48 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/05 22:06:46 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@
 # define SHADOW 100
 # define TCY 7
 # define CCY 8
+# define NUM_OF_THREAD 7
 
 //parse
 t_canvas	parse(char *av[]);
@@ -56,13 +57,14 @@ int			key_hook(int keycode, t_view *view);
 void		my_mlx_pixel_put(t_view *mlx, int x, int y, unsigned int color);
 int			rgb_to_int(int color[]);
 t_vec3		rotate_around_axis(t_vec3 vec, t_vec3 axis, float angle);
-void	rotate_vertical(int keycode, t_view *view);
-void	rotate_horizontal(int keycode, t_view *view);
-void	up_down(int keycode, t_view *view);
-void	left_right(int keycode, t_view *view);
-void	foward_back(int keycode, t_view *view);
-void	quality(int keycode, t_view *view);
-void	move_focus(int scalra, t_view *view, float sensitivity);
+void		rotate_vertical(int keycode, t_view *view);
+void		rotate_horizontal(int keycode, t_view *view);
+void		up_down(int keycode, t_view *view);
+void		left_right(int keycode, t_view *view);
+void		foward_back(int keycode, t_view *view);
+void		quality(int keycode, t_view *view);
+void		move_focus(int scalra, t_view *view, float sensitivity);
+void		newwin(t_view *view);
 
 //intersection
 int			discriminant(float a, float b, float c);
@@ -73,7 +75,7 @@ void		hit_cylinder(t_ray3 *ray, t_cylinder *cy);
 void		make_cylinder_cap(t_cylinder *cy);
 t_vec3		check_plane_direction(t_plane *pl, t_ray3 *ray);
 int			cy_in_range(t_ray3 *ray, float t, t_cylinder *cy);
-void cylindrical_map(t_vec3 p, float *u, float *v, t_cylinder *cy);
+void		cylindrical_map(t_vec3 p, float *u, float *v, t_cylinder *cy);
 
 //raycasting
 t_ray3		create_ray(t_camera cam, float u, float v);
@@ -93,15 +95,14 @@ int			amb_light(t_canvas canvas, t_ray3 *ray, int idx);
 void		ray_color(t_canvas canvas, t_ray3 *ray, int light);
 
 //pattern
-void	init_texture(t_texture *texture, t_view *view, char *path);
-t_color get_texture_color(t_texture texture, float u, float v);
-void	spherical_map(t_vec3 p, float *u, float *v, t_vec3 center, float ag);
+void		init_texture(t_texture *texture, t_view *view, char *path);
+t_color		get_texture_color(t_texture texture, float u, float v);
+void		spherical_map(t_vec3 p, float *u, float *v, t_sphere *sp);
 
 //shadow
 int			hit_shadow(t_ray3 *ray, t_canvas canvas, int light);
 
 
-//
-void	newwin(t_view *view);
-void	multi_rend(t_view *view);
+//RENDERING
+void		multi_rend(t_view *view);
 #endif

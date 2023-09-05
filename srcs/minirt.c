@@ -6,15 +6,11 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 19:11:17 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/05 22:06:51 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../includes/minirt.h"
-#include <OpenGL/OpenGL.h>
-
-#define	num_of_thread 7
 
 void	intersection(t_ray3 *ray, t_volume *obj)
 {
@@ -40,7 +36,7 @@ void	intersection(t_ray3 *ray, t_volume *obj)
 	}
 }
 
-void	color_cal(t_canvas canvas, t_ray3 *ray)
+void	color_cal(t_canvas canvas, t_ray3 *ray, t_color *color)
 {
 	int	light;
 	int	idx;
@@ -62,6 +58,9 @@ void	color_cal(t_canvas canvas, t_ray3 *ray)
 			idx++;
 		}
 	}
+	color->r += ray->real[RED];
+	color->g += ray->real[GREEN];
+	color->b += ray->real[BLUE];
 }
 
 t_color	anti_aliasing(int pix[2], float vp_idx[2], t_view *view, t_ray3 *ray)
@@ -87,22 +86,30 @@ t_color	anti_aliasing(int pix[2], float vp_idx[2], t_view *view, t_ray3 *ray)
 			ray->pix[0] = pix[0];
 			ray->pix[1] = pix[1];
 			intersection(ray, view->can.obj);
-			color_cal(view->can, ray);
-			color.r += ray->real[RED];
-			color.g += ray->real[GREEN];
-			color.b += ray->real[BLUE];
+			color_cal(view->can, ray, &color);
 		}
 	}
 	return (color);
 }
 
+void	init_backgorund(t_view *view, int pix[2], t_ray3 *ray, int xy[2])
+{
+	float		po[2];
+	t_color		c;
+
+	po[0] = ((float)pix[0] / view->can.width);
+	po[1] = ((float)pix[1] / view->can.height);
+	c = get_texture_color(view->back, po[0], po[1]);
+	ray->real[RED] = c.r;
+	ray->real[GREEN] = c.g;
+	ray->real[BLUE] = c.b;
+	my_mlx_pixel_put(view, xy[0], xy[1], rgb_to_int(ray->real));
+}
+
 void	low_quality(int scalar, int pix[2], t_ray3 ray, t_view *view)
 {
-	int		offset[2];
-	const float	po[2] = {((float)pix[0] / view->can.width), ((float)pix[1] / view->can.height)};
-	int		new_x;
-	int		new_y;
-	t_color	c;
+	int			offset[2];
+	int			xy[2];
 
 	offset[0] = 0;
 	while (offset[0] < scalar)
@@ -110,56 +117,53 @@ void	low_quality(int scalar, int pix[2], t_ray3 ray, t_view *view)
 		offset[1] = 0;
 		while (offset[1] < scalar)
 		{
-			new_x = pix[0] + offset[0];
-			new_y = pix[1] + offset[1];
-			if (new_x < view->can.width && new_y < view->can.height)
+			xy[0] = pix[0] + offset[0];
+			xy[1] = pix[1] + offset[1];
+			if (xy[0] < view->can.width && xy[1] < view->can.height)
 			{
 				if (ray.t > 0.0)
-					my_mlx_pixel_put(view, new_x, new_y, rgb_to_int(ray.real));
+					my_mlx_pixel_put(view, xy[0], xy[1], rgb_to_int(ray.real));
 				else if (view->can.bgt_filepath)
-				{
-					c = get_texture_color(view->back, po[0], po[1]);
-					ray.real[RED] = c.r;
-					ray.real[GREEN] = c.g;
-					ray.real[BLUE] = c.b;
-					my_mlx_pixel_put(view, new_x, new_y, rgb_to_int(ray.real));
-				}
+					init_backgorund(view, pix, &ray, xy);
 				else
-					my_mlx_pixel_put(view, new_x, new_y, 0xFFFFFF);
+					my_mlx_pixel_put(view, xy[0], xy[1], 0xFFFFFF);
 			}
 			offset[1]++;
-
 		}
 		offset[0]++;
 	}
 }
 
-void	*make_image2(void *m)
+void	set_thread_st_point(int *anti, int pix[2], t_thread *t)
 {
-	int		pix[3];
-	float	vp_idx[2];
-	t_ray3	ray;
-	t_color	c;
-	t_thread	*t;
-	int	anti;
-
-	t = (t_thread *)m;
-	anti = t->view->anti_scalar * t->view->anti_scalar;
-	pix[1] = t->id * (t->canvas.height / num_of_thread);
-	if (t->id == num_of_thread - 1)
+	*anti = t->view->anti_scalar * t->view->anti_scalar;
+	pix[1] = t->id * (t->canvas.height / NUM_OF_THREAD);
+	if (t->id == NUM_OF_THREAD - 1)
 		pix[2] = t->canvas.height;
 	else
-		pix[2] = (t->id + 1) * (t->canvas.height / num_of_thread);
+		pix[2] = (t->id + 1) * (t->canvas.height / NUM_OF_THREAD);
+}
+
+void	*make_image2(void *m)
+{
+	int			pix[3];
+	float		vp_idx[2];
+	t_color		c;
+	t_thread	*t;
+	int			anti;
+
+	t = (t_thread *)m;
+	set_thread_st_point(&anti, pix, t);
 	while (pix[1] < pix[2] && pix[1] < t->canvas.height)
 	{
 		pix[0] = 0;
 		while (pix[0] < t->canvas.width)
 		{
-			c = anti_aliasing(pix, vp_idx, t->view, &ray);
-			ray.real[RED] = c.r / anti;
-			ray.real[GREEN] = c.g / anti;
-			ray.real[BLUE] = c.b / anti;
-			low_quality(t->view->low_scalar, pix, ray, t->view);
+			c = anti_aliasing(pix, vp_idx, t->view, &t->ray);
+			t->ray.real[RED] = c.r / anti;
+			t->ray.real[GREEN] = c.g / anti;
+			t->ray.real[BLUE] = c.b / anti;
+			low_quality(t->view->low_scalar, pix, t->ray, t->view);
 			pix[0] += t->view->low_scalar;
 		}
 		pix[1] += (t->view->low_scalar);
@@ -214,14 +218,17 @@ void	make_image(t_view *view, t_canvas canvas)
 t_thread	*init_thread(t_view *view)
 {
 	t_thread	*m;
+	int			x;
 
-	m = (t_thread *)malloc(sizeof(t_thread) * num_of_thread);
+	m = (t_thread *)malloc(sizeof(t_thread) * NUM_OF_THREAD);
 	set_quality_scalar(view);
-	for (int x = 0; x < num_of_thread; x++)
+	x = 0;
+	while (x < NUM_OF_THREAD)
 	{
 		m[x].id = x;
 		m[x].view = view;
 		m[x].canvas = view->can;
+		x++;
 	}
 	return (m);
 }
@@ -229,21 +236,28 @@ t_thread	*init_thread(t_view *view)
 void	multi_rend(t_view *view)
 {
 	t_thread	*m;
+	int			x;
 
+	x = 0;
 	m = init_thread(view);
-	for (int x = 0; x < num_of_thread; x++)
+	while (x < NUM_OF_THREAD)
+	{
 		pthread_create(&m[x].thread, NULL, make_image2, &m[x]);
-	for (int x = 0; x < num_of_thread; x++)
+		x++;
+	}
+	x = 0;
+	while (x < NUM_OF_THREAD)
+	{
 		pthread_join(m[x].thread, NULL);
+		x++;
+	}
 }
 
 void	set_texture(t_view *view, t_volume *obj)
 {
-	int i;
+	int	i;
 
 	i = -1;
-	if (view->can.bgt_filepath)
-		init_texture(&view->back, view, view->can.bgt_filepath);
 	while (++i < obj->sp_cnt)
 	{
 		if (obj->sp[i].type == TSP)
@@ -254,10 +268,8 @@ void	set_texture(t_view *view, t_volume *obj)
 	}
 	i = -1;
 	while (++i < obj->pl_cnt)
-	{
 		if (obj->pl[i].type == TPL)
 			init_texture(&obj->pl[i].texture, view, obj->pl[i].filepath);
-	}
 	i = -1;
 	while (++i < obj->cy_cnt)
 	{
@@ -267,73 +279,84 @@ void	set_texture(t_view *view, t_volume *obj)
 			init_texture(&obj->cy[i].bumtexture, view, obj->cy[i].bumppath);
 		}
 	}
+}
+
+void	init_view_scale(t_view *view)
+{
 	view->anti_scalar = 1;
 	view->low_scalar = 1;
 	view->quality_scalar = -2;
 	view->flag = 0;
 	view->focus = 0;
 	view->stop = 1;
+	if (view->can.bgt_filepath)
+		init_texture(&view->back, view, view->can.bgt_filepath);
+	mlx_mouse_hide();
+	mlx_mouse_move(view->win, view->can.width / 2, view->can.height / 2);
 }
 
-t_vec3 rotate_around_specific_point(t_vec3 vec, t_vec3 center, float angle)
+t_vec3	rotate_around_specific_point(t_vec3 vec, t_vec3 center, float angle)
 {
-	// 1. 이동 단계: 회전 중심 좌표를 원점으로 이동
-	t_vec3 translated_vec;
+	t_vec3		translated_vec;
+	t_vec3		rotated_vec;
+	const float	cos_angle = cos(angle);
+	const float	sin_angle = sin(angle);
+
 	translated_vec.x = vec.x - center.x;
 	translated_vec.y = vec.y - center.y;
 	translated_vec.z = vec.z - center.z;
-
-	// 2. 회전 단계: 원점을 중심으로 벡터를 Y축 방향으로 회전
-	const float cos_angle = cos(angle);
-	const float sin_angle = sin(angle);
-
-	t_vec3 rotated_vec;
 	rotated_vec.x = translated_vec.x * cos_angle - translated_vec.z * sin_angle;
-	rotated_vec.y = translated_vec.y;  // Y축을 중심으로 회전하기 때문에 Y 값은 변하지 않습니다.
+	rotated_vec.y = translated_vec.y;
 	rotated_vec.z = translated_vec.x * sin_angle + translated_vec.z * cos_angle;
-
-	// 3. 복원 단계: 원래 위치로 벡터를 이동
 	rotated_vec.x += center.x;
 	rotated_vec.y += center.y;
 	rotated_vec.z += center.z;
-
-	return rotated_vec;
+	return (rotated_vec);
 }
 
-
-int	loop_hook(t_view *view)
+void	change_angle(t_view *view)
 {
 	int	x;
 
+	x = 0;
+	while (x < view->can.obj->sp_cnt || x < view->can.obj->cy_cnt)
+	{
+		if (x < view->can.obj->sp_cnt)
+		{
+			if (view->can.obj->sp[x].type == TSP)
+				view->can.obj->sp[x].angle += 0.05;
+			else if (view->can.obj->sp[x].type == CSP)
+				view->can.obj->sp[x].angle += 0.2;
+			else
+			view->can.obj->sp[x].angle = \
+			fmod(view->can.obj->sp[x].angle, 2.0 * M_PI);
+		}
+		if (x < view->can.obj->cy_cnt)
+		{
+			if (view->can.obj->cy[x].type == TCY \
+			|| view->can.obj->cy[x].type == CCY)
+				view->can.obj->cy[x].angle += 0.2;
+			view->can.obj->cy[x].angle = \
+			fmod(view->can.obj->cy[x].angle, 2.0 * M_PI);
+		}
+		x++;
+	}
+}
+
+int	loop_hook(t_view *view)
+{
 	if (view->flag && view->stop)
 	{
-		x = 0;
-		while (x < view->can.obj->sp_cnt || x < view->can.obj->cy_cnt)
-		{
-			if (x < view->can.obj->sp_cnt)
-			{
-				if (view->can.obj->sp[x].type == TSP)
-					view->can.obj->sp[x].angle += 0.05;
-				else if (view->can.obj->sp[x].type == CSP)
-					view->can.obj->sp[x].angle += 0.2;
-				else
-					view->can.obj->sp[x].angle = fmod(view->can.obj->sp[x].angle, 2.0 * M_PI);
-			}
-			if (x < view->can.obj->cy_cnt)
-			{
-				if (view->can.obj->cy[x].type == TCY)
-					view->can.obj->cy[x].angle += 0.05;
-				else if (view->can.obj->cy[x].type == CCY)
-					view->can.obj->cy[x].angle += 0.2;
-				view->can.obj->cy[x].angle = fmod(view->can.obj->cy[x].angle, 2.0 * M_PI);
-			}
-			x++;
-		}
 		if (view->can.obj->rsp_cnt > 0)
 		{
-			view->can.obj->rsp[0].sp->center = sub_vector(view->can.obj->rsp[0].sp->center, view->can.obj->rsp[0].r_center);
-			view->can.obj->rsp[0].sp->center = rotate_around_axis(view->can.obj->rsp[0].sp->center, view->can.obj->rsp[0].r_axis, 0.05);
-			view->can.obj->rsp[0].sp->center = add_vector(view->can.obj->rsp[0].sp->center, view->can.obj->rsp[0].r_center);
+			view->can.obj->rsp[0].sp->center = sub_vector(view->can.obj->\
+			rsp[0].sp->center, view->can.obj->rsp[0].r_center);
+			view->can.obj->rsp[0].sp->center = \
+			rotate_around_axis(view->can.obj->rsp[0] \
+			.sp->center, view->can.obj->rsp[0].r_axis, 0.05);
+			view->can.obj->rsp[0].sp->center = \
+			add_vector(view->can.obj->\
+			rsp[0].sp->center, view->can.obj->rsp[0].r_center);
 		}
 		newwin(view);
 		move_focus(0, view, 0.007);
@@ -374,7 +397,7 @@ void	make_obj_cap(t_volume *obj)
 		make_cylinder_cap(&obj->cy[idx++]);
 }
 
-int mouse_motion(int x, int y, t_view *view)
+int	mouse_motion(int x, int y, t_view *view)
 {
 	static int	pos[2];
 
@@ -389,9 +412,8 @@ int mouse_motion(int x, int y, t_view *view)
 	}
 	pos[0] = x;
 	pos[1] = y;
-    return (0);
+	return (0);
 }
-
 
 int	key_release(int keycode, t_view *view)
 {
@@ -425,6 +447,15 @@ int	is_valid_file_type(char *file_path)
 	return (answer);
 }
 
+void	mlx_engine(t_view *view)
+{
+	mlx_hook(view->win, 2, 1L << 0, key_hook, view);
+	mlx_hook(view->win, 3, 1L << 1, key_release, view);
+	mlx_hook(view->win, 17, 1L << 5, win_destroy, view);
+	mlx_hook(view->win, 6, 1L << 7, mouse_motion, view);
+	mlx_loop_hook(view->mlx, loop_hook, view);
+}
+
 int	main(int argc, char *argv[])
 {
 	t_view		view;
@@ -444,16 +475,11 @@ int	main(int argc, char *argv[])
 	view.img = mlx_new_image(view.mlx, canvas.width, canvas.height);
 	view.addr = mlx_get_data_addr(view.img, &view.bits_per_pixel, \
 		&view.line_length, &view.endian);
+	init_view_scale(&view);
 	set_texture(&view, canvas.obj);
 	multi_rend(&view);
-	mlx_mouse_hide();
-	mlx_mouse_move(view.win, view.can.width / 2, view.can.height / 2);
 	mlx_put_image_to_window(view.mlx, view.win, view.img, 0, 0);
-	mlx_hook(view.win, 2, 1L << 0, key_hook, &view);
-	mlx_hook(view.win, 3, 1L << 1, key_release, &view);
-	mlx_hook(view.win, 17, 1L << 5, win_destroy, &view);
-	mlx_hook(view.win, 6, 1L << 7, mouse_motion, &view);
-	mlx_loop_hook(view.mlx, loop_hook, &view);
+	mlx_engine(&view);
 	mlx_loop(view.mlx);
 	exit(0);
 }

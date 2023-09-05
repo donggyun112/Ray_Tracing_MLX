@@ -3,13 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   intersection.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:29:45 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 02:55:24 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/05 22:00:16 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../includes/minirt.h"
 
@@ -32,15 +31,17 @@ t_color	checkertexture(t_vec3 point, float scale, t_plane *pl, int flag)
 		return ((t_color){0, 0, 0});
 	else if (flag == 1)
 		return ((t_color){255, 255, 255});
-	else if ((pl->norm.z == 1.0 && ((checkerx + checkery) % 2 == 0)) || (pl->norm.z == -1.0 && ((checkerx + checkery) % 2 == 0)))
+	else if ((pl->norm.z == 1.0 && ((checkerx + checkery) % 2 == 0)) || \
+	(pl->norm.z == -1.0 && ((checkerx + checkery) % 2 == 0)))
 		return ((t_color){0, 0, 0});
-	else if (pl->norm.z != 1.0 && (checkerx + checkery + checkerz) % 2 == 0 && pl->norm.z != -1.0)
+	else if (pl->norm.z != 1.0 && (checkerx + checkery + checkerz) % 2 == 0 \
+	&& pl->norm.z != -1.0)
 		return ((t_color){0, 0, 0});
 	else
 		return ((t_color){255, 255, 255});
 }
 
-void	spherical_map(t_vec3 p, float *u, float *v, t_vec3 center, float ag)
+void	spherical_map(t_vec3 p, float *u, float *v, t_sphere *sp)
 {
 	float	theta;
 	float	vecmagnitude;
@@ -48,12 +49,13 @@ void	spherical_map(t_vec3 p, float *u, float *v, t_vec3 center, float ag)
 	float	raw_u;
 	t_vec3	relative_point;
 
-	relative_point = (t_vec3){p.x - center.x, p.y - center.y, p.z - center.z};
+	relative_point = \
+	(t_vec3){p.x - sp->center.x, p.y - sp->center.y, p.z - sp->center.z};
 	theta = atan2f(relative_point.z, relative_point.x);
 	vecmagnitude = sqrtf(relative_point.x * relative_point.x + \
 	relative_point.y * relative_point.y + relative_point.z * relative_point.z);
 	phi = acosf(relative_point.y / vecmagnitude);
-	theta += ag;
+	theta += sp->angle;
 	raw_u = theta / (2.0f * M_PI);
 	*u = (raw_u + 0.5f);
 	*v = phi / M_PI;
@@ -89,7 +91,7 @@ t_color	image_texture_on_sphere(t_vec3 point, t_sphere *sp, t_texture *texture)
 	float	u;
 	float	v;
 
-	spherical_map(point, &u, &v, sp->center, sp->angle);
+	spherical_map(point, &u, &v, sp);
 	return (get_texture_color(*texture, u, v));
 }
 
@@ -98,7 +100,7 @@ t_color	grid_texture_on_sphere(t_vec3 point, t_checker pattern, t_sphere *sp)
 	float	u;
 	float	v;
 
-	spherical_map(point, &u, &v, sp->center, sp->angle);
+	spherical_map(point, &u, &v, sp);
 	return (uv_grid_pattern_at(pattern, u, v));
 }
 
@@ -143,9 +145,9 @@ void	init_sp_color(t_ray3 *ray, t_sphere *sp)
 void	hit_sphere(t_ray3 *ray, t_sphere *sp)
 {
 	const t_vec3	l = sub_vector(sp->center, ray->origin);
-	const float	tca = scalar_product(l, ray->dir);
-	const float	d2 = scalar_product(l, l) - (tca * tca);
-	const float	tnc = sqrt(sp->radius * sp->radius - d2);
+	const float		tca = scalar_product(l, ray->dir);
+	const float		d2 = scalar_product(l, l) - (tca * tca);
+	const float		tnc = sqrt(sp->radius * sp->radius - d2);
 	float			tmp;
 
 	if (tca < 0)
@@ -192,7 +194,9 @@ void	init_pltexture(t_ray3 *ray, t_plane *pl)
 
 	hit = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
 	if (pl->type == TPL)
-		c = get_texture_color(pl->texture, ((float)ray->pix[0] / pl->texture.width), ((float)ray->pix[1] / pl->texture.height));
+		c = get_texture_color(pl->texture, \
+		((float)ray->pix[0] / pl->texture.width), \
+		((float)ray->pix[1] / pl->texture.height));
 	else
 		c = checkertexture(hit, 1, pl, 0);
 	ray->color[RED] = c.r;
@@ -261,29 +265,6 @@ int	cy_in_range(t_ray3 *ray, float t, t_cylinder *cy)
 	return (1);
 }
 
-void endcap_map(t_vec3 p, float *u, float *v, t_vec3 center, float radius)
-{
-	t_vec3 relative_point = (t_vec3){p.z - center.z, p.x - center.x, 0};
-
-	*u = relative_point.x / (2.0 * radius) + 0.5; // Mapping x to U with normalization
-	*v = relative_point.z / (2.0 * radius) + 0.5; // Mapping z to V with normalization
-}
-
-t_color checker_pattern(t_vec3 p, t_vec3 center, float radius, float tile_size)
-{
-	float u, v;
-	endcap_map(p, &u, &v, center, radius);
-
-	int u_checker = (int)(u * tile_size);
-	int v_checker = (int)(v * tile_size);
-
-	// Decide color based on UV coordinates
-	if ((u_checker + v_checker) % 2)
-		return (t_color){255, 255, 255}; // white
-	else
-		return (t_color){255, 255, 0}; // black
-}
-
 void	cap_texture(t_vec3 point, t_cylinder *cy, t_plane *cap, t_ray3 *ray)
 {
 	t_color	c;
@@ -319,7 +300,6 @@ void	hit_cap(t_ray3 *ray, t_cylinder *cy, t_plane *cap)
 		return ;
 	if ((ray->t < 0.0 && tmp > 0.0) || (tmp > 0.0 && ray->t > tmp))
 	{
-		
 		ray->t = tmp;
 		ray->type = PL;
 		ray->obj = (void *)cap;
@@ -340,13 +320,13 @@ void	init_cy_color(t_ray3 *ray, t_cylinder *cy, float tmp)
 	ray->obj = (void *)cy;
 }
 
-void cylindrical_map(t_vec3 p, float *u, float *v, t_cylinder *cy)
+void	cylindrical_map(t_vec3 p, float *u, float *v, t_cylinder *cy)
 {
-	t_vec3			relative_point = sub_vector(p, cy->center);
+	const t_vec3	relative_point = sub_vector(p, cy->center);
 	float			projected_y;
 	float			theta;
-	const t_vec3	proj = sub_vector(relative_point, multiple_vector\
-	(scalar_product(relative_point, cy->dir), cy->dir));
+	const t_vec3	proj = sub_vector(relative_point, \
+	multiple_vector(scalar_product(relative_point, cy->dir), cy->dir));
 
 	theta = atan2f(proj.z, proj.x);
 	theta += cy->angle;
@@ -356,10 +336,9 @@ void cylindrical_map(t_vec3 p, float *u, float *v, t_cylinder *cy)
 	*v = (projected_y + cy->height / 2) / cy->height;
 }
 
-
-t_color get_checker_pattern(t_vec3 p, t_cylinder *cy)
+t_color	get_checker_pattern(t_vec3 p, t_cylinder *cy)
 {
-	float	u; 
+	float	u;
 	float	v;
 	int		u_checker;
 	int		v_checker;
@@ -373,20 +352,23 @@ t_color get_checker_pattern(t_vec3 p, t_cylinder *cy)
 		return ((t_color){255, 255, 255});
 }
 
-t_color	image_textur_on_cylinder(t_vec3 point, t_cylinder *cy, t_texture *texture)
+t_color	image_textur_on_cylinder(t_vec3 point, t_cylinder *cy, t_texture *tex)
 {
 	float	u;
 	float	v;
 
 	cylindrical_map(point, &u, &v, cy);
-	return (get_texture_color(*texture, u, v));
+	return (get_texture_color(*tex, u, v));
 }
 
-void	cylinder_texture(t_ray3 *ray, t_cylinder *cy)
+void	cylinder_texture(t_ray3 *ray, t_cylinder *cy, float tmp)
 {
-	const t_vec3	hit = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
+	const t_vec3	hit = add_vector(ray->origin, \
+	multiple_vector(ray->t, ray->dir));
 	t_color			c;
 
+	ray->obj = (void *)cy;
+	ray->t = tmp;
 	if (cy->type == CCY)
 		c = get_checker_pattern(hit, cy);
 	else
@@ -419,10 +401,8 @@ void	hit_cylinder(t_ray3 *ray, t_cylinder *cy)
 		return ;
 	if ((ray->t < 0.0 && tmp > 0.0) || (tmp > 0.0 && ray->t > tmp))
 	{
-		ray->t = tmp;
-		ray->obj = (void *)cy;
 		if (cy->type == CCY || cy->type == TCY)
-			cylinder_texture(ray, cy);
+			cylinder_texture(ray, cy, tmp);
 		else
 			init_cy_color(ray, cy, tmp);
 	}

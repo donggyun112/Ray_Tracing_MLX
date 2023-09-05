@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   angle.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 14:30:31 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 03:18:53 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/05 21:10:55 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_vec3	bump_sphere(t_sphere *sphere, t_texture bp, t_vec3 hit)
 	t_vec3	bump_normal;
 	t_vec3	normal;
 
-	spherical_map(hit, &u, &v, sphere->center, sphere->angle);
+	spherical_map(hit, &u, &v, sphere);
 	c = get_texture_color(bp, u, v);
 	normal = norm_vec(sub_vector(hit, sphere->center));
 	bump_normal = get_tangent_bump(normal, c);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 22:15:19 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/06 00:43:02 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,6 +224,10 @@ int	key_hook(int keycode, t_view *view)
 		quality(keycode, view);
 	else if (keycode == 4)
 		view->flag = !view->flag;
+	else if (keycode == 0 || keycode == 2)
+		left_right(keycode, view);
+	else if (keycode == 13 || keycode == 1)
+		foward_back(keycode, view);
 	else if (keycode == 35)
 		pasue_system(view);
 	if ((keycode == 13 || keycode == 1 \
@@ -232,6 +236,7 @@ int	key_hook(int keycode, t_view *view)
 		view->focus = 1;
 		move_focus(0, view, 0.007);
 	}
+	printf("%d\n", keycode);
 	return (0);
 }
 

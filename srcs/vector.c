@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 11:38:12 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/01 23:00:35 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/06 00:37:45 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ t_vec3	norm_vec(t_vec3 vec)
 	t_vec3	norm;
 	float	size;
 
-	size = size_of_vec(vec.x, vec.y, vec.z);
+	size = size_of_vec2(vec);
 	norm.x = vec.x / size;
 	norm.y = vec.y / size;
 	norm.z = vec.z / size;

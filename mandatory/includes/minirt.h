@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/29 20:37:34 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/06 00:35:54 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,6 @@ int			win_destroy(t_view *view);
 int			key_hook(int keycode, t_view *view);
 void		my_mlx_pixel_put(t_view *mlx, int x, int y, unsigned int color);
 int			rgb_to_int(int color[]);
-double		my_rand_double(void);
-double		my_rand_double_range(double min, double max);
-int			my_rand(void);
 
 //intersection
 int			discriminant(double a, double b, double c);

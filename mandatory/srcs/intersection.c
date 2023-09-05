@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   intersection.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 21:39:34 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/29 20:48:40 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/06 00:37:00 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

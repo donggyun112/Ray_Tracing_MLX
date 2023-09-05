@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 15:16:09 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/01 01:00:06 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/06 03:18:57 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ void		ft_putendl_fd(char *s, int fd);
 void		ft_putnbr_fd(int n, int fd);
 void		ft_putstr_fd(char *s, int fd);
 char		**ft_split(char const *s, char *c);
+char		**ft_putstring(char const *s, char *c, char **arr);
+int			word_count(char const *s, char *c);
 char		*ft_strchr(const char *str, int c);
 char		*ft_strdup(const char *s1);
 void		ft_striteri(char *s, void (*f)(unsigned int, char *));

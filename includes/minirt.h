@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 22:40:11 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/06 04:32:02 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,8 +102,6 @@ int			mouse_motion(int x, int y, t_view *view);
 int			key_release(int keycode, t_view *view);
 void		pasue_system(t_view *view);
 
-
-
 //intersection
 void		intersection(t_ray3 *ray, t_volume *obj);
 int			discriminant(float a, float b, float c);
@@ -136,7 +134,6 @@ t_cylinder *cy, t_plane *cap, t_ray3 *ray);
 void		init_pltexture(t_ray3 *ray, t_plane *pl);
 void		init_texture(t_texture *texture, t_view *view, char *path);
 void		cylindrical_map(t_vec3 p, float *u, float *v, t_cylinder *cy);
-
 
 //raycasting
 t_ray3		create_ray(t_camera cam, float u, float v);
@@ -175,7 +172,5 @@ void		*make_image2(void *m);
 void		set_thread_st_point(int *anti, int pix[2], t_thread *t);
 void		init_backgorund(t_view *view, int pix[2], t_ray3 *ray, int xy[2]);
 t_thread	*init_thread(t_view *view);
-
-
 
 #endif

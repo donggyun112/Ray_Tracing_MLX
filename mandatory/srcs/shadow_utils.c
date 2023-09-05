@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shadow_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 00:59:42 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/06 00:59:48 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/06 03:15:33 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

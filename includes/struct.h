@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 19:32:23 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/06 03:32:57 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,11 +101,11 @@ typedef struct s_sphere
 
 typedef struct s_rsphere
 {
-	int				type;
-	t_sphere		*sp;
-	t_vec3			r_center; //공전하는 축의 시작좌표
-	t_vec3			r_axis; //공전하는 축의 방향좌표
-	float			r_radius; //구의 중심점과 r_center사이의 거리
+	int			type;
+	t_sphere	*sp;
+	t_vec3		r_center;
+	t_vec3		r_axis;
+	float		r_radius;
 }	t_rsphere;
 
 typedef struct s_cylinder
@@ -127,9 +127,9 @@ typedef struct s_cylinder
 
 typedef struct s_light
 {
-	t_vec3			light_orig;
-	float			light_bright;
-	int				light_col[3];
+	t_vec3	light_orig;
+	float	light_bright;
+	int		light_col[3];
 }	t_light;
 
 typedef struct s_volume
@@ -150,20 +150,20 @@ typedef struct s_volume
 
 typedef struct s_canvas
 {
-	int				width;
-	int				height;
-	float			ratio;
-	float			amb_bright;
-	int				amb_col[3];
-	t_vec3			cam_orig;
-	t_vec3			cam_dir;
-	int				fov;
-	t_vec3			light_orig;
-	float			light_bright;
-	int				light_col[3];
-	char			*bgt_filepath;
-	t_volume		*obj;
-	t_camera		cam;
+	int			width;
+	int			height;
+	float		ratio;
+	float		amb_bright;
+	int			amb_col[3];
+	t_vec3		cam_orig;
+	t_vec3		cam_dir;
+	int			fov;
+	t_vec3		light_orig;
+	float		light_bright;
+	int			light_col[3];
+	char		*bgt_filepath;
+	t_volume	*obj;
+	t_camera	cam;
 }	t_canvas;
 
 typedef struct s_view
@@ -187,7 +187,6 @@ typedef struct s_view
 	t_texture	back;
 }	t_view;
 
-
 typedef struct s_thread
 {
 	int			id;
@@ -196,6 +195,5 @@ typedef struct s_thread
 	t_canvas	canvas;
 	pthread_t	thread;
 }	t_thread;
-
 
 #endif

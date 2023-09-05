@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 01:11:51 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/06 05:12:04 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,12 +108,14 @@ int	main(int argc, char *argv[])
 		return (1);
 	}
 	canvas = parse(argv);
+	make_obj_cap(canvas.obj);
 	cam = camera(canvas);
 	view.mlx = mlx_init();
 	view.win = mlx_new_window(view.mlx, canvas.width, canvas.height, "miniRT");
 	view.img = mlx_new_image(view.mlx, canvas.width, canvas.height);
 	view.addr = mlx_get_data_addr(view.img, &view.bits_per_pixel, \
 		&view.line_length, &view.endian);
+	view.can = canvas;
 	make_image(&view, canvas, cam);
 	mlx_put_image_to_window(view.mlx, view.win, view.img, 0, 0);
 	mlx_hook(view.win, 17, 1L << 5, win_destroy, &view);

@@ -3,15 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+         #
+#    By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/02 15:17:44 by jinhyeop          #+#    #+#              #
-#    Updated: 2023/09/06 01:10:12 by seodong-gyu      ###   ########.fr        #
+#    Updated: 2023/09/06 05:07:00 by jinhyeop         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3 -fsanitize=address
+CFLAGS = -Wall -Wextra -Werror -g3
 CLIB = -Llibft -lft -Lmlx -lmlx -framework OpenGL -framework Appkit -Imlx -lm
 
 NAME = minirt

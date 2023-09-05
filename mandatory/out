@@ -1,0 +1,23 @@
+Process:         minirt [21029]
+Path:            /Volumes/VOLUME/*/minirt
+Load Address:    0x10bad1000
+Identifier:      minirt
+Version:         ???
+Code Type:       X86-64
+Parent Process:  zsh [17574]
+
+Date/Time:       2023-09-06 05:33:51.483 +0900
+Launch Time:     2023-09-06 05:33:49.084 +0900
+OS Version:      Mac OS X 10.15.7 (19H15)
+Report Version:  7
+Analysis Tool:   /Applications/Xcode.app/Contents/Developer/usr/bin/leaks
+Analysis Tool Version:  Xcode 12.3 (12C33)
+
+Physical footprint:         24.6M
+Physical footprint (peak):  31.9M
+----
+
+leaks Report Version: 4.0
+Process 21029: 21801 nodes malloced for 13773 KB
+Process 21029: 0 leaks for 0 total leaked bytes.
+

@@ -3,30 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cylinder.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 21:39:34 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 01:08:57 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/06 03:04:36 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
-
-int	cy_in_range(t_ray3 *ray, double t, t_cylinder *cy)
-{
-	t_vec3	hit;
-	double	height[2];
-
-	hit = add_vector(ray->origin, multiple_vector(t, ray->dir));
-	height[0] = scalar_product(sub_vector(hit, cy->center), cy->dir);
-	height[1] = scalar_product(sub_vector(hit, cy->center), \
-		multiple_vector(-1.0, cy->dir));
-	if (height[0] > 0 && height[0] > cy->height / 2)
-		return (0);
-	if (height[1] > 0 && height[1] > cy->height / 2)
-		return (0);
-	return (1);
-}
 
 void	make_cylinder_cap(t_cylinder *cy)
 {
@@ -47,6 +31,22 @@ void	make_cylinder_cap(t_cylinder *cy)
 		multiple_vector(cy->height / 2.0, cy->dir));
 	cy->lcap->on_plane = add_vector(cy->center, \
 		multiple_vector(cy->height / -2.0, cy->dir));
+}
+
+int	cy_in_range(t_ray3 *ray, double t, t_cylinder *cy)
+{
+	t_vec3	hit;
+	double	height[2];
+
+	hit = add_vector(ray->origin, multiple_vector(t, ray->dir));
+	height[0] = scalar_product(sub_vector(hit, cy->center), cy->dir);
+	height[1] = scalar_product(sub_vector(hit, cy->center), \
+		multiple_vector(-1.0, cy->dir));
+	if (height[0] > 0 && height[0] > cy->height / 2)
+		return (0);
+	if (height[1] > 0 && height[1] > cy->height / 2)
+		return (0);
+	return (1);
 }
 
 void	hit_cap(t_ray3 *ray, t_cylinder *cy, t_plane *cap, t_canvas canvas)
@@ -92,7 +92,6 @@ void	hit_cylinder(t_ray3 *ray, t_cylinder *cy, t_canvas canvas)
 	double	coef[3];
 	double	tmp;
 
-	make_cylinder_cap(cy);
 	hit_cap(ray, cy, cy->ucap, canvas);
 	hit_cap(ray, cy, cy->lcap, canvas);
 	oc = sub_vector(ray->origin, cy->center);

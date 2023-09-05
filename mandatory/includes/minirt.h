@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 00:35:54 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/06 01:09:30 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,32 @@
 
 //parse
 t_canvas	parse(char *av[]);
-
-//utils
-
+//parse utils
+int			argument_count(char **tmp);
+void		init_view2(t_canvas *canvas, char **tmp);
+int			ft_strcmp(char *s1, char *s2);
+void		free_split(char **tmp);
+//parse obj
+int	init_view(char **tmp, t_canvas *canvas, int count);
+int	init_plane(char **tmp, t_canvas *canvas, int count);
+int	init_sphere(char **tmp, t_canvas *canvas, int count);
+int	init_cylinder(char **tmp, t_canvas *canvas, int count);
+int	init_light(char **tmp, t_canvas *canvas, int count);
+//shadow
+int	hit_shadow(t_ray3 *ray, t_canvas canvas);
+void	shadow_cap(t_ray3 *ray, t_cylinder *cy, t_plane *cap);
+void	shadow_check(t_ray3 *ray, t_canvas canvas);
+void	shadow_plane(t_ray3 *ray, t_plane *pl);
+void	shadow_sphere(t_ray3 *ray, t_sphere *sp);
+void	shadow_cylinder(t_ray3 *ray, t_cylinder *cy);
+//angle_utils
+double	get_hit_height(t_cylinder *cy, t_vec3 hit);
+t_vec3	reflection(t_vec3 normal, t_vec3 light);
+//cylinder
+int		cy_in_range(t_ray3 *ray, double t, t_cylinder *cy);
+void	hit_cylinder(t_ray3 *ray, t_cylinder *cy, t_canvas canvas);
+//sphere
+void	hit_sphere(t_ray3 *ray, t_sphere *sp, t_canvas canvas);
 //mlx_utils
 int			win_destroy(t_view *view);
 int			key_hook(int keycode, t_view *view);

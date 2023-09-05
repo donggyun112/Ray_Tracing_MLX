@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/08/28 21:44:15 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/06 01:11:51 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	main(int argc, char *argv[])
 
 	if (argc != 2 || !is_valid_file_type(argv[1]))
 	{
-		printf("Error\nInput mapfile(*.rt) as argument\n");
+		ft_putstr_fd("Error\nInput mapfile(*.rt) as argument\n", 2);
 		return (1);
 	}
 	canvas = parse(argv);

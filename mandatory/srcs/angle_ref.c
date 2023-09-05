@@ -6,12 +6,11 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 14:30:31 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 00:32:46 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/06 01:12:55 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
-
 
 double	get_hit_height(t_cylinder *cy, t_vec3 hit)
 {

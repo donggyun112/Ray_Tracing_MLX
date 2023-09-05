@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 17:48:21 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 00:35:55 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/06 01:16:43 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,21 +91,6 @@ void	shadow_cylinder(t_ray3 *ray, t_cylinder *cy)
 		return ;
 	if ((ray->t < 0.0 && tmp > 0.0) || (tmp > 0.0 && ray->t > tmp))
 		ray->t = tmp;
-}
-
-void	shadow_check(t_ray3 *ray, t_canvas canvas)
-{
-	int	idx;
-
-	idx = 0;
-	while (idx < canvas.obj->sp_cnt)
-		shadow_sphere(ray, &canvas.obj->sp[idx++]);
-	idx = 0;
-	while (idx < canvas.obj->pl_cnt)
-		shadow_plane(ray, &canvas.obj->pl[idx++]);
-	idx = 0;
-	while (idx < canvas.obj->cy_cnt)
-		shadow_cylinder(ray, &canvas.obj->cy[idx++]);
 }
 
 int	hit_shadow(t_ray3 *ray, t_canvas canvas)

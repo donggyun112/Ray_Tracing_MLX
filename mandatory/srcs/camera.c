@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycasting.c                                       :+:      :+:    :+:   */
+/*   camera.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 02:07:30 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/08/29 19:21:14 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/06 01:12:22 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,6 @@ t_camera	camera(t_canvas canvas)
 	cam.r_norm = vector_product(cam.dir, up);
 	cam.v_norm = vector_product(cam.dir, cam.r_norm);
 	cam.left_upper = left_upper(cam, viewport);
-	printf("%f, %f, %f\n", cam.r_norm.x, cam.r_norm.y, cam.r_norm.z);
-	printf("%f, %f, %f\n", cam.v_norm.x, cam.v_norm.y, cam.v_norm.z);
-	printf("%f, %f, %f\n", cam.left_upper.x, cam.left_upper.y, cam.left_upper.z);
 	return (cam);
 }
 

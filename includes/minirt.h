@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 22:06:46 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/05 22:40:11 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,37 @@
 
 //parse
 t_canvas	parse(char *av[]);
+t_volume	*init_volume(char **av);
+void		ft_obj_count(char **av, t_volume *obj);
+void		init_count(t_volume *obj, char **tmp);
+void		make_obj_cap(t_volume *obj);
+void		make_cylinder_cap(t_cylinder *cy);
+void		free_split(char **tmp);
+int			init_data(char **tmp, t_canvas *canvas);
+void		find_problem(char **tmp, int count);
+void		find_problem2(char **tmp, int count);
+void		error_print(char *tmp, int expected, int input_count);
+int			init_light(char **tmp, t_canvas *canvas, int count);
+int			init_cylinder(char **tmp, t_canvas *canvas, int count);
+void		init_normal_cylinder(char **tmp, t_canvas *canvas, int idx);
+void		init_texture_cylinder(char **tmp, \
+t_canvas *canvas, int idx, int count);
+int			init_sphere(char **tmp, t_canvas *canvas, int count);
+void		init_rotate_sphere(t_canvas *canvas, char **tmp, int idx);
+void		init_checker_sphere(t_canvas *canvas, char **tmp, int idx);
+void		init_texture_sphere(t_canvas *canvas, char **tmp, int idx, \
+int count);
+void		init_nomal_sphere(t_canvas *canvas, char **tmp, int idx);
+int			init_plane(char **tmp, t_canvas *canvas, int count);
+void		init_texture_plane(char **tmp, t_canvas *canvas, int idx);
+void		init_checker_palne(char **tmp, t_canvas *canvas, int idx);
+void		init_nomal_plane(char **tmp, t_canvas *canvas, int idx);
+int			argument_count(char **tmp);
+int			init_view(char **tmp, t_canvas *canvas, int count);
+void		init_view2(t_canvas *canvas, char **tmp);
 
 //utils
+int			is_valid_file_type(char *file_path);
 
 //mlx_utils
 int			win_destroy(t_view *view);
@@ -65,8 +94,18 @@ void		foward_back(int keycode, t_view *view);
 void		quality(int keycode, t_view *view);
 void		move_focus(int scalra, t_view *view, float sensitivity);
 void		newwin(t_view *view);
+void		mlx_engine(t_view *view);
+t_vec3		rotate_around_specific_point(t_vec3 vec, \
+t_vec3 center, float angle);
+void		change_angle(t_view *view);
+int			mouse_motion(int x, int y, t_view *view);
+int			key_release(int keycode, t_view *view);
+void		pasue_system(t_view *view);
+
+
 
 //intersection
+void		intersection(t_ray3 *ray, t_volume *obj);
 int			discriminant(float a, float b, float c);
 float		quad_formula(float a, float b, float c);
 void		hit_sphere(t_ray3 *ray, t_sphere *sp);
@@ -76,6 +115,28 @@ void		make_cylinder_cap(t_cylinder *cy);
 t_vec3		check_plane_direction(t_plane *pl, t_ray3 *ray);
 int			cy_in_range(t_ray3 *ray, float t, t_cylinder *cy);
 void		cylindrical_map(t_vec3 p, float *u, float *v, t_cylinder *cy);
+void		color_cal(t_canvas canvas, t_ray3 *ray, t_color *color);
+
+//mapping
+t_color		checkertexture(t_vec3 point, float scale, t_plane *pl, int flag);
+t_color		get_checker_pattern(t_vec3 p, t_cylinder *cy);
+void		spherical_map(t_vec3 p, float *u, float *v, t_sphere *sp);
+t_color		uv_grid_pattern_at(t_checker pattern, float u, float v);
+t_color		get_texture_color(t_texture texture, float u, float v);
+t_color		image_texture_on_sphere(t_vec3 point, \
+t_sphere *sp, t_texture *texture);
+t_color		image_textur_on_cylinder(t_vec3 point, \
+t_cylinder *cy, t_texture *tex);
+t_color		grid_texture_on_sphere(t_vec3 point, \
+t_checker pattern, t_sphere *sp);
+void		sphere_texture(t_ray3 *ray, t_sphere *sp);
+void		cylinder_texture(t_ray3 *ray, t_cylinder *cy, float tmp);
+void		cap_texture(t_vec3 point, \
+t_cylinder *cy, t_plane *cap, t_ray3 *ray);
+void		init_pltexture(t_ray3 *ray, t_plane *pl);
+void		init_texture(t_texture *texture, t_view *view, char *path);
+void		cylindrical_map(t_vec3 p, float *u, float *v, t_cylinder *cy);
+
 
 //raycasting
 t_ray3		create_ray(t_camera cam, float u, float v);
@@ -102,7 +163,19 @@ void		spherical_map(t_vec3 p, float *u, float *v, t_sphere *sp);
 //shadow
 int			hit_shadow(t_ray3 *ray, t_canvas canvas, int light);
 
-
 //RENDERING
+
+t_color		anti_aliasing(int pix[2], \
+float vp_idx[2], t_view *view, t_ray3 *ray);
+void		low_quality(int scalar, int pix[2], t_ray3 ray, t_view *view);
 void		multi_rend(t_view *view);
+void		init_view_scale(t_view *view);
+void		set_texture(t_view *view, t_volume *obj);
+void		*make_image2(void *m);
+void		set_thread_st_point(int *anti, int pix[2], t_thread *t);
+void		init_backgorund(t_view *view, int pix[2], t_ray3 *ray, int xy[2]);
+t_thread	*init_thread(t_view *view);
+
+
+
 #endif

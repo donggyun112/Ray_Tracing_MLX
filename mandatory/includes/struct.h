@@ -6,23 +6,12 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 03:16:18 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/06 05:10:51 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCT_H
 # define STRUCT_H
-
-typedef struct s_view
-{
-	void	*mlx;
-	void	*win;
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}	t_view;
 
 typedef struct s_vec3
 {
@@ -109,5 +98,17 @@ typedef struct s_canvas
 	int				light_col[3];
 	t_volume		*obj;
 }	t_canvas;
+
+typedef struct s_view
+{
+	void		*mlx;
+	void		*win;
+	void		*img;
+	char		*addr;
+	int			bits_per_pixel;
+	int			line_length;
+	int			endian;
+	t_canvas	can;
+}	t_view;
 
 #endif

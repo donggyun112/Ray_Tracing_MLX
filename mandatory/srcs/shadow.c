@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 17:48:21 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 03:15:55 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/06 05:42:36 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ void	shadow_cylinder(t_ray3 *ray, t_cylinder *cy)
 	double	coef[3];
 	double	tmp;
 
-	make_cylinder_cap(cy);
 	shadow_cap(ray, cy, cy->ucap);
 	shadow_cap(ray, cy, cy->lcap);
 	oc = sub_vector(ray->origin, cy->center);

@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 06:02:58 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/06 06:42:58 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,7 +202,7 @@ void	move_focus(int scalra, t_view *view, float sensitivity)
 	count++;
 }
 
-void	pasue_system(t_view *view)
+void	pause_system(t_view *view)
 {
 	view->stop = !view->stop;
 	if (view->stop)
@@ -214,28 +214,40 @@ void	pasue_system(t_view *view)
 		mlx_mouse_show();
 }
 
-int	key_hook(int keycode, t_view *view)
+void	move_hook(int keycode, t_view *view)
 {
-	if (keycode == 53)
-		win_destroy(view);
-	else if (keycode == 125 || keycode == 126)
+	if (keycode == 0 || keycode == 2)
+		left_right(keycode, view);
+	else if (keycode == 13 || keycode == 1)
+		foward_back(keycode, view);
+}
+
+void	rotate_hook(int keycode, t_view *view)
+{
+	if (keycode == 125 || keycode == 126)
 		rotate_vertical(keycode, view);
-	else if (keycode == 24 || keycode == 27)
-		up_down(keycode, view);
 	else if (keycode == 124 || keycode == 123)
 		rotate_horizontal(keycode, view);
+}
+
+int	key_hook(int keycode, t_view *view)
+{
+	if (keycode == 125 || keycode == 126 || keycode == 124 || keycode == 123)
+		rotate_hook(keycode, view);
+	else if (keycode == 0 || keycode == 1 || keycode == 2 || keycode == 13)
+		move_hook(keycode, view);
+	else if (keycode == 24 || keycode == 27)
+		up_down(keycode, view);
 	else if (keycode == 33 || keycode == 30 || keycode == 17)
 		quality(keycode, view);
 	else if (keycode == 4)
 		view->flag = !view->flag;
-	else if (keycode == 0 || keycode == 2)
-		left_right(keycode, view);
-	else if (keycode == 13 || keycode == 1)
-		foward_back(keycode, view);
 	else if (keycode == 35)
-		pasue_system(view);
-	if ((keycode == 13 || keycode == 1 \
-	|| keycode == 0 || keycode == 2) && view->stop)
+		pause_system(view);
+	else if (keycode == 53)
+		win_destroy(view);
+	if (view->stop && (keycode == 13 || keycode == 1 \
+		|| keycode == 0 || keycode == 2))
 	{
 		view->focus = 1;
 		move_focus(0, view, 0.007);

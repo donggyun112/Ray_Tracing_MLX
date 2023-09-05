@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 04:32:02 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/06 06:42:27 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ t_vec3 center, float angle);
 void		change_angle(t_view *view);
 int			mouse_motion(int x, int y, t_view *view);
 int			key_release(int keycode, t_view *view);
-void		pasue_system(t_view *view);
+void		pause_system(t_view *view);
 
 //intersection
 void		intersection(t_ray3 *ray, t_volume *obj);

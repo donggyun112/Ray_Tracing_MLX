@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 17:55:47 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/06 22:33:12 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -281,6 +281,8 @@ void	init_view_scale(t_view *view)
 	view->flag = 0;
 	view->focus = 0;
 	view->stop = 1;
+	view->show_mouse = 1;
+	view->clik_status = 0;
 	if (view->can.bgt_filepath)
 		init_texture(&view->back, view, view->can.bgt_filepath);
 	mlx_mouse_hide();
@@ -440,20 +442,25 @@ int	is_valid_file_type(char *file_path)
 	free(path);
 	return (answer);
 }
-
-int	mouse_press(int x, int y, t_view *view)
+void	grep_obj(int x, int y, t_view *view);
+int	mouse_press(int button, int x, int y, t_view *view)
 {
-	(void)x;
-	(void)y;
-	view->clik_status = 1;
+	if (button == 2 || button == 1)
+	{
+		mlx_mouse_get_pos(view->win, &x, &y);
+		grep_obj(x, y, view);
+		printf("%d %d\n", x, y);
+		view->clik_status = 1;
+	}
 	return (0);
 }
 
-int	mouse_release(int x, int y, t_view *view)
+int	mouse_release(int button, int x, int y, t_view *view)
 {
 	(void)x;
 	(void)y;
-	view->clik_status = 0;
+	if (button == 2 || button == 1)
+		view->clik_status = 0;
 	return (0);
 }
 

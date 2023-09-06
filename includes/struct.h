@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 16:39:10 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/06 21:42:30 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 
 #ifndef STRUCT_H
 # define STRUCT_H
-
-# include <pthread.h>
 
 typedef struct s_color
 {
@@ -166,6 +164,13 @@ typedef struct s_canvas
 	t_camera	cam;
 }	t_canvas;
 
+typedef struct s_grep
+{
+	void		*obj;
+	int			grep;
+	int			type;
+}	t_grep;
+
 typedef struct s_view
 {
 	void		*mlx;
@@ -182,9 +187,11 @@ typedef struct s_view
 	int			focus;
 	int			stop;
 	int			clik_status;
+	int			show_mouse;
 	int			fd[2];
 	t_camera	cam;
 	t_canvas	can;
+	t_grep		grep;
 	t_texture	back;
 }	t_view;
 

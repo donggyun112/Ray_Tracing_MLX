@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 17:57:39 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/06 22:45:11 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,36 @@ t_vec3	rotate_around_axis(t_vec3 vec, t_vec3 axis, float angle)
 	return (rotated_vec);
 }
 
+void	grep_obj(int x, int y, t_view *view)
+{
+	float	vp_idx[2];
+	t_ray3 ray;
+
+	vp_idx[0] = view->can.ratio * 2.0 * ((float)x) / (float)view->can.width;
+	vp_idx[1] = 2.0 * ((float)y) / (float)view->can.height;
+	ray = create_ray(view->cam, vp_idx[0], vp_idx[1]);
+	ray.type = -1;
+	ray.pix[0] = x;
+	ray.pix[1] = y;
+	intersection(&ray, view->can.obj);
+	if (ray.type == SP)
+	{
+		view->grep.obj = ray.obj;
+		view->grep.type = SP;
+		view->grep.grep = ON;
+		printf("oh sp\n");
+	}
+	else if (ray.type == CY)
+	{
+		view->grep.obj = ray.obj;
+		view->grep.type = CY;
+		view->grep.grep = ON;
+		printf("oh cy\n");
+	}
+	else
+		view->grep.grep = OFF;
+}
+
 void	move_focus(int scalra, t_view *view, float sensitivity)
 {
 	static int	count;
@@ -208,28 +238,38 @@ void	move_focus(int scalra, t_view *view, float sensitivity)
 		rotate_around_axis(view->can.cam_dir, right, -pitch);
 		view->can.cam_dir = norm_vec(view->can.cam_dir);
 		view->cam = camera(view->can);
+		if (view->clik_status && view->grep.grep == ON)
+		{
+			t_sphere	*sp;
+			t_cylinder	*cy;
+			printf("%d\n", view->grep.type);
+			if (view->grep.type == SP)
+			{
+				sp = (t_sphere *)view->grep.obj;
+				sp->center = sub_vector(sp->center, view->cam.origin);
+				sp->center = rotate_around_axis(sp->center, (t_vec3){0.0f, 1.0f, 0.0f}, -yaw);
+				sp->center = rotate_around_axis(sp->center, right, -pitch);
+				sp->center = add_vector(sp->center, view->cam.origin);
+				
+			}
+			else if (view->grep.type == CY)
+			{
+				cy = (t_cylinder *)view->grep.obj;
+				cy->center = sub_vector(cy->center, view->cam.origin);
+				cy->center = rotate_around_axis(cy->center, (t_vec3){0.0f, 1.0f, 0.0f}, -yaw);
+				cy->center = rotate_around_axis(cy->center, right, -pitch);
+				cy->center = add_vector(cy->center, view->cam.origin);
+			}
+		}
 		newwin(view);
 		mlx_mouse_move(view->win, view->can.width / 2, view->can.height / 2);
 		count = 0;
 	}
 	count++;
 }
-
 void	pause_system(t_view *view)
 {
-	int x, y;
-	float	vp_idx[2] = { 0 };
-	t_ray3 ray;
 
-	mlx_mouse_get_pos(view->win, &x, &y);
-	vp_idx[0] = view->can.ratio * 2.0 * ((float)x) / (float)view->can.width;
-	vp_idx[1] = 2.0 * ((float)y) / (float)view->can.height;
-	ray = create_ray(view->cam, vp_idx[0], vp_idx[1]);
-	ray.type = -1;
-	ray.pix[0] = x;
-	ray.pix[1] = y;
-	intersection(&ray, view->can.obj);
-	printf("%d\n", ray.type);
 	view->stop = !view->stop;
 	if (view->stop)
 	{
@@ -278,6 +318,14 @@ int	key_hook(int keycode, t_view *view)
 	{
 		view->focus = 1;
 		move_focus(0, view, 0.007);
+	}
+	else if (keycode == M)
+	{
+		view->show_mouse = !view->show_mouse;
+		if (view->show_mouse)
+			mlx_mouse_hide();
+		else
+			mlx_mouse_show();
 	}
 	printf("%d\n", keycode);
 	return (0);

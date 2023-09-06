@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 16:04:48 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/06 21:42:31 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>
+# include <pthread.h>
 # include "struct.h"
 # include "vector.h"
 # include "../mlx/mlx.h"
@@ -45,6 +46,8 @@
 # define TCY 7
 # define CCY 8
 # define NUM_OF_THREAD 7
+# define ON 1
+# define OFF 0
 
 // mlx_key
 # define W 13
@@ -59,6 +62,7 @@
 # define Q2 19
 # define Q3 20
 # define Q4 21
+# define M 46
 //parse
 t_canvas	parse(char *av[]);
 t_volume	*init_volume(char **av);

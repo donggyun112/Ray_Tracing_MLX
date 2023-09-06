@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 07:08:05 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/06 11:53:36 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -339,6 +339,7 @@ int	loop_hook(t_view *view)
 {
 	if (view->flag && view->stop)
 	{
+		change_angle(view);
 		if (view->can.obj->rsp_cnt > 0)
 		{
 			view->can.obj->rsp[0].sp->center = sub_vector(view->can.obj->\

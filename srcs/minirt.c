@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 11:53:36 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/06 17:55:47 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -397,7 +397,8 @@ int	mouse_motion(int x, int y, t_view *view)
 	mlx_mouse_get_pos(view->win, &x, &y);
 	if ((pos[0] != x || pos[1] != y) && view->stop)
 	{
-		view->quality_scalar = -4;
+		if (view->quality_scalar >= -4)
+			view->quality_scalar = -4;
 		if (view->focus == 0)
 			move_focus(10, view, 0.007);
 		else
@@ -440,11 +441,29 @@ int	is_valid_file_type(char *file_path)
 	return (answer);
 }
 
+int	mouse_press(int x, int y, t_view *view)
+{
+	(void)x;
+	(void)y;
+	view->clik_status = 1;
+	return (0);
+}
+
+int	mouse_release(int x, int y, t_view *view)
+{
+	(void)x;
+	(void)y;
+	view->clik_status = 0;
+	return (0);
+}
+
 void	mlx_engine(t_view *view)
 {
 	mlx_hook(view->win, 2, 1L << 0, key_hook, view);
 	mlx_hook(view->win, 3, 1L << 1, key_release, view);
 	mlx_hook(view->win, 17, 1L << 5, win_destroy, view);
+	mlx_hook(view->win, 4, 1L << 2, mouse_press, view);
+	mlx_hook(view->win, 5, 1L << 3, mouse_release, view);
 	mlx_hook(view->win, 6, 1L << 7, mouse_motion, view);
 	mlx_loop_hook(view->mlx, loop_hook, view);
 }

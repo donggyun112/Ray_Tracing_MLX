@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 07:43:55 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/06 17:57:39 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ int	win_destroy(t_view *view)
 
 void	newwin(t_view *view)
 {
+	if (!view->stop)
+		return ;
 	mlx_destroy_image(view->mlx, view->img);
 	view->img = mlx_new_image(view->mlx, view->can.width, view->can.height);
 	view->addr = mlx_get_data_addr(view->img, &view->bits_per_pixel, \
@@ -39,17 +41,19 @@ void	newwin(t_view *view)
 
 void	foward_back(int keycode, t_view *view)
 {
-	if (keycode == 1)
+	if (keycode == S)
 	{
 		view->can.cam_orig = sub_vector(view->can.cam_orig, view->can.cam_dir);
-		view->quality_scalar = -4;
+		if (view->quality_scalar >= -4)
+			view->quality_scalar = -4;
 		view->cam = camera(view->can);
 		newwin(view);
 	}
-	else if (keycode == 13)
+	else if (keycode == W)
 	{
 		view->can.cam_orig = add_vector(view->can.cam_orig, view->can.cam_dir);
-		view->quality_scalar = -4;
+		if (view->quality_scalar >= -4)
+			view->quality_scalar = -4;
 		view->cam = camera(view->can);
 		newwin(view);
 	}	
@@ -57,17 +61,19 @@ void	foward_back(int keycode, t_view *view)
 
 void	left_right(int keycode, t_view *view)
 {
-	if (keycode == 0)
+	if (keycode == A)
 	{
 		view->can.cam_orig = sub_vector(view->can.cam_orig, view->cam.r_norm);
-		view->quality_scalar = -4;
+		if (view->quality_scalar >= -4)
+			view->quality_scalar = -4;
 		view->cam = camera(view->can);
 		newwin(view);
 	}
 	else if (keycode == 2)
 	{
 		view->can.cam_orig = add_vector(view->can.cam_orig, view->cam.r_norm);
-		view->quality_scalar = -4;
+		if (view->quality_scalar >= -4)
+			view->quality_scalar = -4;
 		view->cam = camera(view->can);
 		newwin(view);
 	}	
@@ -78,14 +84,17 @@ void	up_down(int keycode, t_view *view)
 	if (keycode == 24)
 	{
 		view->can.cam_orig.y += 1;
-		view->quality_scalar = -4;
+		if (view->quality_scalar >= -4)
+		if (view->quality_scalar >= -4)
+			view->quality_scalar = -4;
 		view->cam = camera(view->can);
 		newwin(view);
 	}
 	else if (keycode == 27)
 	{
 		view->can.cam_orig.y -= 1;
-		view->quality_scalar = -4;
+		if (view->quality_scalar >= -4)
+			view->quality_scalar = -4;
 		view->cam = camera(view->can);
 		newwin(view);
 	}
@@ -98,7 +107,8 @@ void	rotate_horizontal(int keycode, t_view *view)
 		view->can.cam_dir = sub_vector(view->can.cam_dir, \
 			multiple_vector(0.1, view->cam.r_norm));
 		view->can.cam_dir = norm_vec(view->can.cam_dir);
-		view->quality_scalar = -4;
+		if (view->quality_scalar >= -4)
+			view->quality_scalar = -4;
 		view->cam = camera(view->can);
 		newwin(view);
 	}
@@ -137,23 +147,26 @@ void	rotate_vertical(int keycode, t_view *view)
 
 void	quality(int keycode, t_view *view)
 {
-	if (keycode == 33)
+	if (keycode == Q_UP)
 	{
 		if (view->quality_scalar >= 6)
 			view->quality_scalar = 6;
 		view->quality_scalar += 1;
-		newwin(view);
 	}
-	else if (keycode == 30)
-	{
+	else if (keycode == Q_DOWN)
 		view->quality_scalar -= 1;
-		newwin(view);
-	}
-	else if (keycode == 17)
-	{
+	else if (keycode == T)
 		view->quality_scalar = 1;
+	else if (keycode == Q2)
+		view->quality_scalar = -10;
+	if (keycode == Q1)
+	{
+		view->quality_scalar = 6;
 		newwin(view);
-	}	
+		pause_system(view);
+	}
+	else
+		newwin(view);
 }
 
 t_vec3	rotate_around_axis(t_vec3 vec, t_vec3 axis, float angle)
@@ -204,6 +217,19 @@ void	move_focus(int scalra, t_view *view, float sensitivity)
 
 void	pause_system(t_view *view)
 {
+	int x, y;
+	float	vp_idx[2] = { 0 };
+	t_ray3 ray;
+
+	mlx_mouse_get_pos(view->win, &x, &y);
+	vp_idx[0] = view->can.ratio * 2.0 * ((float)x) / (float)view->can.width;
+	vp_idx[1] = 2.0 * ((float)y) / (float)view->can.height;
+	ray = create_ray(view->cam, vp_idx[0], vp_idx[1]);
+	ray.type = -1;
+	ray.pix[0] = x;
+	ray.pix[1] = y;
+	intersection(&ray, view->can.obj);
+	printf("%d\n", ray.type);
 	view->stop = !view->stop;
 	if (view->stop)
 	{
@@ -216,9 +242,9 @@ void	pause_system(t_view *view)
 
 void	move_hook(int keycode, t_view *view)
 {
-	if (keycode == 0 || keycode == 2)
+	if (keycode == A || keycode == D)
 		left_right(keycode, view);
-	else if (keycode == 13 || keycode == 1)
+	else if (keycode == W || keycode == S)
 		foward_back(keycode, view);
 }
 
@@ -234,20 +260,21 @@ int	key_hook(int keycode, t_view *view)
 {
 	if (keycode == 125 || keycode == 126 || keycode == 124 || keycode == 123)
 		rotate_hook(keycode, view);
-	else if (keycode == 0 || keycode == 1 || keycode == 2 || keycode == 13)
+	else if (keycode == A || keycode == S || keycode == D || keycode == W)
 		move_hook(keycode, view);
 	else if (keycode == 24 || keycode == 27)
 		up_down(keycode, view);
-	else if (keycode == 33 || keycode == 30 || keycode == 17)
+	else if (keycode == Q_UP || keycode == Q_DOWN || keycode == T || keycode == Q1 || \
+			keycode == Q2 || keycode == Q3 || keycode == Q4)
 		quality(keycode, view);
-	else if (keycode == 4)
+	else if (keycode == H)
 		view->flag = !view->flag;
 	else if (keycode == 35)
 		pause_system(view);
 	else if (keycode == 53)
 		win_destroy(view);
-	if (view->stop && (keycode == 13 || keycode == 1 \
-		|| keycode == 0 || keycode == 2))
+	if (view->stop && (keycode == W || keycode == S \
+		|| keycode == A || keycode == D))
 	{
 		view->focus = 1;
 		move_focus(0, view, 0.007);

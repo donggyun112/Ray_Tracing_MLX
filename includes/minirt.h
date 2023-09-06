@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 11:45:42 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/06 16:04:48 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,19 @@
 # define CCY 8
 # define NUM_OF_THREAD 7
 
+// mlx_key
+# define W 13
+# define A 0
+# define S 1
+# define D 2
+# define T 17
+# define H 4
+# define Q_UP 33
+# define Q_DOWN 30
+# define Q1 18
+# define Q2 19
+# define Q3 20
+# define Q4 21
 //parse
 t_canvas	parse(char *av[]);
 t_volume	*init_volume(char **av);

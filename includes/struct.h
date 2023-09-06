@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/19 14:36:02 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 21:42:30 by dongkseo         ###   ########.fr       */
+/*   Created: 2023/09/07 01:23:19 by seodong-gyu       #+#    #+#             */
+/*   Updated: 2023/09/07 01:23:22 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*   Updated: 2023/09/04 23:26:04 by jinhyeop         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+
 
 #ifndef STRUCT_H
 # define STRUCT_H
+
+# include <pthread.h>
 
 typedef struct s_color
 {

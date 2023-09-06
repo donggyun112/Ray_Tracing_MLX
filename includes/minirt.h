@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 21:42:31 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/07 02:47:04 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>
-# include <pthread.h>
 # include "struct.h"
 # include "vector.h"
 # include "../mlx/mlx.h"
@@ -60,8 +59,8 @@
 # define Q_DOWN 30
 # define Q1 18
 # define Q2 19
-# define Q3 20
-# define Q4 21
+# define PRINT 20
+# define MAKE 21
 # define M 46
 //parse
 t_canvas	parse(char *av[]);
@@ -118,6 +117,9 @@ void		change_angle(t_view *view);
 int			mouse_motion(int x, int y, t_view *view);
 int			key_release(int keycode, t_view *view);
 void		pause_system(t_view *view);
+void		move_obj(int keycode, t_view *view);
+void		save_image_to_ppm(char *filename, t_view *img);
+
 
 //intersection
 void		intersection(t_ray3 *ray, t_volume *obj);

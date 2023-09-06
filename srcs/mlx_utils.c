@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 22:45:11 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/07 03:05:56 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ void	foward_back(int keycode, t_view *view)
 		if (view->quality_scalar >= -4)
 			view->quality_scalar = -4;
 		view->cam = camera(view->can);
+		if (view->grep.grep == ON && view->clik_status)
+			move_obj(keycode, view);
 		newwin(view);
 	}
 	else if (keycode == W)
@@ -55,8 +57,39 @@ void	foward_back(int keycode, t_view *view)
 		if (view->quality_scalar >= -4)
 			view->quality_scalar = -4;
 		view->cam = camera(view->can);
+		if (view->grep.grep == ON && view->clik_status)
+			move_obj(keycode, view);
 		newwin(view);
 	}	
+}
+
+void	move_obj(int keycode, t_view *view)
+{
+	t_sphere	*sp;
+	t_cylinder	*cy;
+
+	if (view->grep.type == SP)
+		sp = view->grep.obj;
+	else if (view->grep.type == CY)
+		cy = view->grep.obj;
+	else
+		return ;
+	if (keycode == A && view->grep.type == SP)
+		sp->center = sub_vector(sp->center, view->cam.r_norm);
+	else if (keycode == A && view->grep.type == CY)
+		cy->center = sub_vector(cy->center, view->cam.r_norm);
+	else if (keycode == D && view->grep.type == SP)
+		sp->center = add_vector(sp->center, view->cam.r_norm);
+	else if (keycode == D && view->grep.type == CY)
+		cy->center = add_vector(cy->center, view->cam.r_norm);
+	else if (keycode == S && view->grep.type == SP)
+		sp->center = sub_vector(sp->center, view->can.cam_dir);
+	else if (keycode == S && view->grep.type == CY)
+		cy->center = sub_vector(sp->center, view->can.cam_dir);
+	else if (keycode == W && view->grep.type == SP)
+		sp->center = add_vector(sp->center, view->can.cam_dir);
+	else if (keycode == W && view->grep.type == CY)
+		cy->center = add_vector(sp->center, view->can.cam_dir);
 }
 
 void	left_right(int keycode, t_view *view)
@@ -67,14 +100,18 @@ void	left_right(int keycode, t_view *view)
 		if (view->quality_scalar >= -4)
 			view->quality_scalar = -4;
 		view->cam = camera(view->can);
+		if (view->grep.grep == ON && view->clik_status)
+			move_obj(keycode, view);
 		newwin(view);
 	}
-	else if (keycode == 2)
+	else if (keycode == D)
 	{
 		view->can.cam_orig = add_vector(view->can.cam_orig, view->cam.r_norm);
 		if (view->quality_scalar >= -4)
 			view->quality_scalar = -4;
 		view->cam = camera(view->can);
+		if (view->grep.grep == ON && view->clik_status)
+			move_obj(keycode, view);
 		newwin(view);
 	}	
 }
@@ -205,14 +242,12 @@ void	grep_obj(int x, int y, t_view *view)
 		view->grep.obj = ray.obj;
 		view->grep.type = SP;
 		view->grep.grep = ON;
-		printf("oh sp\n");
 	}
 	else if (ray.type == CY)
 	{
 		view->grep.obj = ray.obj;
 		view->grep.type = CY;
 		view->grep.grep = ON;
-		printf("oh cy\n");
 	}
 	else
 		view->grep.grep = OFF;
@@ -242,7 +277,6 @@ void	move_focus(int scalra, t_view *view, float sensitivity)
 		{
 			t_sphere	*sp;
 			t_cylinder	*cy;
-			printf("%d\n", view->grep.type);
 			if (view->grep.type == SP)
 			{
 				sp = (t_sphere *)view->grep.obj;
@@ -296,6 +330,98 @@ void	rotate_hook(int keycode, t_view *view)
 		rotate_horizontal(keycode, view);
 }
 
+void	init_ppm(FILE *f, unsigned int tmp, unsigned char color[3])
+{
+	color[RED] = (tmp >> 16) & 0xFF;
+	color[GREEN] = (tmp >> 8) & 0xFF;
+	color[BLUE] = tmp & 0xFF;
+	fwrite(&color[RED], 1, 1, f);
+	fwrite(&color[GREEN], 1, 1, f);
+	fwrite(&color[BLUE], 1, 1, f);
+}
+
+void save_image_to_ppm(char *filename, t_view *view)
+{
+	FILE			*f;
+	int				xy[2];
+	char			*dst;
+	unsigned int	tmp;
+	unsigned char	color[3];
+
+	f = fopen(filename, "w");
+	if (!f)
+	{
+		fprintf(stderr, "Unable to open file '%s'\n", filename);
+		return;
+	}
+	fprintf(f, "P6\n%d %d\n255\n", view->can.width, view->can.height);
+	xy[1] = -1;
+	while (++xy[1] < view->can.height)
+	{
+		xy[0] = -1;
+		while (++xy[0] < view->can.width)
+		{
+			dst = view->addr + (xy[1] * view->line_length + xy[0] * (view->bits_per_pixel / 8));
+			tmp = *(unsigned int *)dst;
+			init_ppm(f, tmp, color);
+		}
+	}
+	fclose(f);
+}
+
+void	init_rt_color(int color[3], FILE *f)
+{
+	fprintf(f, " %d,%d,%d\n", color[RED], color[GREEN], color[BLUE]);
+}
+void	init_rt_vec(t_vec3 vec, FILE *f)
+{
+	fprintf(f, " %f,%f,%f ", vec.x, vec.y, vec.z);
+}
+
+void	init_rt_camera(t_view *view, FILE *f)
+{
+	fprintf(f, "c	");
+	init_rt_vec(view->can.cam.origin, f);
+	init_rt_vec(view->can.cam.dir, f);
+	fprintf(f, " %f \n", view->can.cam.fov);
+}
+
+void	init_rt_light(t_view *view, FILE *f)
+{
+	int		i;
+	t_light	tmp;
+
+	i = 0;
+	while (view->can.obj->l_cnt)
+	{
+		tmp = view->can.obj->l[i];
+		fprintf(f, "l	");
+		init_rt_vec(tmp.light_orig, f);
+		fprintf(f, " %f	", tmp.light_bright);
+		init_rt_color(tmp.light_col, f);
+		i++;
+	}
+
+}
+
+void	save_image_to_rtfile(char *filename, t_view *view)
+{
+	FILE	*f;
+
+	f = fopen(filename, "w");
+	if (!f)
+	{
+		fprintf(stderr, "Unable to open file '%s'\n", filename);
+		return;
+	}
+	fprintf(f, "R	%d %d", view->can.width, view->can.height);
+	fprintf(f, "A	%f ", view->can.amb_bright);
+	init_rt_color(view->can.amb_col, f);
+	init_rt_camera(view, f);
+	init_rt_light(view, f);
+
+}
+
 int	key_hook(int keycode, t_view *view)
 {
 	if (keycode == 125 || keycode == 126 || keycode == 124 || keycode == 123)
@@ -305,7 +431,7 @@ int	key_hook(int keycode, t_view *view)
 	else if (keycode == 24 || keycode == 27)
 		up_down(keycode, view);
 	else if (keycode == Q_UP || keycode == Q_DOWN || keycode == T || keycode == Q1 || \
-			keycode == Q2 || keycode == Q3 || keycode == Q4)
+			keycode == Q2)
 		quality(keycode, view);
 	else if (keycode == H)
 		view->flag = !view->flag;
@@ -327,7 +453,10 @@ int	key_hook(int keycode, t_view *view)
 		else
 			mlx_mouse_show();
 	}
-	printf("%d\n", keycode);
+	else if (keycode == PRINT)
+		save_image_to_ppm("outfile.ppm", view);
+	else if (keycode == MAKE)
+		save_image_to_rtfile("outfile.rt", view);
 	return (0);
 }
 

@@ -5,6 +5,9 @@
 		"math.h": "c",
 		"locale": "c",
 		"minirt.h": "c",
-		"libft.h": "c"
+		"libft.h": "c",
+		"stdio.h": "c",
+		"fcntl.h": "c",
+		"pthread.h": "c"
 	}
 }

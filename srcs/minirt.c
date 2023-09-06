@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 22:33:12 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/07 01:39:34 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -449,7 +449,6 @@ int	mouse_press(int button, int x, int y, t_view *view)
 	{
 		mlx_mouse_get_pos(view->win, &x, &y);
 		grep_obj(x, y, view);
-		printf("%d %d\n", x, y);
 		view->clik_status = 1;
 	}
 	return (0);

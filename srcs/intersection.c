@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   intersection.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:29:45 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 22:00:16 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/06 11:32:00 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -363,12 +363,12 @@ t_color	image_textur_on_cylinder(t_vec3 point, t_cylinder *cy, t_texture *tex)
 
 void	cylinder_texture(t_ray3 *ray, t_cylinder *cy, float tmp)
 {
-	const t_vec3	hit = add_vector(ray->origin, \
-	multiple_vector(ray->t, ray->dir));
-	t_color			c;
+	t_vec3	hit;
+	t_color	c;
 
 	ray->obj = (void *)cy;
 	ray->t = tmp;
+	hit = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
 	if (cy->type == CCY)
 		c = get_checker_pattern(hit, cy);
 	else

@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/07 23:40:15 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/07 23:46:04 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -531,16 +531,16 @@ void	copy_sphere()
 void	obj_copy(t_view *view)
 {
 	t_sphere	*sp;
-	t_sphere	*tmp;
+	// t_sphere	*tmp;
 	// t_cylinder	*cy;
 	if (view->grep.type == SP)
 	{
-		view->can.obj->sp = (t_sphere *)realloc(view->can.obj->sp, view->can.obj->sp_cnt + 1);
+		view->can.obj->sp = (t_sphere *)realloc(view->can.obj->sp, sizeof(t_sphere) * (view->can.obj->sp_cnt + 1));
 		sp = (t_sphere *)view->grep.obj;
 		view->can.obj->sp[view->can.obj->sp_cnt].type = SP;
-		view->can.obj->sp[view->can.obj->sp_cnt].center.x = sp->center.x;
-		view->can.obj->sp[view->can.obj->sp_cnt].center.y = sp->center.y;
-		view->can.obj->sp[view->can.obj->sp_cnt].center.z = sp->center.z;
+		view->can.obj->sp[view->can.obj->sp_cnt].center.x = sp->center.x + 1;
+		view->can.obj->sp[view->can.obj->sp_cnt].center.y = sp->center.y + 1;
+		view->can.obj->sp[view->can.obj->sp_cnt].center.z = sp->center.z + 1;
 		view->can.obj->sp[view->can.obj->sp_cnt].radius = sp->radius;
 		if (sp->type == SP)
 		{
@@ -554,12 +554,13 @@ void	obj_copy(t_view *view)
 			view->can.obj->sp[view->can.obj->sp_cnt].bumppath = sp->bumppath;
 		}
 		view->can.obj->sp[view->can.obj->sp_cnt].angle = 0.0000;
+		view->can.obj->sp_cnt += 1;
 	}
 	else if (view->grep.type == CY)
 	{
 		
 	}
-	
+	newwin(view);
 }
 
 int	key_hook(int keycode, t_view *view)

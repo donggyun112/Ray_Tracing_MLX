@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/07 03:05:56 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/07 09:25:41 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -369,39 +369,136 @@ void save_image_to_ppm(char *filename, t_view *view)
 	fclose(f);
 }
 
-void	init_rt_color(int color[3], FILE *f)
+void	write_rt_color(int color[3], FILE *f)
 {
 	fprintf(f, " %d,%d,%d\n", color[RED], color[GREEN], color[BLUE]);
 }
-void	init_rt_vec(t_vec3 vec, FILE *f)
+void	write_rt_vec(t_vec3 vec, FILE *f)
 {
 	fprintf(f, " %f,%f,%f ", vec.x, vec.y, vec.z);
 }
 
-void	init_rt_camera(t_view *view, FILE *f)
+void	write_rt_camera(t_view *view, FILE *f)
 {
 	fprintf(f, "c	");
-	init_rt_vec(view->can.cam.origin, f);
-	init_rt_vec(view->can.cam.dir, f);
-	fprintf(f, " %f \n", view->can.cam.fov);
+	write_rt_vec(view->cam.origin, f);
+	write_rt_vec(view->cam.dir, f);
+	fprintf(f, " %d \n", view->can.fov);
 }
 
-void	init_rt_light(t_view *view, FILE *f)
+void	write_rt_light(t_view *view, FILE *f)
 {
 	int		i;
 	t_light	tmp;
 
 	i = 0;
-	while (view->can.obj->l_cnt)
+	while (i < view->can.obj->l_cnt)
 	{
 		tmp = view->can.obj->l[i];
 		fprintf(f, "l	");
-		init_rt_vec(tmp.light_orig, f);
+		write_rt_vec(tmp.light_orig, f);
 		fprintf(f, " %f	", tmp.light_bright);
-		init_rt_color(tmp.light_col, f);
+		write_rt_color(tmp.light_col, f);
 		i++;
 	}
 
+}
+
+void	write_rt_sphere(t_view *view, FILE *f)
+{
+	int	i;
+	int	arr[30];
+
+	i = -1;
+	while (++i < 30)
+		arr[i] = 0;
+	i = 0;
+	while (i < view->can.obj->rsp_cnt)
+	{
+		fprintf(f, "rsp	");
+		write_rt_vec(view->can.obj->rsp[i].sp->center, f);
+		fprintf(f, " %f ", view->can.obj->rsp[i].sp->radius);
+		write_rt_vec(view->can.obj->rsp[i].r_center, f);
+		write_rt_vec(view->can.obj->rsp[i].r_axis, f);
+		fprintf(f, " %s %s\n", view->can.obj->rsp[i].sp->filepath, \
+								view->can.obj->rsp[i].sp->bumppath);
+		arr[view->can.obj->rsp[i].sp_idx] = 1;
+		i++;
+	}
+	i = -1;
+	while (++i < view->can.obj->sp_cnt)
+	{
+		if (arr[i] == 1)
+			continue ;
+		if (view->can.obj->sp[i].type == CSP)
+			fprintf(f, "csp	");
+		else if (view->can.obj->sp[i].type == TSP)
+			fprintf(f, "tsp	");
+		else
+			fprintf(f, "sp	");
+		write_rt_vec(view->can.obj->sp[i].center, f);
+		fprintf(f, " %f ", view->can.obj->sp[i].radius);
+		if (view->can.obj->sp[i].type == CSP)
+			fprintf(f, "\n");
+		else if (view->can.obj->sp[i].type == TSP)
+			fprintf(f, " %s %s\n", view->can.obj->sp[i].filepath, \
+								view->can.obj->sp[i].bumppath);
+		else
+			write_rt_color(view->can.obj->sp[i].color, f);
+	}
+}
+
+void	write_rt_cylinder(t_view *view, FILE *f)
+{
+	int	i;
+
+	i = 0;
+	while (i < view->can.obj->cy_cnt)
+	{
+		if (view->can.obj->cy[i].type == TCY)
+			fprintf(f, "tcy ");
+		else if (view->can.obj->cy[i].type == CCY)
+			fprintf(f, "ccy ");
+		else
+			fprintf(f, "cy ");
+		write_rt_vec(view->can.obj->cy[i].center, f);
+		write_rt_vec(view->can.obj->cy[i].dir, f);
+		fprintf(f, "%f ", view->can.obj->cy[i].radius);
+		fprintf(f, "%f ", view->can.obj->cy[i].height);
+		if (view->can.obj->cy[i].type == TCY)
+			fprintf(f, "%s %s\n", view->can.obj->cy[i].filepath, \
+								view->can.obj->cy[i].bumppath);
+		else if (view->can.obj->cy[i].type == CCY)
+			fprintf(f, "\n");
+		else
+			write_rt_color(view->can.obj->cy[i].color, f);
+		i++;
+	}
+}
+
+void	write_rt_plane(t_view *view, FILE *f)
+{
+	int	i;
+
+	i = 0;
+	while (i < view->can.obj->pl_cnt)
+	{
+		if (view->can.obj->pl[i].type == TPL)
+			fprintf(f, "tpl ");
+		else if (view->can.obj->pl[i].type == CPL)
+			fprintf(f, "cpl ");
+		else
+			fprintf(f, "pl ");
+		write_rt_vec(view->can.obj->pl[i].on_plane, f);
+		write_rt_vec(view->can.obj->pl[i].norm, f);
+		if (view->can.obj->pl[i].type == TPL)
+			fprintf(f, "%s \n", view->can.obj->pl[i].filepath);
+		else if (view->can.obj->pl[i].type == CPL)
+			fprintf(f, " \n");
+		else
+			write_rt_color(view->can.obj->pl[i].color, f);
+		i++;
+	}
 }
 
 void	save_image_to_rtfile(char *filename, t_view *view)
@@ -414,12 +511,16 @@ void	save_image_to_rtfile(char *filename, t_view *view)
 		fprintf(stderr, "Unable to open file '%s'\n", filename);
 		return;
 	}
-	fprintf(f, "R	%d %d", view->can.width, view->can.height);
+	fprintf(f, "R	%d %d\n", view->can.width, view->can.height);
 	fprintf(f, "A	%f ", view->can.amb_bright);
-	init_rt_color(view->can.amb_col, f);
-	init_rt_camera(view, f);
-	init_rt_light(view, f);
-
+	write_rt_color(view->can.amb_col, f);
+	write_rt_camera(view, f);
+	write_rt_light(view, f);
+	write_rt_sphere(view, f);
+	write_rt_cylinder(view, f);
+	write_rt_plane(view, f);
+	if (view->can.bgt_filepath)
+		fprintf(f, "bg %s", view->can.bgt_filepath);
 }
 
 int	key_hook(int keycode, t_view *view)

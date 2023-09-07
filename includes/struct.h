@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 01:23:19 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/07 01:23:22 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/07 08:49:58 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ typedef struct s_sphere
 typedef struct s_rsphere
 {
 	int			type;
+	int			sp_idx;
 	t_sphere	*sp;
 	t_vec3		r_center;
 	t_vec3		r_axis;

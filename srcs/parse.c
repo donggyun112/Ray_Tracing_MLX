@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:24:29 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 22:38:24 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/07 08:50:53 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,7 @@ void	init_rotate_sphere(t_canvas *canvas, char **tmp, int idx)
 	size_of_vec2(sub_vector(canvas->obj->sp[idx].center, \
 	canvas->obj->rsp[ridx].r_center));
 	canvas->obj->sp[idx].angle = 0.000000;
+	canvas->obj->rsp[ridx].sp_idx = idx;
 	ridx++;
 }
 

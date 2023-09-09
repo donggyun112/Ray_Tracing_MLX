@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/09 12:46:45 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/09 12:59:33 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -679,15 +679,9 @@ void	copy_sphere(t_view *view, int keycode)
 	view->can.obj->sp_cnt++;
 }
 
-void	copy_normal_cylinder(t_view *view, size_t t, t_cylinder *cy, int keycode)
+void	copy_normal_cylinder(t_view *view, size_t t, int keycode)
 {
-	if (keycode == C)
-	{
-		view->can.obj->cy[t].color[RED] = cy->color[RED];
-		view->can.obj->cy[t].color[GREEN] = cy->color[GREEN];
-		view->can.obj->cy[t].color[BLUE] = cy->color[BLUE];
-	}
-	else
+	if (keycode == Z)
 	{
 		view->can.obj->cy[t].color[RED] = rand() % 255;
 		view->can.obj->cy[t].color[GREEN] = rand() % 255;
@@ -726,6 +720,9 @@ void	copy_cylinder(t_view *view, int keycode)
 	cy = *(t_cylinder *)view->grep.obj;
 	view->can.obj->cy = (t_cylinder *)reallocf(view->can.obj->cy, sizeof(t_cylinder) * (t + 1));
 	memcpy(&view->can.obj->cy[t], &cy, sizeof(cy));
+	view->can.obj->cy[t].center.x += 1;
+	view->can.obj->cy[t].center.y += 1;
+	view->can.obj->cy[t].center.z += 1;
 	if (keycode == Z)
 	{
 		view->can.obj->cy[t].height = get_float_rand_l(0.5, 3);
@@ -734,23 +731,17 @@ void	copy_cylinder(t_view *view, int keycode)
 		view->can.obj->cy[t].dir.y = get_float_rand_l(-1.0f, 1.0f);
 		view->can.obj->cy[t].dir.z = get_float_rand_l(-1.0f, 1.0f);
 		view->can.obj->cy[t].dir = norm_vec(view->can.obj->cy[t].dir);
-		view->can.obj->cy[t].type = CY;
+		view->can.obj->cy[t].type= CY;
 	}
-	if (cy.type == CY)
-		copy_normal_cylinder(view, t, &cy, keycode);
+	if (view->can.obj->cy[t].type == CY)
+		copy_normal_cylinder(view, t, keycode);
 	make_cylinder_cap(&view->can.obj->cy[t]);
 	view->can.obj->cy_cnt++;
 }
 
-void	copy_normal_plane(t_view *view, size_t t, t_plane *pl, int keycode)
+void	copy_normal_plane(t_view *view, size_t t, int keycode)
 {
-	if (keycode == C)
-	{
-		view->can.obj->pl[t].color[RED] = pl->color[RED];
-		view->can.obj->pl[t].color[GREEN] = pl->color[GREEN];
-		view->can.obj->pl[t].color[BLUE] = pl->color[BLUE];
-	}
-	else
+	if (keycode == Z)
 	{
 		view->can.obj->pl[t].type = PL;
 		view->can.obj->pl[t].color[RED] = rand() % 255;
@@ -768,7 +759,7 @@ void	copy_plane(t_view *view, int keycode)
 	pl = *(t_plane *)view->grep.obj;
 	view->can.obj->pl = (t_plane *)realloc(view->can.obj->pl, sizeof(t_plane) * (t + 1));
 	memcpy(&view->can.obj->pl[t], &pl, sizeof(pl));
-	copy_normal_plane(view, t, &pl, keycode);
+	copy_normal_plane(view, t, keycode);
 	view->can.obj->pl_cnt++;
 }
 

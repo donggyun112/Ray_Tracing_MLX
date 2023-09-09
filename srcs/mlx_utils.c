@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/10 01:04:15 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/10 02:01:17 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -883,6 +883,50 @@ int	key_hook(int keycode, t_view *view)
 	if (keycode == Q)
 	{
 		view->change_dir = !view->change_dir;
+		newwin(view);
+	}
+	if (keycode == PGUP)
+	{
+		view->can.obj->l[0].light_bright += 0.1;
+		newwin(view);
+	}
+	else if (keycode == PGDN)
+	{
+		view->can.obj->l[0].light_bright -= 0.1;
+		newwin(view);
+	}
+	else if (keycode == HOME)
+	{
+		view->can.obj->l[0].light_col[BLUE] += 5;
+		if (view->can.obj->l[0].light_col[BLUE] >= 255)
+		{
+			view->can.obj->l[0].light_col[BLUE] = 255;
+			view->can.obj->l[0].light_col[GREEN] += 5;
+			if (view->can.obj->l[0].light_col[GREEN] >= 255)
+			{
+				view->can.obj->l[0].light_col[GREEN] = 255;
+				view->can.obj->l[0].light_col[RED] += 5;
+				if (view->can.obj->l[0].light_col[RED] >= 255)
+					view->can.obj->l[0].light_col[RED] = 255;
+			}
+		}
+		newwin(view);
+	}
+	else if (keycode == END)
+	{
+		view->can.obj->l[0].light_col[BLUE] -= 5;
+		if (view->can.obj->l[0].light_col[BLUE] <= 0)
+		{
+			view->can.obj->l[0].light_col[BLUE] = 0;
+			view->can.obj->l[0].light_col[GREEN] -= 5;
+			if (view->can.obj->l[0].light_col[GREEN] <= 0)
+			{
+				view->can.obj->l[0].light_col[GREEN] = 0;
+				view->can.obj->l[0].light_col[RED] -= 5;
+				if (view->can.obj->l[0].light_col[RED] <= 0)
+					view->can.obj->l[0].light_col[RED] = 0;
+			}
+		}
 		newwin(view);
 	}
 	printf("%d\n", keycode);

@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/08 02:31:29 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/09 12:33:52 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,25 @@ void	intersection(t_ray3 *ray, t_volume *obj)
 
 	idx = 0;
 	while (idx < obj->sp_cnt)
-		hit_sphere(ray, &obj->sp[idx++]);
+	{
+		if (obj->sp[idx].type != NONE)
+			hit_sphere(ray, &obj->sp[idx]);
+		idx++;
+	}
 	idx = 0;
 	while (idx < obj->pl_cnt)
-		hit_plane(ray, &obj->pl[idx++]);
+	{
+		if (obj->pl[idx].type != NONE)
+			hit_plane(ray, &obj->pl[idx]);
+		idx++;
+	}
 	idx = 0;
 	while (idx < obj->cy_cnt)
-		hit_cylinder(ray, &obj->cy[idx++]);
+	{
+		if (obj->cy[idx].type != NONE)
+			hit_cylinder(ray, &obj->cy[idx]);
+		idx++;
+	}
 }
 
 void	color_cal(t_canvas canvas, t_ray3 *ray, t_color *color)
@@ -250,6 +262,8 @@ void	set_texture(t_view *view, t_volume *obj)
 	int	i;
 
 	i = -1;
+	view->mini_size = view->can.width - 200;
+	view->real_size = view->can.width;
 	while (++i < obj->sp_cnt)
 	{
 		if (obj->sp[i].type == TSP)
@@ -283,6 +297,9 @@ void	init_view_scale(t_view *view)
 	view->stop = 1;
 	view->show_mouse = 1;
 	view->clik_status = 0;
+	view->backup = NULL;
+	view->change_dir = 0;
+	view->grep.type = -1;
 	if (view->can.bgt_filepath)
 		init_texture(&view->back, view, view->can.bgt_filepath);
 	mlx_mouse_hide();
@@ -337,21 +354,34 @@ void	change_angle(t_view *view)
 	}
 }
 
+void	rotate_rsp(int x, t_view *view)
+{
+	view->can.obj->rsp[x].sp->center = sub_vector(view->can.obj->\
+	rsp[x].sp->center, view->can.obj->rsp[x].r_center);
+	view->can.obj->rsp[x].sp->center = \
+	rotate_around_axis(view->can.obj->rsp[x] \
+	.sp->center, view->can.obj->rsp[x].r_axis, 0.05);
+	view->can.obj->rsp[x].sp->center = \
+	add_vector(view->can.obj->\
+	rsp[x].sp->center, view->can.obj->rsp[x].r_center);
+}
+
 int	loop_hook(t_view *view)
 {
+	int	i;
+
+	i = 0;
 	if (view->flag && view->stop)
 	{
 		change_angle(view);
 		if (view->can.obj->rsp_cnt > 0)
 		{
-			view->can.obj->rsp[0].sp->center = sub_vector(view->can.obj->\
-			rsp[0].sp->center, view->can.obj->rsp[0].r_center);
-			view->can.obj->rsp[0].sp->center = \
-			rotate_around_axis(view->can.obj->rsp[0] \
-			.sp->center, view->can.obj->rsp[0].r_axis, 0.05);
-			view->can.obj->rsp[0].sp->center = \
-			add_vector(view->can.obj->\
-			rsp[0].sp->center, view->can.obj->rsp[0].r_center);
+			printf("%d\n", view->can.obj->rsp_cnt);
+			while (i < view->can.obj->rsp_cnt)
+			{
+				rotate_rsp(i, view);
+				i++;
+			}
 		}
 		newwin(view);
 		move_focus(0, view, 0.007);
@@ -442,15 +472,59 @@ int	is_valid_file_type(char *file_path)
 	free(path);
 	return (answer);
 }
+
 void	grep_obj(int x, int y, t_view *view);
+
+void	zoom_inout(int button, t_view *view)
+{
+	t_sphere	*sp;
+	t_cylinder	*cy;
+
+	if (button == 4)
+	{
+		if (view->grep.type == SP)
+		{
+			sp = (t_sphere *)view->grep.obj;
+			sp->radius += 0.2;
+		}
+		else if (view->grep.type == CY)
+		{
+			cy = (t_cylinder *)view->grep.obj;
+			cy->height -= 0.5;
+			cy->radius -= 0.2;
+			make_cylinder_cap2(cy);
+		}
+	}
+	else
+	{
+		if (view->grep.type == SP)
+		{
+			sp = (t_sphere *)view->grep.obj;
+			sp->radius -= 0.2;
+		}
+		else if (view->grep.type == CY)
+		{
+			cy = (t_cylinder *)view->grep.obj;
+			cy->radius += 0.2;
+			cy->height += 0.5;
+			make_cylinder_cap2(cy);
+		}
+	}
+	newwin(view);
+}
+
 int	mouse_press(int button, int x, int y, t_view *view)
 {
+	(void)x;
+	(void)y;
 	if (button == 2 || button == 1)
 	{
 		mlx_mouse_get_pos(view->win, &x, &y);
 		grep_obj(x, y, view);
 		view->clik_status = 1;
 	}
+	if ((button == 4 || button == 5) && view->clik_status)
+		zoom_inout(button, view);
 	return (0);
 }
 
@@ -484,6 +558,7 @@ int	main(int argc, char *argv[])
 		printf("Error\nInput mapfile(*.rt) as argument\n");
 		return (1);
 	}
+	srand((unsigned int)time(NULL));
 	canvas = parse(argv);
 	make_obj_cap(canvas.obj);
 	view.cam = camera(canvas);

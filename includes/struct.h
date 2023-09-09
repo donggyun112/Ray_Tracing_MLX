@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 01:23:19 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/07 08:49:58 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/09 11:01:37 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ typedef struct s_plane
 typedef struct s_sphere
 {
 	int				type;
+	int				idx;
+	int				rsp_type;
 	float			angle;
 	t_texture		texture;
 	t_texture		bumtexture;
@@ -172,6 +174,13 @@ typedef struct s_grep
 	int			type;
 }	t_grep;
 
+typedef struct s_backup
+{
+	int				type;
+	void			*obj;
+	struct s_backup	*next;
+}	t_backup;
+
 typedef struct s_view
 {
 	void		*mlx;
@@ -189,11 +198,15 @@ typedef struct s_view
 	int			stop;
 	int			clik_status;
 	int			show_mouse;
+	int			change_dir;
 	int			fd[2];
+	int			mini_size;
+	int			real_size;
 	t_camera	cam;
 	t_canvas	can;
 	t_grep		grep;
 	t_texture	back;
+	t_backup	*backup;
 }	t_view;
 
 typedef struct s_thread

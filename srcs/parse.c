@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:24:29 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/07 08:50:53 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/09 12:17:14 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,8 @@ void	init_nomal_sphere(t_canvas *canvas, char **tmp, int idx)
 	canvas->obj->sp[idx].color[GREEN] = ft_strtod(tmp[6]);
 	canvas->obj->sp[idx].color[BLUE] = ft_strtod(tmp[7]);
 	canvas->obj->sp[idx].angle = 0.000000;
+	canvas->obj->sp[idx].rsp_type = 0;
+	canvas->obj->sp[idx].idx = idx;
 }
 
 void	init_texture_sphere(t_canvas *canvas, char **tmp, int idx, int count)
@@ -152,6 +154,8 @@ void	init_texture_sphere(t_canvas *canvas, char **tmp, int idx, int count)
 	else
 		canvas->obj->sp[idx].bumppath = NULL;
 	canvas->obj->sp[idx].angle = 0.000000;
+	canvas->obj->sp[idx].rsp_type = 0;
+	canvas->obj->sp[idx].idx = idx;
 }
 
 void	init_checker_sphere(t_canvas *canvas, char **tmp, int idx)
@@ -162,6 +166,8 @@ void	init_checker_sphere(t_canvas *canvas, char **tmp, int idx)
 	canvas->obj->sp[idx].center.z = ft_strtod(tmp[3]);
 	canvas->obj->sp[idx].radius = ft_strtod(tmp[4]);
 	canvas->obj->sp[idx].angle = 0.000000;
+	canvas->obj->sp[idx].rsp_type = SP;
+	canvas->obj->sp[idx].idx = idx;
 }
 
 void	init_rotate_sphere(t_canvas *canvas, char **tmp, int idx)
@@ -185,6 +191,8 @@ void	init_rotate_sphere(t_canvas *canvas, char **tmp, int idx)
 	canvas->obj->rsp[ridx].r_center));
 	canvas->obj->sp[idx].angle = 0.000000;
 	canvas->obj->rsp[ridx].sp_idx = idx;
+	canvas->obj->sp[idx].rsp_type = 1;
+	canvas->obj->sp[idx].idx = idx;
 	ridx++;
 }
 

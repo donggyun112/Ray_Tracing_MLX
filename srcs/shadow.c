@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shadow.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 17:48:21 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/04 23:38:58 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/09 01:20:12 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,13 +97,25 @@ void	shadow_check(t_ray3 *ray, t_canvas canvas)
 
 	idx = 0;
 	while (idx < canvas.obj->sp_cnt)
-		shadow_sphere(ray, &canvas.obj->sp[idx++]);
+	{
+		if (canvas.obj->sp[idx].type != NONE)
+			shadow_sphere(ray, &canvas.obj->sp[idx]);
+		idx++;
+	}
 	idx = 0;
 	while (idx < canvas.obj->pl_cnt)
-		shadow_plane(ray, &canvas.obj->pl[idx++]);
+	{
+		if (canvas.obj->pl[idx].type != NONE)
+			shadow_plane(ray, &canvas.obj->pl[idx]);
+		idx++;
+	}
 	idx = 0;
 	while (idx < canvas.obj->cy_cnt)
-		shadow_cylinder(ray, &canvas.obj->cy[idx++]);
+	{
+		if (canvas.obj->cy[idx].type != NONE)
+			shadow_cylinder(ray, &canvas.obj->cy[idx]);
+		idx++;
+	}
 }
 
 int	hit_shadow(t_ray3 *ray, t_canvas canvas, int light)

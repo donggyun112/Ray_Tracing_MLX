@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/07 23:19:32 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/09 11:19:16 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>
+# include <string.h>
 # include "struct.h"
 # include "vector.h"
 # include "../mlx/mlx.h"
@@ -44,6 +45,7 @@
 # define SHADOW 100
 # define TCY 7
 # define CCY 8
+# define NONE 9
 # define NUM_OF_THREAD 7
 # define ON 1
 # define OFF 0
@@ -63,6 +65,11 @@
 # define MAKE 21
 # define M 46
 # define C 8
+# define Z 6
+# define F 3
+# define G 5
+# define Q 12
+# define E 14
 //parse
 t_canvas	parse(char *av[]);
 t_volume	*init_volume(char **av);
@@ -130,6 +137,7 @@ void		hit_sphere(t_ray3 *ray, t_sphere *sp);
 void		hit_plane(t_ray3 *ray, t_plane *pl);
 void		hit_cylinder(t_ray3 *ray, t_cylinder *cy);
 void		make_cylinder_cap(t_cylinder *cy);
+void		make_cylinder_cap2(t_cylinder *cy);
 t_vec3		check_plane_direction(t_plane *pl, t_ray3 *ray);
 int			cy_in_range(t_ray3 *ray, float t, t_cylinder *cy);
 void		cylindrical_map(t_vec3 p, float *u, float *v, t_cylinder *cy);

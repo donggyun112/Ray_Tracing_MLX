@@ -8,12 +8,12 @@ l	0.0,50.0,10.0			0.9		0,0,255
 l	0.0,0.0,10.0			0.5		255,255,255
 
 csp	7.0,1.0,3.0		1.0				
-tsp	15.0,1.0,10.0		4.0				earthmap.xpm qwe.xpm
-tsp	12.0,1.0,5.0		1.0				../Downloads/moon_texture.xpm	../Downloads/moon_normal.xpm
-tsp	10.0,3.0,8.0		1.0				../Downloads/moon_texture.xpm	../Downloads/moon_normal.xpm
-tsp	10.0,3.0,2.0		1.0				../Downloads/moon_texture.xpm	../Downloads/moon_normal.xpm
+# tsp	15.0,1.0,10.0		4.0				earthmap.xpm qwe.xpm
+# tsp	12.0,1.0,5.0		1.0				../Downloads/moon_texture.xpm	../Downloads/moon_normal.xpm
+# tsp	10.0,3.0,8.0		1.0				../Downloads/moon_texture.xpm	../Downloads/moon_normal.xpm
+# tsp	10.0,3.0,2.0		1.0				../Downloads/moon_texture.xpm	../Downloads/moon_normal.xpm
 tcy	12.0,0.0,-3.0	0.3,1.0,0.1		1.0		3	../Downloads/moon_texture.xpm	../Downloads/moon_normal.xpm
-# rsp 5.0,0.0,0.0   2.5  0.0,0.0,0.0    0.0,1.0,0.2  ../Downloads/moon_texture.xpm	../Downloads/moon_normal.xpm
+rsp 5.0,0.0,0.0   2.5  0.0,0.0,0.0    0.0,1.0,0.2  ../Downloads/moon_texture.xpm	../Downloads/moon_normal.xpm
 
 cpl	0.0,-1.5,0.0 0.0,1.0,0.0			
 tpl	0.0,0.0,-8.0 0.0,0.0,1.0			space.xpm

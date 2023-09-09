@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 01:23:19 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/09 23:12:11 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/10 02:08:42 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,10 +210,9 @@ typedef struct s_view
 	int			clik_status;
 	int			show_mouse;
 	int			change_dir;
-	int			fd[2];
 	int			mini_size;
 	int			real_size;
-	int			pid_num;
+	int			lnum;
 	t_camera	cam;
 	t_canvas	can;
 	t_grep		grep;

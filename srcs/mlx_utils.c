@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/10 02:01:17 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/10 02:16:43 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,11 @@ void	newwin(t_view *view)
 		mlx_string_put(view->mlx, view->win, view->mini_size + 30, 400, 0XFFFFF, "Make .rt : 4");
 		mlx_string_put(view->mlx, view->win, view->mini_size + 30, 430, 0XFFFFF, "Pause : p");
 		mlx_string_put(view->mlx, view->win, view->mini_size + 30, 460, 0XFFFFF, "Mouse contol : m");
+		tmp2 = ft_itoa(view->lnum);
+		tmp = ft_strjoin("lidx : ", tmp2);
+		mlx_string_put(view->mlx, view->win, view->mini_size + 30, 490, 0XFFFFF, tmp);
+		free(tmp);
+		free(tmp2);
 
 	}
 }
@@ -839,6 +844,8 @@ int	clear_backup(t_backup **backup)
 
 int	key_hook(int keycode, t_view *view)
 {
+	static int	lidx;
+
 	if (keycode == 125 || keycode == 126 || keycode == 124 || keycode == 123)
 		rotate_hook(keycode, view);
 	else if (keycode == A || keycode == S || keycode == D || keycode == W)
@@ -887,49 +894,64 @@ int	key_hook(int keycode, t_view *view)
 	}
 	if (keycode == PGUP)
 	{
-		view->can.obj->l[0].light_bright += 0.1;
+		view->can.obj->l[lidx].light_bright += 0.1;
 		newwin(view);
 	}
 	else if (keycode == PGDN)
 	{
-		view->can.obj->l[0].light_bright -= 0.1;
+		view->can.obj->l[lidx].light_bright -= 0.1;
 		newwin(view);
 	}
 	else if (keycode == HOME)
 	{
-		view->can.obj->l[0].light_col[BLUE] += 5;
-		if (view->can.obj->l[0].light_col[BLUE] >= 255)
+		view->can.obj->l[lidx].light_col[BLUE] += 5;
+		if (view->can.obj->l[lidx].light_col[BLUE] >= 255)
 		{
-			view->can.obj->l[0].light_col[BLUE] = 255;
-			view->can.obj->l[0].light_col[GREEN] += 5;
-			if (view->can.obj->l[0].light_col[GREEN] >= 255)
+			view->can.obj->l[lidx].light_col[BLUE] = 255;
+			view->can.obj->l[lidx].light_col[GREEN] += 5;
+			if (view->can.obj->l[lidx].light_col[GREEN] >= 255)
 			{
-				view->can.obj->l[0].light_col[GREEN] = 255;
-				view->can.obj->l[0].light_col[RED] += 5;
-				if (view->can.obj->l[0].light_col[RED] >= 255)
-					view->can.obj->l[0].light_col[RED] = 255;
+				view->can.obj->l[lidx].light_col[GREEN] = 255;
+				view->can.obj->l[lidx].light_col[RED] += 5;
+				if (view->can.obj->l[lidx].light_col[RED] >= 255)
+					view->can.obj->l[lidx].light_col[RED] = 255;
 			}
 		}
 		newwin(view);
 	}
 	else if (keycode == END)
 	{
-		view->can.obj->l[0].light_col[BLUE] -= 5;
-		if (view->can.obj->l[0].light_col[BLUE] <= 0)
-		{
-			view->can.obj->l[0].light_col[BLUE] = 0;
-			view->can.obj->l[0].light_col[GREEN] -= 5;
-			if (view->can.obj->l[0].light_col[GREEN] <= 0)
-			{
-				view->can.obj->l[0].light_col[GREEN] = 0;
-				view->can.obj->l[0].light_col[RED] -= 5;
-				if (view->can.obj->l[0].light_col[RED] <= 0)
-					view->can.obj->l[0].light_col[RED] = 0;
-			}
-		}
+		// view->can.obj->l[0].light_col[BLUE] -= 5;
+		// if (view->can.obj->l[0].light_col[BLUE] <= 0)
+		// {
+		// 	view->can.obj->l[0].light_col[BLUE] = 0;
+		// 	view->can.obj->l[0].light_col[GREEN] -= 5;
+		// 	if (view->can.obj->l[0].light_col[GREEN] <= 0)
+		// 	{
+		// 		view->can.obj->l[0].light_col[GREEN] = 0;
+		// 		view->can.obj->l[0].light_col[RED] -= 5;
+		// 		if (view->can.obj->l[0].light_col[RED] <= 0)
+		// 			view->can.obj->l[0].light_col[RED] = 0;
+		// 	}
+		// }
+		view->can.obj->l[lidx].light_col[RED] = rand() % 255;
+		view->can.obj->l[lidx].light_col[GREEN] = rand() % 255;
+		view->can.obj->l[lidx].light_col[BLUE] = rand() % 255;
 		newwin(view);
 	}
-	printf("%d\n", keycode);
+	if (keycode == NEXT && lidx < view->can.obj->l_cnt - 1)
+	{
+		lidx++;
+		view->lnum = lidx;
+		newwin(view);
+	}
+	else if (keycode == PRIV && lidx > 0)
+	{
+		lidx--;
+		view->lnum = lidx;
+		newwin(view);
+	}
+	// printf("%d\n", keycode);
 	return (0);
 }
 

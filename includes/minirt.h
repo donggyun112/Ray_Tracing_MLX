@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/10 01:53:43 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/10 02:06:09 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@
 # define PGDN 121
 # define HOME 115
 # define END 119
+# define NEXT 47
+# define PRIV 43
 //parse
 t_canvas	parse(char *av[]);
 t_volume	*init_volume(char **av);

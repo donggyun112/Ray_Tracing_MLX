@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/09 12:33:52 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/10 00:41:17 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -366,26 +366,37 @@ void	rotate_rsp(int x, t_view *view)
 	rsp[x].sp->center, view->can.obj->rsp[x].r_center);
 }
 
+void	rotate_rl(int x, t_view *view)
+{
+	view->can.obj->rl[x].light->light_orig = sub_vector(view->can.obj->\
+	rl[x].light->light_orig, view->can.obj->rl[x].r_center);
+	view->can.obj->rl[x].light->light_orig = \
+	rotate_around_axis(view->can.obj->rl[x] \
+	.light->light_orig, view->can.obj->rl[x].r_axis, 0.05);
+	view->can.obj->rl[x].light->light_orig = \
+	add_vector(view->can.obj->\
+	rl[x].light->light_orig, view->can.obj->rl[x].r_center);
+}
+
 int	loop_hook(t_view *view)
 {
 	int	i;
 
-	i = 0;
+	i = -1;
 	if (view->flag && view->stop)
 	{
 		change_angle(view);
-		if (view->can.obj->rsp_cnt > 0)
+		if (view->can.obj->rsp_cnt > 0 || view->can.obj->rl_cnt)
 		{
-			printf("%d\n", view->can.obj->rsp_cnt);
-			while (i < view->can.obj->rsp_cnt)
-			{
+			while (++i < view->can.obj->rsp_cnt)
 				rotate_rsp(i, view);
-				i++;
-			}
+			i = -1;
+			while (++i < view->can.obj->rl_cnt)
+				rotate_rl(i, view);
 		}
-		newwin(view);
 		move_focus(0, view, 0.007);
 		view->focus = 1;
+		newwin(view);
 	}
 	else
 		view->focus = 0;
@@ -461,7 +472,7 @@ int	is_valid_file_type(char *file_path)
 		return (0);
 	while (path[i] != 0)
 		i++;
-	if (ft_strncmp(path[i - 1], "rt", 2) == 0)
+	if (ft_strcmp(path[i - 1], "rt") == 0)
 		answer = 1;
 	i = 0;
 	while (path[i])

@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 01:23:19 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/09 11:01:37 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/09 23:12:11 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,10 +128,19 @@ typedef struct s_cylinder
 
 typedef struct s_light
 {
+	int		rotate_idx[5];
 	t_vec3	light_orig;
 	float	light_bright;
 	int		light_col[3];
 }	t_light;
+
+typedef struct s_rlight
+{
+	int		light_idx;
+	t_vec3	r_center;
+	t_vec3	r_axis;
+	t_light	*light;
+}	t_rlight;
 
 typedef struct s_volume
 {
@@ -139,6 +148,7 @@ typedef struct s_volume
 	int			sp_cnt;
 	int			cy_cnt;
 	int			l_cnt;
+	int			rl_cnt;
 	int			rsp_cnt;
 	int			error_flag[3];
 	float		ag;
@@ -147,6 +157,7 @@ typedef struct s_volume
 	t_cylinder	*cy;
 	t_light		*l;
 	t_rsphere	*rsp;
+	t_rlight	*rl;
 }	t_volume;
 
 typedef struct s_canvas
@@ -202,6 +213,7 @@ typedef struct s_view
 	int			fd[2];
 	int			mini_size;
 	int			real_size;
+	int			pid_num;
 	t_camera	cam;
 	t_canvas	can;
 	t_grep		grep;

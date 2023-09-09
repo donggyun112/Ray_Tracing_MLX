@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/09 11:19:16 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/09 14:49:09 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <stdlib.h>
 # include <math.h>
 # include <string.h>
+# include <signal.h>
 # include "struct.h"
 # include "vector.h"
 # include "../mlx/mlx.h"
@@ -127,6 +128,8 @@ int			key_release(int keycode, t_view *view);
 void		pause_system(t_view *view);
 void		move_obj(int keycode, t_view *view);
 void		save_image_to_ppm(char *filename, t_view *img);
+int			ft_strcmp(char *s1, char *s2);
+
 
 
 //intersection

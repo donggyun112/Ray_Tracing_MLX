@@ -6,12 +6,12 @@
 #    By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/02 15:17:44 by jinhyeop          #+#    #+#              #
-#    Updated: 2023/09/09 01:03:08 by seodong-gyu      ###   ########.fr        #
+#    Updated: 2023/09/10 01:09:20 by seodong-gyu      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g3
+CFLAGS = -Wall -Wextra -Werror -O3
 CLIB = -Llibft -lft -Lmlx -lmlx -framework OpenGL -framework Appkit -Imlx -lm
 
 NAME = minirt

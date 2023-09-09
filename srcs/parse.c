@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:24:29 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/09 12:17:14 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/09 23:30:19 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	init_view(char **tmp, t_canvas *canvas, int count)
 {
 	if (count == 2 && !ft_strcmp(tmp[0], "R"))
 		init_view2(canvas, tmp);
-	if (count == 1 && !ft_strcmp(tmp[0], "bg"))
+	else if (count == 1 && !ft_strcmp(tmp[0], "bg"))
 		canvas->bgt_filepath = ft_strdup(tmp[1]);
 	else if (count == 4 && !ft_strcmp(tmp[0], "A"))
 	{
@@ -282,6 +282,28 @@ int	init_cylinder(char **tmp, t_canvas *canvas, int count)
 	return (0);
 }
 
+void	init_rlight(char **tmp, t_canvas *canvas, int idx)
+{
+	static int	ridx;
+
+	canvas->obj->l[idx].light_orig.x = ft_strtod(tmp[1]);
+	canvas->obj->l[idx].light_orig.y = ft_strtod(tmp[2]);
+	canvas->obj->l[idx].light_orig.z = ft_strtod(tmp[3]);
+	canvas->obj->l[idx].light_bright = ft_strtod(tmp[4]);
+	canvas->obj->rl[ridx].r_center.x = ft_strtod(tmp[5]);
+	canvas->obj->rl[ridx].r_center.y = ft_strtod(tmp[6]);
+	canvas->obj->rl[ridx].r_center.z = ft_strtod(tmp[7]);
+	canvas->obj->rl[ridx].r_axis.x = ft_strtod(tmp[8]);
+	canvas->obj->rl[ridx].r_axis.y = ft_strtod(tmp[9]);
+	canvas->obj->rl[ridx].r_axis.z = ft_strtod(tmp[10]);
+	canvas->obj->l[idx].light_col[RED] = ft_strtod(tmp[11]);
+	canvas->obj->l[idx].light_col[GREEN] = ft_strtod(tmp[12]);
+	canvas->obj->l[idx].light_col[BLUE] = ft_strtod(tmp[13]);
+	canvas->obj->rl->light = &canvas->obj->l[idx];
+	ridx++;
+}
+
+
 int	init_light(char **tmp, t_canvas *canvas, int count)
 {
 	static int	idx;
@@ -295,10 +317,12 @@ int	init_light(char **tmp, t_canvas *canvas, int count)
 		canvas->obj->l[idx].light_col[RED] = ft_strtod(tmp[5]);
 		canvas->obj->l[idx].light_col[GREEN] = ft_strtod(tmp[6]);
 		canvas->obj->l[idx].light_col[BLUE] = ft_strtod(tmp[7]);
-		idx++;
 	}
+	else if (!ft_strcmp(tmp[0], "rl"))
+		init_rlight(tmp, canvas, idx);
 	else
 		return (-1);
+	idx++;
 	return (0);
 }
 
@@ -348,6 +372,13 @@ void	find_problem(char **tmp, int count)
 	find_problem2(tmp, count);
 }
 
+int	is_undefine_obj(char **tmp)
+{
+	if (**tmp == '#')
+		return (0);
+	return (-1);
+}
+
 int	init_data(char **tmp, t_canvas *canvas)
 {
 	int			count;
@@ -362,7 +393,8 @@ int	init_data(char **tmp, t_canvas *canvas)
 			if (init_plane(tmp, canvas, count - 1) == -1)
 				if (init_sphere(tmp, canvas, count - 1) == -1)
 					if (init_cylinder(tmp, canvas, count - 1) == -1)
-						return (-1);
+						if (is_undefine_obj(tmp) == -1)
+							return (-1);
 	return (0);
 }
 
@@ -382,6 +414,8 @@ void	init_count(t_volume *obj, char **tmp)
 {
 	if (!ft_strcmp(tmp[0], "rsp"))
 		obj->rsp_cnt++;
+	if (!ft_strcmp(tmp[0], "rl"))
+		obj->rl_cnt++;
 	if (!ft_strcmp(tmp[0], "sp") || !ft_strcmp(tmp[0], "tsp") || \
 	!ft_strcmp(tmp[0], "csp") || !ft_strcmp(tmp[0], "rsp"))
 		obj->sp_cnt++;
@@ -390,7 +424,7 @@ void	init_count(t_volume *obj, char **tmp)
 		obj->cy_cnt++;
 	else if (!ft_strcmp(tmp[0], "pl"))
 		obj->pl_cnt++;
-	else if (!ft_strcmp(tmp[0], "l"))
+	else if (!ft_strcmp(tmp[0], "l") || !ft_strcmp(tmp[0], "rl"))
 		obj->l_cnt++;
 	else if (!ft_strcmp(tmp[0], "tpl"))
 		obj->pl_cnt++;
@@ -441,6 +475,7 @@ t_volume	*init_volume(char **av)
 	obj->sp_cnt = 0;
 	obj->l_cnt = 0;
 	obj->rsp_cnt = 0;
+	obj->rl_cnt = 0;
 	obj->error_flag[0] = 0;
 	obj->error_flag[1] = 0;
 	obj->error_flag[2] = 0;
@@ -453,6 +488,7 @@ t_volume	*init_volume(char **av)
 	obj->pl = (t_plane *)malloc(sizeof(t_plane) * obj->pl_cnt);
 	obj->cy = (t_cylinder *)malloc(sizeof(t_cylinder) * obj->cy_cnt);
 	obj->rsp = (t_rsphere *)malloc(sizeof(t_rsphere) * obj->rsp_cnt);
+	obj->rl = (t_rlight *)malloc(sizeof(t_rlight) * obj->rl_cnt);
 	return (obj);
 }
 
@@ -474,7 +510,8 @@ t_canvas	parse(char *av[])
 		if (!line || !*line)
 			break ;
 		tmp = ft_split(line, " \t\n,");
-		init_data(tmp, &data);
+		if (init_data(tmp, &data) == -1)
+			error_print(*tmp, -1, -1);
 		free(line);
 		free_split(tmp);
 	}

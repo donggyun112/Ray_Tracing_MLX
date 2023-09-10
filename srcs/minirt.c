@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/10 21:29:54 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/10 21:51:52 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -394,9 +394,12 @@ int	loop_hook(t_view *view)
 			while (++i < view->can.obj->rl_cnt)
 				rotate_rl(i, view);
 		}
-		move_focus(0, view, 0.007);
+		move_focus(0, view, 0.005);
+		view->focus = 1;
 		newwin(view);
 	}
+	else
+		view->focus = 0;
 	return (0);
 }
 
@@ -439,10 +442,8 @@ int	mouse_motion(int x, int y, t_view *view)
 	{
 		if (view->quality_scalar >= -4)
 			view->quality_scalar = -4;
-		if (view->focus != 1)
-		{
-			move_focus(1, view, 0.005);
-		}
+		if (view->focus == 0)
+			move_focus(7, view, 0.005);
 		else
 			move_focus(30, view, 0.005);
 	}

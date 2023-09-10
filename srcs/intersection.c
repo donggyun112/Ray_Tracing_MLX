@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:29:45 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 02:28:58 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/11 04:24:56 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,7 +204,7 @@ void	init_pltexture(t_ray3 *ray, t_plane *pl)
 	ray->color[BLUE] = c.b;
 }
 
-int		in_triangle(t_vec3 hit, t_plane *pl)
+int	in_triangle(t_vec3 hit, t_plane *pl)
 {
 	t_vec3	pos;
 	t_vec3	v1_hit;

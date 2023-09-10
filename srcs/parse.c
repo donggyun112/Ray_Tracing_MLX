@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:24:29 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 01:44:23 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/11 04:27:04 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -331,7 +331,6 @@ void	init_rlight(char **tmp, t_canvas *canvas, int idx)
 	canvas->obj->rl[ridx].light = &canvas->obj->l[idx];
 	ridx++;
 }
-
 
 int	init_light(char **tmp, t_canvas *canvas, int count)
 {

@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 03:47:20 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/11 04:27:07 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -464,7 +464,7 @@ void	init_ppm(FILE *f, unsigned int tmp, unsigned char color[3])
 	fwrite(&color[BLUE], 1, 1, f);
 }
 
-void save_image_to_ppm(char *filename, t_view *view)
+void	save_image_to_ppm(char *filename, t_view *view)
 {
 	FILE			*f;
 	int				xy[2];
@@ -495,6 +495,7 @@ void	write_rt_color(int color[3], FILE *f)
 {
 	fprintf(f, " %d,%d,%d\n", color[RED], color[GREEN], color[BLUE]);
 }
+
 void	write_rt_vec(t_vec3 vec, FILE *f)
 {
 	fprintf(f, " %f,%f,%f ", vec.x, vec.y, vec.z);
@@ -712,7 +713,7 @@ t_vec3	init_copy_vec(t_vec3 *vec, t_vec3 tar)
 	return (*vec);
 }
 
-float get_rand(float a, float b)
+float	get_rand(float a, float b)
 {
 	return (a + (b - a) * (float)rand() / (float)RAND_MAX);
 }

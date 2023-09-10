@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   color.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/04 00:50:37 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/05 20:30:47 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/11 02:27:35 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	ray_color(t_canvas canvas, t_ray3 *ray, int light)
 		ray->angle[DIFF] = cos_sp(ray->obj, ray, canvas, light);
 		ray->angle[REF] = ref_sp(ray->obj, ray, canvas, light);
 	}
-	else if (ray-> type == PL)
+	else if (ray->type == PL || ray->type == TRI || ray->type == CAP)
 	{
 		ray->angle[DIFF] = cos_pl(ray->obj, ray, canvas, light);
 		ray->angle[REF] = ref_pl(ray->obj, ray, canvas, light);

@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 01:48:53 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/11 02:28:03 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,11 @@
 # define CPL 5
 # define TPL 6
 # define TRI 7
+# define CAP 8
 # define SHADOW 100
-# define TCY 8
-# define CCY 9
-# define NONE 10
+# define TCY 9
+# define CCY 10
+# define NONE 11
 # define NUM_OF_THREAD 7
 # define ON 1
 # define OFF 0
@@ -124,7 +125,7 @@ void		up_down(int keycode, t_view *view);
 void		left_right(int keycode, t_view *view);
 void		foward_back(int keycode, t_view *view);
 void		quality(int keycode, t_view *view);
-void		move_focus(int scalra, t_view *view, float sensitivity);
+void		move_focus(int scalar, t_view *view, float sensitivity);
 void		newwin(t_view *view);
 void		mlx_engine(t_view *view);
 t_vec3		rotate_around_specific_point(t_vec3 vec, \

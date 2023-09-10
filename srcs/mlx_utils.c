@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 00:19:26 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/11 02:25:46 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -386,7 +386,7 @@ void	move_grep_obj(t_view *view, t_vec3 right, float pitch, float yaw)
 	}
 }
 
-void	move_focus(int scalra, t_view *view, float sensitivity)
+void	move_focus(int scalar, t_view *view, float sensitivity)
 {
 	static int	count;
 	int			xy[2];
@@ -394,7 +394,7 @@ void	move_focus(int scalra, t_view *view, float sensitivity)
 	float		pitch;
 	t_vec3		right;
 
-	if (count > scalra)
+	if (count > scalar)
 	{
 		mlx_mouse_get_pos(view->win, &xy[0], &xy[1]);
 		yaw = (xy[0] - view->can.width / 2) * sensitivity;

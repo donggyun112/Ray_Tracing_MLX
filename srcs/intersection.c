@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:29:45 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 01:45:02 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/11 02:28:58 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,7 +240,7 @@ void	hit_triangle(t_ray3 *ray, t_plane *pl)
 			return ;
 		ray->t = tmp;
 		ray->obj = (void *)pl;
-		ray->type = PL;
+		ray->type = TRI;
 		init_pl_color(ray, pl);
 	}
 }
@@ -347,7 +347,7 @@ void	hit_cap(t_ray3 *ray, t_cylinder *cy, t_plane *cap)
 	if ((ray->t < 0.0 && tmp > 0.0) || (tmp > 0.0 && ray->t > tmp))
 	{
 		ray->t = tmp;
-		ray->type = PL;
+		ray->type = CAP;
 		ray->obj = (void *)cap;
 		if (cy->type == CCY || cy->type == TCY)
 			cap_texture(hit, cy, cap, ray);

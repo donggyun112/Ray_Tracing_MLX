@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 03:35:47 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/11 03:47:20 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -1061,7 +1061,7 @@ int	key_hook(int keycode, t_view *view)
 {
 	static int	lidx;
 
-	if (!view->stop && keycode != 35)
+	if (!view->stop && keycode != 35 && keycode != 53)
 		return (0);
 	if (keycode == 125 || keycode == 126 || keycode == 124 || keycode == 123)
 		rotate_hook(keycode, view);

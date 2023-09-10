@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/10 02:16:43 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/10 21:24:42 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,7 @@ void	newwin(t_view *view)
 {
 	if (!view->stop)
 		return ;
-	mlx_destroy_image(view->mlx, view->img);
 	mlx_clear_window(view->mlx, view->win);
-	if (!view->show_mouse)
-		view->can.width = view->mini_size;
-	else
-		view->can.width = view->real_size;
-	view->img = mlx_new_image(view->mlx, view->can.width, view->can.height);
-	view->addr = mlx_get_data_addr(view->img, &view->bits_per_pixel, \
-	&view->line_length, &view->endian);
 	multi_rend(view);
 	mlx_put_image_to_window(view->mlx, view->win, view->img, 0, 0);
 	if (!view->show_mouse)
@@ -396,11 +388,21 @@ void	pause_system(t_view *view)
 	view->stop = !view->stop;
 	if (view->stop)
 	{
-		mlx_mouse_hide();
+		if (!view->show_mouse)
+		{
+			mlx_mouse_hide();
+			view->show_mouse = !view->show_mouse;
+		}
 		mlx_mouse_move(view->win, view->can.width / 2, view->can.height / 2);
 	}
 	else
-		mlx_mouse_show();
+	{
+		if (view->show_mouse)
+		{
+			mlx_mouse_show();
+			view->show_mouse = !view->show_mouse;
+		}
+	}
 }
 
 void	move_hook(int keycode, t_view *view)
@@ -480,15 +482,27 @@ void	write_rt_light(t_view *view, FILE *f)
 	int		i;
 	t_light	tmp;
 
-	i = 0;
-	while (i < view->can.obj->l_cnt)
+	i = -1;
+	while (++i < view->can.obj->rl_cnt)
 	{
+		fprintf(f, "rl	");	
+		write_rt_vec(view->can.obj->rl[i].light->light_orig, f);
+		fprintf(f, "%f	", view->can.obj->rl[i].light->light_bright);
+		write_rt_vec(view->can.obj->rl[i].r_center, f);
+		write_rt_vec(view->can.obj->rl[i].r_axis, f);
+		write_rt_color(view->can.obj->rl[i].light->light_col, f);
+		view->can.obj->l[view->can.obj->rl[i].light_idx].rotate_idx = -1;
+	}
+	i = -1;
+	while (++i < view->can.obj->l_cnt)
+	{
+		if (view->can.obj->l->rotate_idx == -1)
+			continue ;
 		tmp = view->can.obj->l[i];
 		fprintf(f, "l	");
 		write_rt_vec(tmp.light_orig, f);
 		fprintf(f, " %f	", tmp.light_bright);
 		write_rt_color(tmp.light_col, f);
-		i++;
 	}
 
 }
@@ -496,14 +510,12 @@ void	write_rt_light(t_view *view, FILE *f)
 void	write_rt_sphere(t_view *view, FILE *f)
 {
 	int	i;
-	int	arr[30];
 
-	i = -1;
-	while (++i < 30)
-		arr[i] = 0;
 	i = -1;
 	while (++i < view->can.obj->rsp_cnt)
 	{
+		if (view->can.obj->rsp[i].sp->type == NONE)
+			continue;
 		fprintf(f, "rsp	");
 		write_rt_vec(view->can.obj->rsp[i].sp->center, f);
 		fprintf(f, " %f ", view->can.obj->rsp[i].sp->radius);
@@ -511,12 +523,12 @@ void	write_rt_sphere(t_view *view, FILE *f)
 		write_rt_vec(view->can.obj->rsp[i].r_axis, f);
 		fprintf(f, " %s %s\n", view->can.obj->rsp[i].sp->filepath, \
 								view->can.obj->rsp[i].sp->bumppath);
-		arr[view->can.obj->rsp[i].sp_idx] = 1;
+		view->can.obj->rsp[i].sp->type = NONE;
 	}
 	i = -1;
 	while (++i < view->can.obj->sp_cnt)
 	{
-		if (arr[i] == 1 || view->can.obj->sp[i].type == NONE)
+		if (view->can.obj->sp[i].type == NONE)
 			continue ;
 		if (view->can.obj->sp[i].type == CSP)
 			fprintf(f, "csp	");
@@ -569,9 +581,11 @@ void	write_rt_plane(t_view *view, FILE *f)
 {
 	int	i;
 
-	i = 0;
-	while (i < view->can.obj->pl_cnt)
+	i = -1;
+	while (++i < view->can.obj->pl_cnt)
 	{
+		if (view->can.obj->pl[i].type == NONE)
+			continue ;
 		if (view->can.obj->pl[i].type == TPL)
 			fprintf(f, "tpl ");
 		else if (view->can.obj->pl[i].type == CPL)
@@ -586,7 +600,6 @@ void	write_rt_plane(t_view *view, FILE *f)
 			fprintf(f, " \n");
 		else
 			write_rt_color(view->can.obj->pl[i].color, f);
-		i++;
 	}
 }
 
@@ -600,7 +613,7 @@ void	save_image_to_rtfile(char *filename, t_view *view)
 		fprintf(stderr, "Unable to open file '%s'\n", filename);
 		return;
 	}
-	fprintf(f, "R	%d %d\n", view->can.width, view->can.height);
+	fprintf(f, "R	%d %d\n", view->real_size, view->can.height);
 	fprintf(f, "A	%f ", view->can.amb_bright);
 	write_rt_color(view->can.amb_col, f);
 	write_rt_camera(view, f);
@@ -610,6 +623,7 @@ void	save_image_to_rtfile(char *filename, t_view *view)
 	write_rt_plane(view, f);
 	if (view->can.bgt_filepath)
 		fprintf(f, "bg %s", view->can.bgt_filepath);
+	mlx_string_put(view->mlx, view->win, view->can.width/2, view->can.height/2, 0xFF00FF, "Success make .rt file");
 }
 
 t_vec3	init_copy_vec(t_vec3 *vec, t_vec3 tar)
@@ -864,10 +878,11 @@ int	key_hook(int keycode, t_view *view)
 	if (view->stop && (keycode == W || keycode == S \
 		|| keycode == A || keycode == D))
 	{
+		printf("tt\n");
 		view->focus = 1;
 		move_focus(0, view, 0.007);
 	}
-	else if (keycode == M)
+	else if (keycode == M && view->stop)
 	{
 		view->show_mouse = !view->show_mouse;
 		if (view->show_mouse)

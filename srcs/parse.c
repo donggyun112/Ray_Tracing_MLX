@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:24:29 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/09 23:30:19 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/10 17:30:35 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -299,7 +299,8 @@ void	init_rlight(char **tmp, t_canvas *canvas, int idx)
 	canvas->obj->l[idx].light_col[RED] = ft_strtod(tmp[11]);
 	canvas->obj->l[idx].light_col[GREEN] = ft_strtod(tmp[12]);
 	canvas->obj->l[idx].light_col[BLUE] = ft_strtod(tmp[13]);
-	canvas->obj->rl->light = &canvas->obj->l[idx];
+	canvas->obj->rl[ridx].light_idx = idx;
+	canvas->obj->rl[ridx].light = &canvas->obj->l[idx];
 	ridx++;
 }
 

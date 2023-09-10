@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 04:45:06 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/11 04:57:47 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -293,7 +293,7 @@ void	init_view_scale(t_view *view)
 	view->focus = 0;
 	view->stop = 1;
 	view->show_mouse = 1;
-	view->clik_status = 0;
+	view->click_status = 0;
 	view->backup = NULL;
 	view->change_dir = 0;
 	view->grep.type = -1;
@@ -547,9 +547,9 @@ int	mouse_press(int button, int x, int y, t_view *view)
 	{
 		mlx_mouse_get_pos(view->win, &x, &y);
 		grep_obj(x, y, view);
-		view->clik_status = 1;
+		view->click_status = 1;
 	}
-	if ((button == 4 || button == 5) && view->clik_status)
+	if ((button == 4 || button == 5) && view->click_status)
 		zoom_inout(button, view);
 	return (0);
 }
@@ -559,7 +559,7 @@ int	mouse_release(int button, int x, int y, t_view *view)
 	(void)x;
 	(void)y;
 	if (button == 2 || button == 1)
-		view->clik_status = 0;
+		view->click_status = 0;
 	return (0);
 }
 

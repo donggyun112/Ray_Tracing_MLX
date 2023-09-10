@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 04:27:07 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/11 04:57:50 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,11 @@ void	string_put(t_view *view)
 		free(tmp2);
 		mlx_string_put(view->mlx, view->win, view->mini_size + 30, 250, 0XFFFFF, tmp);
 		free(tmp);
-		if (view->grep.type == SP && view->clik_status)
+		if (view->grep.type == SP && view->click_status)
 			mlx_string_put(view->mlx, view->win, view->mini_size + 30, 280, 0XFFFFF, "Grep Obj Type: SP");
-		else if (view->grep.type == CY && view->clik_status)
+		else if (view->grep.type == CY && view->click_status)
 			mlx_string_put(view->mlx, view->win, view->mini_size + 30, 280, 0XFFFFF, "Grep Obj Type: CY");
-		else if (view->clik_status)
+		else if (view->click_status)
 			mlx_string_put(view->mlx, view->win, view->mini_size + 30, 280, 0XFFFFF, "Grep Obj Type: PL");
 		else
 			mlx_string_put(view->mlx, view->win, view->mini_size + 30, 280, 0XFFFFF, "Grep Obj Type:   ");
@@ -90,7 +90,7 @@ void	foward_back(int keycode, t_view *view)
 		if (view->quality_scalar >= -4)
 			view->quality_scalar = -4;
 		view->cam = camera(view->can);
-		if (view->grep.grep == ON && view->clik_status)
+		if (view->grep.grep == ON && view->click_status)
 			move_obj(keycode, view);
 		newwin(view);
 	}
@@ -101,7 +101,7 @@ void	foward_back(int keycode, t_view *view)
 		if (view->quality_scalar >= -4)
 			view->quality_scalar = -4;
 		view->cam = camera(view->can);
-		if (view->grep.grep == ON && view->clik_status)
+		if (view->grep.grep == ON && view->click_status)
 			move_obj(keycode, view);
 		newwin(view);
 	}
@@ -161,7 +161,7 @@ void	left_right(int keycode, t_view *view)
 		if (view->quality_scalar >= -4)
 			view->quality_scalar = -4;
 		view->cam = camera(view->can);
-		if (view->grep.grep == ON && view->clik_status)
+		if (view->grep.grep == ON && view->click_status)
 			move_obj(keycode, view);
 		newwin(view);
 	}
@@ -172,7 +172,7 @@ void	left_right(int keycode, t_view *view)
 		if (view->quality_scalar >= -4)
 			view->quality_scalar = -4;
 		view->cam = camera(view->can);
-		if (view->grep.grep == ON && view->clik_status)
+		if (view->grep.grep == ON && view->click_status)
 			move_obj(keycode, view);
 		newwin(view);
 	}	
@@ -406,7 +406,7 @@ void	move_focus(int scalar, t_view *view, float sensitivity)
 		rotate_around_axis(view->can.cam_dir, right, -pitch);
 		view->can.cam_dir = norm_vec(view->can.cam_dir);
 		view->cam = camera(view->can);
-		if (view->clik_status && view->grep.grep == ON)
+		if (view->click_status && view->grep.grep == ON)
 			move_grep_obj(view, right, pitch, yaw);
 		newwin(view);
 		mlx_mouse_move(view->win, view->can.width / 2, view->can.height / 2);
@@ -967,7 +967,7 @@ int	clear_backup(t_backup **backup)
 
 void	key_hook3(int keycode, t_view *view, int lidx)
 {
-	if (view->grep.grep == ON && view->clik_status)
+	if (view->grep.grep == ON && view->click_status)
 		if (keycode == C || keycode == Z || keycode == F)
 			obj_copy(view, keycode);
 	if (keycode == G)

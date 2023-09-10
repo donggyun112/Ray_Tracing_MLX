@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:24:29 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/10 23:40:15 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/11 01:44:23 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ void	init_nomal_plane(char **tmp, t_canvas *canvas, int idx)
 	canvas->obj->pl[idx].color[RED] = ft_strtod(tmp[7]);
 	canvas->obj->pl[idx].color[GREEN] = ft_strtod(tmp[8]);
 	canvas->obj->pl[idx].color[BLUE] = ft_strtod(tmp[9]);
+	canvas->obj->pl[idx].tr_v1 = (t_vec3){0.0, 0.0, 0.0};
+	canvas->obj->pl[idx].tr_v2 = (t_vec3){0.0, 0.0, 0.0};
 	canvas->obj->pl[idx].norm = norm_vec(canvas->obj->pl[idx].norm);
 }
 
@@ -95,6 +97,8 @@ void	init_checker_plane(char **tmp, t_canvas *canvas, int idx)
 	canvas->obj->pl[idx].norm.y = ft_strtod(tmp[5]);
 	canvas->obj->pl[idx].norm.z = ft_strtod(tmp[6]);
 	canvas->obj->pl[idx].norm = norm_vec(canvas->obj->pl[idx].norm);
+	canvas->obj->pl[idx].tr_v1 = (t_vec3){0.0, 0.0, 0.0};
+	canvas->obj->pl[idx].tr_v2 = (t_vec3){0.0, 0.0, 0.0};
 }
 
 void	init_texture_plane(char **tmp, t_canvas *canvas, int idx)
@@ -108,6 +112,28 @@ void	init_texture_plane(char **tmp, t_canvas *canvas, int idx)
 	canvas->obj->pl[idx].norm.z = ft_strtod(tmp[6]);
 	canvas->obj->pl[idx].filepath = ft_strdup(tmp[7]);
 	canvas->obj->pl[idx].norm = norm_vec(canvas->obj->pl[idx].norm);
+	canvas->obj->pl[idx].tr_v1 = (t_vec3){0.0, 0.0, 0.0};
+	canvas->obj->pl[idx].tr_v2 = (t_vec3){0.0, 0.0, 0.0};
+}
+
+void	init_triangle_plane(char **tmp, t_canvas *canvas, int idx)
+{
+	canvas->obj->pl[idx].type = TRI;
+	canvas->obj->pl[idx].on_plane.x = ft_strtod(tmp[1]);
+	canvas->obj->pl[idx].on_plane.y = ft_strtod(tmp[2]);
+	canvas->obj->pl[idx].on_plane.z = ft_strtod(tmp[3]);
+	canvas->obj->pl[idx].tr_v1.x = ft_strtod(tmp[4]) - ft_strtod(tmp[1]);
+	canvas->obj->pl[idx].tr_v1.y = ft_strtod(tmp[5]) - ft_strtod(tmp[2]);
+	canvas->obj->pl[idx].tr_v1.z = ft_strtod(tmp[6]) - ft_strtod(tmp[3]);
+	canvas->obj->pl[idx].tr_v2.x = ft_strtod(tmp[7]) - ft_strtod(tmp[1]);
+	canvas->obj->pl[idx].tr_v2.y = ft_strtod(tmp[8]) - ft_strtod(tmp[2]);
+	canvas->obj->pl[idx].tr_v2.z = ft_strtod(tmp[9]) - ft_strtod(tmp[3]);
+	canvas->obj->pl[idx].color[RED] = ft_strtod(tmp[10]);
+	canvas->obj->pl[idx].color[GREEN] = ft_strtod(tmp[11]);
+	canvas->obj->pl[idx].color[BLUE] = ft_strtod(tmp[12]);
+	canvas->obj->pl[idx].norm = norm_vec(vector_product(\
+		canvas->obj->pl[idx].tr_v1, canvas->obj->pl[idx].tr_v2));
+	canvas->obj->pl[idx].filepath = NULL;
 }
 
 int	init_plane(char **tmp, t_canvas *canvas, int count)
@@ -120,6 +146,8 @@ int	init_plane(char **tmp, t_canvas *canvas, int count)
 		init_checker_plane(tmp, canvas, idx);
 	else if ((count == 7 || count == 8) && !ft_strcmp(tmp[0], "tpl"))
 		init_texture_plane(tmp, canvas, idx);
+	else if (count == 12 && !ft_strcmp(tmp[0], "tr"))
+		init_triangle_plane(tmp, canvas, idx);
 	else
 		return (-1);
 	idx++;
@@ -423,7 +451,7 @@ void	init_count(t_volume *obj, char **tmp)
 	else if (!ft_strcmp(tmp[0], "cy") || !ft_strcmp(tmp[0], "ccy") || \
 	!ft_strcmp(tmp[0], "tcy"))
 		obj->cy_cnt++;
-	else if (!ft_strcmp(tmp[0], "pl"))
+	else if (!ft_strcmp(tmp[0], "pl") || !ft_strcmp(tmp[0], "tr"))
 		obj->pl_cnt++;
 	else if (!ft_strcmp(tmp[0], "l") || !ft_strcmp(tmp[0], "rl"))
 		obj->l_cnt++;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   intersection.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:29:45 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/08 02:41:07 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/11 01:45:02 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,11 +204,57 @@ void	init_pltexture(t_ray3 *ray, t_plane *pl)
 	ray->color[BLUE] = c.b;
 }
 
+int		in_triangle(t_vec3 hit, t_plane *pl)
+{
+	t_vec3	pos;
+	t_vec3	v1_hit;
+	t_vec3	v2_hit;
+	float	size;
+
+	pos = sub_vector(hit, pl->on_plane);
+	v1_hit = vector_product(pl->tr_v1, pos);
+	v2_hit = vector_product(pos, pl->tr_v2);
+	if (!(scalar_product(pl->norm, v1_hit) > 0.0
+			&& scalar_product(pl->norm, v2_hit) > 0.0))
+		return (0);
+	size = size_of_vec2(v1_hit) + size_of_vec2(v2_hit);
+	if (size > size_of_vec2(vector_product(pl->tr_v1, pl->tr_v2)))
+		return (0);
+	return (1);
+}
+
+void	hit_triangle(t_ray3 *ray, t_plane *pl)
+{
+	float	tmp;
+	float	scalar[3];
+	t_vec3	hit;
+
+	scalar[0] = scalar_product(pl->on_plane, pl->norm);
+	scalar[1] = scalar_product(ray->origin, pl->norm);
+	scalar[2] = scalar_product(ray->dir, pl->norm);
+	tmp = (scalar[0] - scalar[1]) / scalar[2];
+	if ((ray->t < 0.0 && tmp > 0.0) || (tmp > 0.0 && ray->t > tmp))
+	{
+		hit = add_vector(ray->origin, multiple_vector(tmp, ray->dir));
+		if (in_triangle(hit, pl) == 0)
+			return ;
+		ray->t = tmp;
+		ray->obj = (void *)pl;
+		ray->type = PL;
+		init_pl_color(ray, pl);
+	}
+}
+
 void	hit_plane(t_ray3 *ray, t_plane *pl)
 {
 	float	tmp;
 	float	scalar[3];
 
+	if (pl->type == TRI)
+	{
+		hit_triangle(ray, pl);
+		return ;
+	}
 	scalar[0] = scalar_product(pl->on_plane, pl->norm);
 	scalar[1] = scalar_product(ray->origin, pl->norm);
 	scalar[2] = scalar_product(ray->dir, pl->norm);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/10 18:17:08 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/11 01:48:53 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,10 +43,11 @@
 # define CSP 4
 # define CPL 5
 # define TPL 6
+# define TRI 7
 # define SHADOW 100
-# define TCY 7
-# define CCY 8
-# define NONE 9
+# define TCY 8
+# define CCY 9
+# define NONE 10
 # define NUM_OF_THREAD 7
 # define ON 1
 # define OFF 0
@@ -151,6 +152,7 @@ t_vec3		check_plane_direction(t_plane *pl, t_ray3 *ray);
 int			cy_in_range(t_ray3 *ray, float t, t_cylinder *cy);
 void		cylindrical_map(t_vec3 p, float *u, float *v, t_cylinder *cy);
 void		color_cal(t_canvas canvas, t_ray3 *ray, t_color *color);
+int			in_triangle(t_vec3 hit, t_plane *pl);
 
 //mapping
 t_color		checkertexture(t_vec3 point, float scale, t_plane *pl, int flag);

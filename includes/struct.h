@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 01:23:19 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/10 17:33:53 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/11 01:10:44 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ typedef struct s_plane
 {
 	t_vec3			on_plane;
 	t_vec3			norm;
+	t_vec3			tr_v1;
+	t_vec3			tr_v2;
 	int				type;
 	t_texture		texture;
 	char			*filepath;

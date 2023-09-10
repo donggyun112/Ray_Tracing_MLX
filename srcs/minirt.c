@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 04:57:47 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/11 05:01:05 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -489,8 +489,6 @@ int	is_valid_file_type(char *file_path)
 	free(path);
 	return (answer);
 }
-
-void	grep_obj(int x, int y, t_view *view);
 
 void	zomm_in(t_view *view)
 {

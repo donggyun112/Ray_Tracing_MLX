@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 04:45:19 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/11 05:00:59 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ void		pause_system(t_view *view);
 void		move_obj(int keycode, t_view *view);
 void		save_image_to_ppm(char *filename, t_view *img);
 int			ft_strcmp(char *s1, char *s2);
+void		grep_obj(int x, int y, t_view *view);
 
 //intersection
 void		intersection(t_ray3 *ray, t_volume *obj);

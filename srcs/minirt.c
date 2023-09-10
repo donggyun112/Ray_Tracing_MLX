@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/10 22:28:07 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/10 22:41:44 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -398,8 +398,7 @@ int	loop_hook(t_view *view)
 		view->focus = 1;
 		newwin(view);
 	}
-	// else
-	// 	view->focus = 0;
+
 	return (0);
 }
 

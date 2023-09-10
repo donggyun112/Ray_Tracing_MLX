@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/10 22:29:18 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/10 22:41:38 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -499,7 +499,10 @@ void	write_rt_light(t_view *view, FILE *f)
 	while (++i < view->can.obj->l_cnt)
 	{
 		if (view->can.obj->l->rotate_idx == -1)
+		{
+			view->can.obj->l->rotate_idx = 0;
 			continue ;
+		}
 		tmp = view->can.obj->l[i];
 		fprintf(f, "l	");
 		write_rt_vec(tmp.light_orig, f);
@@ -512,7 +515,11 @@ void	write_rt_light(t_view *view, FILE *f)
 void	write_rt_sphere(t_view *view, FILE *f)
 {
 	int	i;
+	int	idx[100];
 
+	i = -1;
+	while (++i < 100)
+		idx[i] = 0;
 	i = -1;
 	while (++i < view->can.obj->rsp_cnt)
 	{
@@ -525,12 +532,12 @@ void	write_rt_sphere(t_view *view, FILE *f)
 		write_rt_vec(view->can.obj->rsp[i].r_axis, f);
 		fprintf(f, " %s %s\n", view->can.obj->rsp[i].sp->filepath, \
 								view->can.obj->rsp[i].sp->bumppath);
-		view->can.obj->rsp[i].sp->type = NONE;
+		idx[view->can.obj->rsp[i].sp_idx] = 1;
 	}
 	i = -1;
 	while (++i < view->can.obj->sp_cnt)
 	{
-		if (view->can.obj->sp[i].type == NONE)
+		if (view->can.obj->sp[i].type == NONE && idx[i] == 1)
 			continue ;
 		if (view->can.obj->sp[i].type == CSP)
 			fprintf(f, "csp	");
@@ -624,7 +631,7 @@ void	save_image_to_rtfile(char *filename, t_view *view)
 	write_rt_cylinder(view, f);
 	write_rt_plane(view, f);
 	if (view->can.bgt_filepath)
-		fprintf(f, "bg %s", view->can.bgt_filepath);
+		fprintf(f, "bg %s \n", view->can.bgt_filepath);
 	mlx_string_put(view->mlx, view->win, view->can.width/2, view->can.height/2, 0xFF00FF, "Success make .rt file");
 }
 

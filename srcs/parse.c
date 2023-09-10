@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:24:29 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/10 17:30:35 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/10 23:40:15 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	init_nomal_plane(char **tmp, t_canvas *canvas, int idx)
 	canvas->obj->pl[idx].norm = norm_vec(canvas->obj->pl[idx].norm);
 }
 
-void	init_checker_palne(char **tmp, t_canvas *canvas, int idx)
+void	init_checker_plane(char **tmp, t_canvas *canvas, int idx)
 {
 	canvas->obj->pl[idx].type = CPL;
 	canvas->obj->pl[idx].on_plane.x = ft_strtod(tmp[1]);
@@ -117,7 +117,7 @@ int	init_plane(char **tmp, t_canvas *canvas, int count)
 	if (count == 9 && !ft_strcmp(tmp[0], "pl"))
 		init_nomal_plane(tmp, canvas, idx);
 	else if (count == 6 && !ft_strcmp(tmp[0], "cpl"))
-		init_checker_palne(tmp, canvas, idx);
+		init_checker_plane(tmp, canvas, idx);
 	else if ((count == 7 || count == 8) && !ft_strcmp(tmp[0], "tpl"))
 		init_texture_plane(tmp, canvas, idx);
 	else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/10 23:39:52 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/11 04:45:06 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ void	set_thread_st_point(int *anti, int pix[2], t_thread *t)
 		pix[2] = (t->id + 1) * (t->canvas.height / NUM_OF_THREAD);
 }
 
-void	*make_image2(void *m)
+void	make_image2(void *m)
 {
 	int			pix[3];
 	float		vp_idx[2];
@@ -171,7 +171,6 @@ void	*make_image2(void *m)
 		}
 		pix[1] += (t->view->low_scalar);
 	}
-	return (NULL);
 }
 
 void	set_quality_scalar(t_view *view)
@@ -245,7 +244,7 @@ void	multi_rend(t_view *view)
 	m = init_thread(view);
 	while (x < NUM_OF_THREAD)
 	{
-		pthread_create(&m[x].thread, NULL, make_image2, &m[x]);
+		pthread_create(&m[x].thread, NULL, (void *)make_image2, &m[x]);
 		x++;
 	}
 	x = 0;

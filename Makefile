@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+         #
+#    By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/02 15:17:44 by jinhyeop          #+#    #+#              #
-#    Updated: 2023/09/10 21:53:39 by dongkseo         ###   ########.fr        #
+#    Updated: 2023/09/11 04:42:30 by jinhyeop         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 

@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/10 21:59:18 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/10 22:29:18 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	foward_back(int keycode, t_view *view)
 {
 	if (keycode == S)
 	{
-		view->can.cam_orig = sub_vector(view->can.cam_orig, view->can.cam_dir);
+		view->can.cam_orig = sub_vector(view->can.cam_orig, multiple_vector(0.5, view->can.cam_dir));
 		if (view->quality_scalar >= -4)
 			view->quality_scalar = -4;
 		view->cam = camera(view->can);
@@ -90,7 +90,7 @@ void	foward_back(int keycode, t_view *view)
 	}
 	else if (keycode == W)
 	{
-		view->can.cam_orig = add_vector(view->can.cam_orig, view->can.cam_dir);
+		view->can.cam_orig = add_vector(view->can.cam_orig, multiple_vector(0.5, view->can.cam_dir));
 		if (view->quality_scalar >= -4)
 			view->quality_scalar = -4;
 		view->cam = camera(view->can);
@@ -103,9 +103,9 @@ void	foward_back(int keycode, t_view *view)
 void	move_obj_vec(t_vec3 *vec, t_vec3 campos, int keycode)
 {
 	if (keycode == A || keycode == S)
-		*vec = sub_vector(*vec, campos);
+		*vec = sub_vector(*vec, multiple_vector(0.5, campos));
 	else if (keycode == D || keycode == W)
-		*vec = add_vector(*vec, campos);
+		*vec = add_vector(*vec, multiple_vector(0.5, campos));
 }
 
 void	move_obj(int keycode, t_view *view)
@@ -145,7 +145,7 @@ void	left_right(int keycode, t_view *view)
 {
 	if (keycode == A)
 	{
-		view->can.cam_orig = sub_vector(view->can.cam_orig, view->cam.r_norm);
+		view->can.cam_orig = sub_vector(view->can.cam_orig, multiple_vector(0.5, view->cam.r_norm));
 		if (view->quality_scalar >= -4)
 			view->quality_scalar = -4;
 		view->cam = camera(view->can);
@@ -155,7 +155,7 @@ void	left_right(int keycode, t_view *view)
 	}
 	else if (keycode == D)
 	{
-		view->can.cam_orig = add_vector(view->can.cam_orig, view->cam.r_norm);
+		view->can.cam_orig = add_vector(view->can.cam_orig, multiple_vector(0.5, view->cam.r_norm));
 		if (view->quality_scalar >= -4)
 			view->quality_scalar = -4;
 		view->cam = camera(view->can);
@@ -382,6 +382,7 @@ void	move_focus(int scalra, t_view *view, float sensitivity)
 	}
 	count++;
 }
+
 void	pause_system(t_view *view)
 {
 
@@ -411,6 +412,7 @@ void	move_hook(int keycode, t_view *view)
 		left_right(keycode, view);
 	else if (keycode == W || keycode == S)
 		foward_back(keycode, view);
+	move_focus(0, view, 0.005);
 }
 
 void	rotate_hook(int keycode, t_view *view)

@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/10 22:06:14 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/10 22:28:07 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -394,7 +394,7 @@ int	loop_hook(t_view *view)
 			while (++i < view->can.obj->rl_cnt)
 				rotate_rl(i, view);
 		}
-		move_focus(0, view, 0.005);
+		move_focus(1, view, 0.005);
 		view->focus = 1;
 		newwin(view);
 	}
@@ -436,6 +436,7 @@ void	make_obj_cap(t_volume *obj)
 int	mouse_motion(int x, int y, t_view *view)
 {
 	static int	pos[2];
+	static int	c;
 
 	mlx_mouse_get_pos(view->win, &x, &y);
 	if ((pos[0] != x || pos[1] != y) && view->stop)
@@ -443,9 +444,17 @@ int	mouse_motion(int x, int y, t_view *view)
 		if (view->quality_scalar >= -4)
 			view->quality_scalar = -4;
 		if (view->focus == 0)
-			move_focus(1, view, 0.005);
+		{
+			c = 0;
+			move_focus(2, view, 0.005);
+		}
 		else
+		{
+			if (c < 15)
+				move_focus(0, view, 0.005);
 			move_focus(10, view, 0.005);
+			c++;
+		}
 	}
 	pos[0] = x;
 	pos[1] = y;

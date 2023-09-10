@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/10 22:41:44 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/10 23:39:52 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -262,8 +262,6 @@ void	set_texture(t_view *view, t_volume *obj)
 	int	i;
 
 	i = -1;
-	view->mini_size = view->can.width - 200;
-	view->real_size = view->can.width;
 	while (++i < obj->sp_cnt)
 	{
 		if (obj->sp[i].type == TSP)
@@ -300,6 +298,8 @@ void	init_view_scale(t_view *view)
 	view->backup = NULL;
 	view->change_dir = 0;
 	view->grep.type = -1;
+	view->mini_size = view->can.width - 200;
+	view->real_size = view->can.width;
 	if (view->can.bgt_filepath)
 		init_texture(&view->back, view, view->can.bgt_filepath);
 	mlx_mouse_hide();
@@ -398,7 +398,6 @@ int	loop_hook(t_view *view)
 		view->focus = 1;
 		newwin(view);
 	}
-
 	return (0);
 }
 
@@ -494,41 +493,50 @@ int	is_valid_file_type(char *file_path)
 
 void	grep_obj(int x, int y, t_view *view);
 
-void	zoom_inout(int button, t_view *view)
+void	zomm_in(t_view *view)
 {
 	t_sphere	*sp;
 	t_cylinder	*cy;
 
+	if (view->grep.type == SP)
+	{
+		sp = (t_sphere *)view->grep.obj;
+		sp->radius += 0.2;
+	}
+	else if (view->grep.type == CY)
+	{
+		cy = (t_cylinder *)view->grep.obj;
+		cy->height -= 0.5;
+		cy->radius -= 0.2;
+		make_cylinder_cap2(cy);
+	}
+}
+
+void	zoom_out(t_view *view)
+{
+	t_sphere	*sp;
+	t_cylinder	*cy;
+
+	if (view->grep.type == SP)
+	{
+		sp = (t_sphere *)view->grep.obj;
+		sp->radius -= 0.2;
+	}
+	else if (view->grep.type == CY)
+	{
+		cy = (t_cylinder *)view->grep.obj;
+		cy->radius += 0.2;
+		cy->height += 0.5;
+		make_cylinder_cap2(cy);
+	}
+}
+
+void	zoom_inout(int button, t_view *view)
+{
 	if (button == 4)
-	{
-		if (view->grep.type == SP)
-		{
-			sp = (t_sphere *)view->grep.obj;
-			sp->radius += 0.2;
-		}
-		else if (view->grep.type == CY)
-		{
-			cy = (t_cylinder *)view->grep.obj;
-			cy->height -= 0.5;
-			cy->radius -= 0.2;
-			make_cylinder_cap2(cy);
-		}
-	}
+		zomm_in(view);
 	else
-	{
-		if (view->grep.type == SP)
-		{
-			sp = (t_sphere *)view->grep.obj;
-			sp->radius -= 0.2;
-		}
-		else if (view->grep.type == CY)
-		{
-			cy = (t_cylinder *)view->grep.obj;
-			cy->radius += 0.2;
-			cy->height += 0.5;
-			make_cylinder_cap2(cy);
-		}
-	}
+		zoom_out(view);
 	newwin(view);
 }
 

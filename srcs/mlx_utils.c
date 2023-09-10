@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/10 22:41:38 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/11 00:19:26 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,13 @@ int	win_destroy(t_view *view)
 	return (0);
 }
 
-void	newwin(t_view *view)
+void	string_put(t_view *view)
 {
-	if (!view->stop)
-		return ;
-	mlx_clear_window(view->mlx, view->win);
-	multi_rend(view);
-	mlx_put_image_to_window(view->mlx, view->win, view->img, 0, 0);
+	char	*tmp;
+	char	*tmp2;
+
 	if (!view->show_mouse)
 	{
-		char *tmp;
-		char *tmp2;
 		if (view->change_dir)
 			tmp = ft_strjoin("Editing Mode : ", "TRUE");
 		else
@@ -72,15 +68,25 @@ void	newwin(t_view *view)
 		mlx_string_put(view->mlx, view->win, view->mini_size + 30, 490, 0XFFFFF, tmp);
 		free(tmp);
 		free(tmp2);
-
 	}
+}
+
+void	newwin(t_view *view)
+{
+	if (!view->stop)
+		return ;
+	mlx_clear_window(view->mlx, view->win);
+	multi_rend(view);
+	mlx_put_image_to_window(view->mlx, view->win, view->img, 0, 0);
+	string_put(view);
 }
 
 void	foward_back(int keycode, t_view *view)
 {
 	if (keycode == S)
 	{
-		view->can.cam_orig = sub_vector(view->can.cam_orig, multiple_vector(0.5, view->can.cam_dir));
+		view->can.cam_orig = \
+		sub_vector(view->can.cam_orig, multiple_vector(0.5, view->can.cam_dir));
 		if (view->quality_scalar >= -4)
 			view->quality_scalar = -4;
 		view->cam = camera(view->can);
@@ -90,14 +96,15 @@ void	foward_back(int keycode, t_view *view)
 	}
 	else if (keycode == W)
 	{
-		view->can.cam_orig = add_vector(view->can.cam_orig, multiple_vector(0.5, view->can.cam_dir));
+		view->can.cam_orig = \
+		add_vector(view->can.cam_orig, multiple_vector(0.5, view->can.cam_dir));
 		if (view->quality_scalar >= -4)
 			view->quality_scalar = -4;
 		view->cam = camera(view->can);
 		if (view->grep.grep == ON && view->clik_status)
 			move_obj(keycode, view);
 		newwin(view);
-	}	
+	}
 }
 
 void	move_obj_vec(t_vec3 *vec, t_vec3 campos, int keycode)
@@ -108,20 +115,24 @@ void	move_obj_vec(t_vec3 *vec, t_vec3 campos, int keycode)
 		*vec = add_vector(*vec, multiple_vector(0.5, campos));
 }
 
-void	move_obj(int keycode, t_view *view)
+void	move_sphere(t_view *view, int keycode)
 {
 	t_sphere	*sp;
+
+	sp = (t_sphere *)view->grep.obj;
+	if (keycode == A || keycode == D)
+		move_obj_vec(&sp->center, view->cam.r_norm, keycode);
+	else
+		move_obj_vec(&sp->center, view->cam.dir, keycode);
+}
+
+void	move_obj(int keycode, t_view *view)
+{
 	t_cylinder	*cy;
 	t_plane		*pl;
 
 	if (view->grep.type == SP)
-	{
-		sp = (t_sphere *)view->grep.obj;
-		if (keycode == A || keycode == D)
-			move_obj_vec(&sp->center, view->cam.r_norm, keycode);
-		else
-			move_obj_vec(&sp->center, view->cam.dir, keycode);			
-	}
+		move_sphere(view, keycode);
 	else if (view->grep.type == CY)
 	{
 		cy = (t_cylinder *)view->grep.obj;
@@ -145,7 +156,8 @@ void	left_right(int keycode, t_view *view)
 {
 	if (keycode == A)
 	{
-		view->can.cam_orig = sub_vector(view->can.cam_orig, multiple_vector(0.5, view->cam.r_norm));
+		view->can.cam_orig = \
+		sub_vector(view->can.cam_orig, multiple_vector(0.5, view->cam.r_norm));
 		if (view->quality_scalar >= -4)
 			view->quality_scalar = -4;
 		view->cam = camera(view->can);
@@ -155,7 +167,8 @@ void	left_right(int keycode, t_view *view)
 	}
 	else if (keycode == D)
 	{
-		view->can.cam_orig = add_vector(view->can.cam_orig, multiple_vector(0.5, view->cam.r_norm));
+		view->can.cam_orig = \
+		add_vector(view->can.cam_orig, multiple_vector(0.5, view->cam.r_norm));
 		if (view->quality_scalar >= -4)
 			view->quality_scalar = -4;
 		view->cam = camera(view->can);
@@ -170,7 +183,6 @@ void	up_down(int keycode, t_view *view)
 	if (keycode == 24)
 	{
 		view->can.cam_orig.y += 1;
-		if (view->quality_scalar >= -4)
 		if (view->quality_scalar >= -4)
 			view->quality_scalar = -4;
 		view->cam = camera(view->can);
@@ -274,18 +286,8 @@ t_vec3	rotate_around_axis(t_vec3 vec, t_vec3 axis, float angle)
 	return (rotated_vec);
 }
 
-void	grep_obj(int x, int y, t_view *view)
+void	def_grep_type(t_view *view, t_ray3 ray)
 {
-	float	vp_idx[2];
-	t_ray3 ray;
-
-	vp_idx[0] = view->can.ratio * 2.0 * ((float)x) / (float)view->can.width;
-	vp_idx[1] = 2.0 * ((float)y) / (float)view->can.height;
-	ray = create_ray(view->cam, vp_idx[0], vp_idx[1]);
-	ray.type = -1;
-	ray.pix[0] = x;
-	ray.pix[1] = y;
-	intersection(&ray, view->can.obj);
 	if (ray.type == SP)
 	{
 		view->grep.obj = ray.obj;
@@ -308,11 +310,80 @@ void	grep_obj(int x, int y, t_view *view)
 		view->grep.grep = OFF;
 }
 
+void	grep_obj(int x, int y, t_view *view)
+{
+	float	vp_idx[2];
+	t_ray3	ray;
+
+	vp_idx[0] = view->can.ratio * 2.0 * ((float)x) / (float)view->can.width;
+	vp_idx[1] = 2.0 * ((float)y) / (float)view->can.height;
+	ray = create_ray(view->cam, vp_idx[0], vp_idx[1]);
+	ray.type = -1;
+	ray.pix[0] = x;
+	ray.pix[1] = y;
+	intersection(&ray, view->can.obj);
+	def_grep_type(view, ray);
+}
+
 void	make_cylinder_cap2(t_cylinder *cy)
 {
 	free(cy->ucap);
 	free(cy->lcap);
 	make_cylinder_cap(cy);
+}
+
+void	move_grep_obj_sphere(t_view *view, t_vec3 right, float pitch, float yaw)
+{
+	t_sphere	*sp;
+
+	sp = (t_sphere *)view->grep.obj;
+	sp->center = sub_vector(sp->center, view->cam.origin);
+	sp->center = \
+	rotate_around_axis(sp->center, (t_vec3){0.0f, 1.0f, 0.0f}, -yaw);
+	sp->center = rotate_around_axis(sp->center, right, -pitch);
+	sp->center = add_vector(sp->center, view->cam.origin);
+}
+
+void	move_grep_obj_cy(t_view *view, t_vec3 right, float pitch, float yaw)
+{
+	t_cylinder	*cy;
+
+	cy = (t_cylinder *)view->grep.obj;
+	if (view->change_dir)
+	{
+		cy->dir = \
+		rotate_around_axis(cy->dir, (t_vec3){0.0f, 1.0f, 0.0f}, yaw * 2);
+		cy->dir = rotate_around_axis(cy->dir, right, pitch * 2);
+		norm_vec(cy->dir);
+	}
+	else
+	{
+		cy->center = sub_vector(cy->center, view->cam.origin);
+		cy->center = \
+		rotate_around_axis(cy->center, (t_vec3){0.0f, 1.0f, 0.0f}, -yaw);
+		cy->center = rotate_around_axis(cy->center, right, -pitch);
+		cy->center = add_vector(cy->center, view->cam.origin);
+	}
+	make_cylinder_cap2(cy);
+}
+
+void	move_grep_obj(t_view *view, t_vec3 right, float pitch, float yaw)
+{
+	t_plane		*pl;
+
+	if (view->grep.type == SP)
+		move_grep_obj_sphere(view, right, pitch, yaw);
+	else if (view->grep.type == CY)
+		move_grep_obj_cy(view, right, pitch, yaw);
+	else if (view->grep.type == PL)
+	{
+		pl = (t_plane *)view->grep.obj;
+		pl->on_plane = sub_vector(pl->on_plane, view->cam.origin);
+		pl->on_plane = \
+		rotate_around_axis(pl->on_plane, (t_vec3){0.0f, 1.0f, 0.0f}, yaw);
+		pl->on_plane = rotate_around_axis(pl->on_plane, right, -pitch);
+		pl->on_plane = add_vector(pl->on_plane, view->cam.origin);
+	}
 }
 
 void	move_focus(int scalra, t_view *view, float sensitivity)
@@ -336,46 +407,7 @@ void	move_focus(int scalra, t_view *view, float sensitivity)
 		view->can.cam_dir = norm_vec(view->can.cam_dir);
 		view->cam = camera(view->can);
 		if (view->clik_status && view->grep.grep == ON)
-		{
-			t_sphere	*sp;
-			t_cylinder	*cy;
-			t_plane		*pl;
-			if (view->grep.type == SP)
-			{
-				sp = (t_sphere *)view->grep.obj;
-				sp->center = sub_vector(sp->center, view->cam.origin);
-				sp->center = rotate_around_axis(sp->center, (t_vec3){0.0f, 1.0f, 0.0f}, -yaw);
-				sp->center = rotate_around_axis(sp->center, right, -pitch);
-				sp->center = add_vector(sp->center, view->cam.origin);
-				
-			}
-			else if (view->grep.type == CY)
-			{
-				cy = (t_cylinder *)view->grep.obj;
-				if (view->change_dir)
-				{
-					cy->dir = rotate_around_axis(cy->dir, (t_vec3){0.0f, 1.0f, 0.0f}, yaw * 2);
-					cy->dir = rotate_around_axis(cy->dir, right, pitch * 2);
-					norm_vec(cy->dir);
-				}
-				else
-				{
-					cy->center = sub_vector(cy->center, view->cam.origin);
-					cy->center = rotate_around_axis(cy->center, (t_vec3){0.0f, 1.0f, 0.0f}, -yaw);
-					cy->center = rotate_around_axis(cy->center, right, -pitch);
-					cy->center = add_vector(cy->center, view->cam.origin);
-				}
-				make_cylinder_cap2(cy);
-			}
-			else if (view->grep.type == PL)
-			{
-				pl = (t_plane *)view->grep.obj;
-				pl->on_plane = 	sub_vector(pl->on_plane, view->cam.origin);
-				pl->on_plane = rotate_around_axis(pl->on_plane, (t_vec3){0.0f, 1.0f, 0.0f}, yaw);
-				pl->on_plane = rotate_around_axis(pl->on_plane, right, -pitch);
-				pl->on_plane = 	add_vector(pl->on_plane, view->cam.origin);
-			}
-		}
+			move_grep_obj(view, right, pitch, yaw);
 		newwin(view);
 		mlx_mouse_move(view->win, view->can.width / 2, view->can.height / 2);
 		count = 0;
@@ -385,7 +417,6 @@ void	move_focus(int scalra, t_view *view, float sensitivity)
 
 void	pause_system(t_view *view)
 {
-
 	view->stop = !view->stop;
 	if (view->stop)
 	{
@@ -443,10 +474,7 @@ void save_image_to_ppm(char *filename, t_view *view)
 
 	f = fopen(filename, "w");
 	if (!f)
-	{
-		fprintf(stderr, "Unable to open file '%s'\n", filename);
-		return;
-	}
+		return ;
 	fprintf(f, "P6\n%d %d\n255\n", view->can.width, view->can.height);
 	xy[1] = -1;
 	while (++xy[1] < view->can.height)
@@ -454,7 +482,8 @@ void save_image_to_ppm(char *filename, t_view *view)
 		xy[0] = -1;
 		while (++xy[0] < view->can.width)
 		{
-			dst = view->addr + (xy[1] * view->line_length + xy[0] * (view->bits_per_pixel / 8));
+			dst = view->addr + (xy[1] * view->line_length + xy[0] * \
+			(view->bits_per_pixel / 8));
 			tmp = *(unsigned int *)dst;
 			init_ppm(f, tmp, color);
 		}
@@ -479,15 +508,14 @@ void	write_rt_camera(t_view *view, FILE *f)
 	fprintf(f, " %d \n", view->can.fov);
 }
 
-void	write_rt_light(t_view *view, FILE *f)
+void	write_rt_rlight(t_view *view, FILE *f)
 {
-	int		i;
-	t_light	tmp;
+	int	i;
 
 	i = -1;
 	while (++i < view->can.obj->rl_cnt)
 	{
-		fprintf(f, "rl	");	
+		fprintf(f, "rl	");
 		write_rt_vec(view->can.obj->rl[i].light->light_orig, f);
 		fprintf(f, "%f	", view->can.obj->rl[i].light->light_bright);
 		write_rt_vec(view->can.obj->rl[i].r_center, f);
@@ -495,6 +523,14 @@ void	write_rt_light(t_view *view, FILE *f)
 		write_rt_color(view->can.obj->rl[i].light->light_col, f);
 		view->can.obj->l[view->can.obj->rl[i].light_idx].rotate_idx = -1;
 	}
+}
+
+void	write_rt_light(t_view *view, FILE *f)
+{
+	int		i;
+	t_light	tmp;
+
+	write_rt_rlight(view, f);
 	i = -1;
 	while (++i < view->can.obj->l_cnt)
 	{
@@ -509,13 +545,11 @@ void	write_rt_light(t_view *view, FILE *f)
 		fprintf(f, " %f	", tmp.light_bright);
 		write_rt_color(tmp.light_col, f);
 	}
-
 }
 
-void	write_rt_sphere(t_view *view, FILE *f)
+void	write_rt_rsphere(t_view *view, FILE *f, int idx[100])
 {
 	int	i;
-	int	idx[100];
 
 	i = -1;
 	while (++i < 100)
@@ -524,7 +558,7 @@ void	write_rt_sphere(t_view *view, FILE *f)
 	while (++i < view->can.obj->rsp_cnt)
 	{
 		if (view->can.obj->rsp[i].sp->type == NONE)
-			continue;
+			continue ;
 		fprintf(f, "rsp	");
 		write_rt_vec(view->can.obj->rsp[i].sp->center, f);
 		fprintf(f, " %f ", view->can.obj->rsp[i].sp->radius);
@@ -534,6 +568,14 @@ void	write_rt_sphere(t_view *view, FILE *f)
 								view->can.obj->rsp[i].sp->bumppath);
 		idx[view->can.obj->rsp[i].sp_idx] = 1;
 	}
+}
+
+void	write_rt_sphere(t_view *view, FILE *f)
+{
+	int	i;
+	int	idx[100];
+
+	write_rt_rsphere(view, f, idx);
 	i = -1;
 	while (++i < view->can.obj->sp_cnt)
 	{
@@ -565,7 +607,7 @@ void	write_rt_cylinder(t_view *view, FILE *f)
 	while (++i < view->can.obj->cy_cnt)
 	{
 		if (view->can.obj->cy[i].type == NONE)
-			continue;
+			continue ;
 		if (view->can.obj->cy[i].type == TCY)
 			fprintf(f, "tcy ");
 		else if (view->can.obj->cy[i].type == CCY)
@@ -620,7 +662,7 @@ void	save_image_to_rtfile(char *filename, t_view *view)
 	if (!f)
 	{
 		fprintf(stderr, "Unable to open file '%s'\n", filename);
-		return;
+		return ;
 	}
 	fprintf(f, "R	%d %d\n", view->real_size, view->can.height);
 	fprintf(f, "A	%f ", view->can.amb_bright);
@@ -632,7 +674,8 @@ void	save_image_to_rtfile(char *filename, t_view *view)
 	write_rt_plane(view, f);
 	if (view->can.bgt_filepath)
 		fprintf(f, "bg %s \n", view->can.bgt_filepath);
-	mlx_string_put(view->mlx, view->win, view->can.width/2, view->can.height/2, 0xFF00FF, "Success make .rt file");
+	mlx_string_put(view->mlx, view->win, view->can.width / 2, view->can.height \
+	/ 2, 0xFF00FF, "Success make .rt file");
 }
 
 t_vec3	init_copy_vec(t_vec3 *vec, t_vec3 tar)
@@ -643,9 +686,27 @@ t_vec3	init_copy_vec(t_vec3 *vec, t_vec3 tar)
 	return (*vec);
 }
 
-float get_float_rand_l(float a, float b)
+float get_rand(float a, float b)
 {
 	return (a + (b - a) * (float)rand() / (float)RAND_MAX);
+}
+
+void	rand_vec(t_vec3 *vec, float max)
+{
+	vec->x = get_rand(0.0f, max);
+	vec->y = get_rand(0.0f, max);
+	vec->z = get_rand(0.0f, max);
+	*vec = norm_vec(*vec);
+}
+
+void	init_rsp_sp(t_view *view, int size)
+{
+	int	i;
+
+	i = -1;
+	while (++i < size)
+		view->can.obj->rsp[i].sp = \
+		&view->can.obj->sp[view->can.obj->rsp[i].sp_idx];
 }
 
 void	set_rsp(t_view *view, size_t t, t_sphere *sp, int keycode)
@@ -654,9 +715,7 @@ void	set_rsp(t_view *view, size_t t, t_sphere *sp, int keycode)
 	const int	size = view->can.obj->rsp_cnt;
 	t_rsphere	rsp;
 
-	i = -1;
-	while (++i < size)
-		view->can.obj->rsp[i].sp = &view->can.obj->sp[view->can.obj->rsp[i].sp_idx];
+	init_rsp_sp(view, size);
 	if (sp->rsp_type == 1)
 	{
 		i = -1;
@@ -668,12 +727,7 @@ void	set_rsp(t_view *view, size_t t, t_sphere *sp, int keycode)
 				rsp.sp_idx = t;
 				memcpy(&view->can.obj->rsp[size], &rsp, sizeof(rsp));
 				if (keycode == Z)
-				{
-					view->can.obj->rsp[size].r_axis.x = get_float_rand_l(0.0f, 3.0f);
-					view->can.obj->rsp[size].r_axis.y = get_float_rand_l(0.0f, 3.0f);
-					view->can.obj->rsp[size].r_axis.z = get_float_rand_l(0.0f, 3.0f);
-					view->can.obj->rsp[size].r_axis = norm_vec(view->can.obj->rsp[size].r_axis);
-				}
+					rand_vec(&view->can.obj->rsp[size].r_axis, 3.0f);
 				view->can.obj->rsp[size].sp = &view->can.obj->sp[t];
 				view->can.obj->rsp_cnt++;
 				break ;
@@ -690,8 +744,10 @@ void	copy_sphere(t_view *view, int keycode)
 
 	sp = *(t_sphere *)view->grep.obj;
 	if (sp.rsp_type == 1)
-		view->can.obj->rsp = (t_rsphere *)realloc(view->can.obj->rsp, sizeof(t_rsphere) * (y + 1));
-	view->can.obj->sp = (t_sphere *)reallocf(view->can.obj->sp, sizeof(t_sphere) * (t + 1));
+		view->can.obj->rsp = \
+		(t_rsphere *)realloc(view->can.obj->rsp, sizeof(t_rsphere) * (y + 1));
+	view->can.obj->sp = \
+	(t_sphere *)reallocf(view->can.obj->sp, sizeof(t_sphere) * (t + 1));
 	memcpy(&view->can.obj->sp[t], &sp, sizeof(sp));
 	if (keycode == Z)
 	{
@@ -746,20 +802,21 @@ void	copy_cylinder(t_view *view, int keycode)
 	const size_t	t = view->can.obj->cy_cnt;
 
 	cy = *(t_cylinder *)view->grep.obj;
-	view->can.obj->cy = (t_cylinder *)reallocf(view->can.obj->cy, sizeof(t_cylinder) * (t + 1));
+	view->can.obj->cy = \
+	(t_cylinder *)reallocf(view->can.obj->cy, sizeof(t_cylinder) * (t + 1));
 	memcpy(&view->can.obj->cy[t], &cy, sizeof(cy));
 	view->can.obj->cy[t].center.x += 1;
 	view->can.obj->cy[t].center.y += 1;
 	view->can.obj->cy[t].center.z += 1;
 	if (keycode == Z)
 	{
-		view->can.obj->cy[t].height = get_float_rand_l(0.5, 3);
-		view->can.obj->cy[t].radius = get_float_rand_l(0.5, 3);
-		view->can.obj->cy[t].dir.x = get_float_rand_l(-1.0f, 1.0f);
-		view->can.obj->cy[t].dir.y = get_float_rand_l(-1.0f, 1.0f);
-		view->can.obj->cy[t].dir.z = get_float_rand_l(-1.0f, 1.0f);
+		view->can.obj->cy[t].height = get_rand(0.5, 3);
+		view->can.obj->cy[t].radius = get_rand(0.5, 3);
+		view->can.obj->cy[t].dir.x = get_rand(-1.0f, 1.0f);
+		view->can.obj->cy[t].dir.y = get_rand(-1.0f, 1.0f);
+		view->can.obj->cy[t].dir.z = get_rand(-1.0f, 1.0f);
 		view->can.obj->cy[t].dir = norm_vec(view->can.obj->cy[t].dir);
-		view->can.obj->cy[t].type= CY;
+		view->can.obj->cy[t].type = CY;
 	}
 	if (view->can.obj->cy[t].type == CY)
 		copy_normal_cylinder(view, t, keycode);
@@ -778,132 +835,111 @@ void	copy_normal_plane(t_view *view, size_t t, int keycode)
 	}
 }
 
-
-
 void	copy_plane(t_view *view, int keycode)
 {
 	t_plane			pl;
 	const size_t	t = view->can.obj->pl_cnt;
+
 	pl = *(t_plane *)view->grep.obj;
-	view->can.obj->pl = (t_plane *)realloc(view->can.obj->pl, sizeof(t_plane) * (t + 1));
+	view->can.obj->pl = \
+	(t_plane *)realloc(view->can.obj->pl, sizeof(t_plane) * (t + 1));
 	memcpy(&view->can.obj->pl[t], &pl, sizeof(pl));
 	copy_normal_plane(view, t, keycode);
 	view->can.obj->pl_cnt++;
 }
 
+void	push_obj(t_sphere *sp, t_cylinder *cy, t_plane *pl, t_view *view)
+{
+	if (sp)
+	{
+		push_front(&view->backup, view->grep.obj, sp->type);
+		sp->type = NONE;
+	}
+	else if (cy)
+	{
+		push_front(&view->backup, view->grep.obj, cy->type);
+		cy->type = NONE;
+	}
+	else if (pl)
+	{
+		push_front(&view->backup, view->grep.obj, pl->type);
+		pl->type = NONE;
+	}
+}
+
 void	obj_copy(t_view *view, int keycode)
 {
-	t_sphere	*sp;
-	t_cylinder	*cy;
-	t_plane		*pl;
-
 	if (view->grep.type == SP)
 	{
 		if (keycode == F)
-		{
-			sp = (t_sphere *)view->grep.obj;
-			push_front(&view->backup, view->grep.obj, sp->type);
-			sp->type = NONE;
-		}
+			push_obj((t_sphere *)view->grep.obj, NULL, NULL, view);
 		else
 			copy_sphere(view, keycode);
 	}
 	else if (view->grep.type == CY)
 	{
 		if (keycode == F)
-		{
-			cy = (t_cylinder *)view->grep.obj;
-			push_front(&view->backup, view->grep.obj, cy->type);
-			cy->type = NONE;
-		}
+			push_obj(NULL, (t_cylinder *)view->grep.obj, NULL, view);
 		else
 			copy_cylinder(view, keycode);
 	}
 	else if (view->grep.type == PL)
 	{
 		if (keycode == F)
-		{
-			pl = (t_plane *)view->grep.obj;
-			push_front(&view->backup, view->grep.obj, pl->type);
-			pl->type = NONE;
-		}
+			push_obj(NULL, NULL, (t_plane *)view->grep.obj, view);
 		else
 			copy_plane(view, keycode);
-			
 	}
 	view->grep.grep = OFF;
 	newwin(view);
 }
 
-int	clear_backup(t_backup **backup)
+void	type_def(void *obj, int type)
 {
-	t_backup	*tmp;
 	t_sphere	*sp;
 	t_plane		*pl;
 	t_cylinder	*cy;
 
+	if (type == SP || type == TSP || type == CSP)
+	{
+		sp = (t_sphere *)obj;
+		sp->type = type;
+	}
+	else if (type == CY || type == TCY || type == CCY)
+	{
+		cy = (t_cylinder *)obj;
+		cy->type = type;
+	}
+	else if (type == PL || type == TPL || type == CPL)
+	{
+		pl = (t_plane *)obj;
+		pl->type = type;
+	}
+}
+
+int	clear_backup(t_backup **backup)
+{
+	t_backup	*tmp;
+
 	if (*backup == NULL)
 		return (0);
-	if ((*backup)->type == SP || (*backup)->type == TSP || (*backup)->type == CSP)
-	{
-		sp = (t_sphere *)(*backup)->obj;
-		sp->type = (*backup)->type;
-	}
-	else if ((*backup)->type == CY || (*backup)->type == CCY || (*backup)->type == TCY)
-	{
-		cy = (t_cylinder *)(*backup)->obj;
-		cy->type = (*backup)->type;
-	}
-	else if ((*backup)->type == PL || (*backup)->type == CPL || (*backup)->type == TPL)
-	{
-		pl = (t_plane *)(*backup)->obj;
-		pl->type = (*backup)->type;
-	}
+	if ((*backup)->type == SP || (*backup)->type == TSP \
+	|| (*backup)->type == CSP)
+		type_def((*backup)->obj, (*backup)->type);
+	else if ((*backup)->type == CY || (*backup)->type == CCY \
+	|| (*backup)->type == TCY)
+		type_def((*backup)->obj, (*backup)->type);
+	else if ((*backup)->type == PL || (*backup)->type == CPL \
+	|| (*backup)->type == TPL)
+		type_def((*backup)->obj, (*backup)->type);
 	tmp = (*backup)->next;
 	free((*backup));
 	(*backup) = tmp;
 	return (1);
 }
 
-int	key_hook(int keycode, t_view *view)
+void	key_hook3(int keycode, t_view *view, int lidx)
 {
-	static int	lidx;
-
-	if (keycode == 125 || keycode == 126 || keycode == 124 || keycode == 123)
-		rotate_hook(keycode, view);
-	else if (keycode == A || keycode == S || keycode == D || keycode == W)
-		move_hook(keycode, view);
-	else if (keycode == 24 || keycode == 27)
-		up_down(keycode, view);
-	else if (keycode == Q_UP || keycode == Q_DOWN || keycode == T || keycode == Q1 || \
-			keycode == Q2)
-		quality(keycode, view);
-	else if (keycode == H)
-		view->flag = !view->flag;
-	else if (keycode == 35)
-		pause_system(view);
-	else if (keycode == 53)
-		win_destroy(view);
-	if (view->stop && (keycode == W || keycode == S \
-		|| keycode == A || keycode == D))
-	{
-		view->focus = 1;
-		move_focus(0, view, 0.005);
-	}
-	else if (keycode == M && view->stop)
-	{
-		view->show_mouse = !view->show_mouse;
-		if (view->show_mouse)
-			mlx_mouse_hide();
-		else
-			mlx_mouse_show();
-		newwin(view);
-		mlx_mouse_move(view->win, view->can.width / 2, view->can.height / 2);
-	}
-	else if (keycode == PRINT)
-		save_image_to_ppm("outfile.ppm", view);
-	else if (keycode == MAKE)
-		save_image_to_rtfile("outfile.rt", view);
 	if (view->grep.grep == ON && view->clik_status)
 		if (keycode == C || keycode == Z || keycode == F)
 			obj_copy(view, keycode);
@@ -925,7 +961,35 @@ int	key_hook(int keycode, t_view *view)
 		view->can.obj->l[lidx].light_bright -= 0.1;
 		newwin(view);
 	}
-	else if (keycode == HOME)
+}
+
+void	key_hook2(int keycode, t_view *view)
+{
+	if (view->stop && (keycode == W || keycode == S \
+		|| keycode == A || keycode == D))
+	{
+		view->focus = 1;
+		move_focus(0, view, 0.005);
+	}
+	else if (keycode == M && view->stop)
+	{
+		view->show_mouse = !view->show_mouse;
+		if (view->show_mouse)
+			mlx_mouse_hide();
+		else
+			mlx_mouse_show();
+		newwin(view);
+		mlx_mouse_move(view->win, view->can.width / 2, view->can.height / 2);
+	}
+	else if (keycode == PRINT)
+		save_image_to_ppm("outfile.ppm", view);
+	else if (keycode == MAKE)
+		save_image_to_rtfile("outfile.rt", view);
+}
+
+void	key_hook5(int keycode, t_view *view, int lidx)
+{
+	if (keycode == HOME)
 	{
 		view->can.obj->l[lidx].light_col[BLUE] += 5;
 		if (view->can.obj->l[lidx].light_col[BLUE] >= 255)
@@ -944,37 +1008,54 @@ int	key_hook(int keycode, t_view *view)
 	}
 	else if (keycode == END)
 	{
-		// view->can.obj->l[0].light_col[BLUE] -= 5;
-		// if (view->can.obj->l[0].light_col[BLUE] <= 0)
-		// {
-		// 	view->can.obj->l[0].light_col[BLUE] = 0;
-		// 	view->can.obj->l[0].light_col[GREEN] -= 5;
-		// 	if (view->can.obj->l[0].light_col[GREEN] <= 0)
-		// 	{
-		// 		view->can.obj->l[0].light_col[GREEN] = 0;
-		// 		view->can.obj->l[0].light_col[RED] -= 5;
-		// 		if (view->can.obj->l[0].light_col[RED] <= 0)
-		// 			view->can.obj->l[0].light_col[RED] = 0;
-		// 	}
-		// }
 		view->can.obj->l[lidx].light_col[RED] = rand() % 255;
 		view->can.obj->l[lidx].light_col[GREEN] = rand() % 255;
 		view->can.obj->l[lidx].light_col[BLUE] = rand() % 255;
 		newwin(view);
 	}
-	if (keycode == NEXT && lidx < view->can.obj->l_cnt - 1)
+}
+
+void	key_hook4(int keycode, t_view *view, int *lidx)
+{
+	if (keycode == NEXT && *lidx < view->can.obj->l_cnt - 1)
 	{
-		lidx++;
-		view->lnum = lidx;
+		(*lidx)++;
+		view->lnum = *lidx;
 		newwin(view);
 	}
 	else if (keycode == PRIV && lidx > 0)
 	{
-		lidx--;
-		view->lnum = lidx;
+		(*lidx)--;
+		view->lnum = *lidx;
 		newwin(view);
 	}
-	// printf("%d\n", keycode);
+}
+
+int	key_hook(int keycode, t_view *view)
+{
+	static int	lidx;
+
+	if (!view->stop && keycode != 35)
+		return (0);
+	if (keycode == 125 || keycode == 126 || keycode == 124 || keycode == 123)
+		rotate_hook(keycode, view);
+	else if (keycode == A || keycode == S || keycode == D || keycode == W)
+		move_hook(keycode, view);
+	else if (keycode == 24 || keycode == 27)
+		up_down(keycode, view);
+	else if (keycode == Q_UP || keycode == Q_DOWN || keycode == T || \
+	keycode == Q1 || keycode == Q2)
+		quality(keycode, view);
+	else if (keycode == H)
+		view->flag = !view->flag;
+	else if (keycode == 35)
+		pause_system(view);
+	else if (keycode == 53)
+		win_destroy(view);
+	key_hook2(keycode, view);
+	key_hook3(keycode, view, lidx);
+	key_hook5(keycode, view, lidx);
+	key_hook4(keycode, view, &lidx);
 	return (0);
 }
 

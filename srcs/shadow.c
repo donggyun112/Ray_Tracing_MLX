@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   shadow.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 17:48:21 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/09 01:20:12 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/11 01:48:29 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,35 @@ void	shadow_sphere(t_ray3 *ray, t_sphere *sp)
 		ray->t = tmp;
 }
 
+void	shadow_triangle(t_ray3 *ray, t_plane *pl)
+{
+	float	tmp;
+	float	scalar[3];
+	t_vec3	hit;
+
+	scalar[0] = scalar_product(pl->on_plane, pl->norm);
+	scalar[1] = scalar_product(ray->origin, pl->norm);
+	scalar[2] = scalar_product(ray->dir, pl->norm);
+	tmp = (scalar[0] - scalar[1]) / scalar[2];
+	if ((ray->t < 0.0 && tmp > 0.0) || (tmp > 0.0 && ray->t > tmp))
+	{
+		hit = add_vector(ray->origin, multiple_vector(tmp, ray->dir));
+		if (in_triangle(hit, pl) == 0)
+			return ;
+		ray->t = tmp;
+	}
+}
+
 void	shadow_plane(t_ray3 *ray, t_plane *pl)
 {
 	float	tmp;
 	float	scalar[3];
 
+	if (pl->type == TRI)
+	{
+		shadow_triangle(ray, pl);
+		return ;
+	}
 	scalar[0] = scalar_product(pl->on_plane, pl->norm);
 	scalar[1] = scalar_product(ray->origin, pl->norm);
 	scalar[2] = scalar_product(ray->dir, pl->norm);

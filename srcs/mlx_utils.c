@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/10 21:47:55 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/10 21:59:18 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -860,12 +860,6 @@ int	key_hook(int keycode, t_view *view)
 {
 	static int	lidx;
 
-	if (view->stop && (keycode == W || keycode == S \
-		|| keycode == A || keycode == D))
-	{
-		view->focus = 1;
-		move_focus(0, view, 0.005);
-	}
 	if (keycode == 125 || keycode == 126 || keycode == 124 || keycode == 123)
 		rotate_hook(keycode, view);
 	else if (keycode == A || keycode == S || keycode == D || keycode == W)
@@ -881,6 +875,12 @@ int	key_hook(int keycode, t_view *view)
 		pause_system(view);
 	else if (keycode == 53)
 		win_destroy(view);
+	if (view->stop && (keycode == W || keycode == S \
+		|| keycode == A || keycode == D))
+	{
+		view->focus = 1;
+		move_focus(0, view, 0.005);
+	}
 	else if (keycode == M && view->stop)
 	{
 		view->show_mouse = !view->show_mouse;

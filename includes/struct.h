@@ -6,11 +6,9 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/07 01:23:19 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/11 01:10:44 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/11 04:29:11 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-
 
 #ifndef STRUCT_H
 # define STRUCT_H

@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 02:07:30 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/11 10:33:39 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/11 12:44:28 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ t_ray3	create_ray(t_camera cam, float u, float v)
 	on_vp = add_three_vector(cam.left_upper, multiple_vector(u, cam.r_norm), \
 	multiple_vector(v, cam.v_norm));
 	ray.dir = norm_vec(on_vp);
+	ray.type = NONE;
 	ray.t = -1.0;
 	ray.color[RED] = 0;
 	ray.color[GREEN] = 0;

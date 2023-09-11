@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 13:54:22 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/11 16:48:34 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -413,8 +413,8 @@ int	loop_hook(t_view *view)
 				rotate_rl(i, view);
 		}
 		view->focus = 1;
-		move_focus(0, view, 0.005);
 		newwin(view);
+		// move_focus(1, view, 0.005);
 	}
 	return (0);
 }
@@ -452,25 +452,16 @@ void	make_obj_cap(t_volume *obj)
 int	mouse_motion(int x, int y, t_view *view)
 {
 	static int	pos[2];
-	static int	c;
 
 	mlx_mouse_get_pos(view->win, &x, &y);
 	if ((pos[0] != x || pos[1] != y) && view->stop && !view->flag)
 	{
 		if (view->quality_scalar >= -4)
 			view->quality_scalar = -4;
-		if (view->focus == 0)
-		{
-			c = 0;
+		if (!view->focus)
 			move_focus(2, view, 0.005);
-		}
 		else
-		{
-			if (c < 15)
-				move_focus(0, view, 0.005);
-			move_focus(10, view, 0.005);
-			c++;
-		}
+			move_focus(5, view, 0.005);
 	}
 	pos[0] = x;
 	pos[1] = y;
@@ -583,6 +574,7 @@ int	mouse_release(int button, int x, int y, t_view *view)
 void	mlx_engine(t_view *view)
 {
 	mlx_hook(view->win, 2, 1L << 0, key_hook, view);
+	mlx_hook(view->win, 4, 1L << 2, mouse_press, view);
 	mlx_hook(view->win, 3, 1L << 1, key_release, view);
 	mlx_hook(view->win, 17, 1L << 5, win_destroy, view);
 	mlx_hook(view->win, 4, 1L << 2, mouse_press, view);

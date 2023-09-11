@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 09:01:20 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/11 11:18:40 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,7 @@ void		init_view_scale(t_view *view);
 void		set_texture(t_view *view, t_volume *obj);
 void		make_image2(void *m);
 void		set_thread_st_point(int *anti, int pix[2], t_thread *t);
-void		init_backgorund(t_view *view, int pix[2], t_ray3 *ray, int xy[2]);
+void		init_background(t_view *view, int pix[2], t_ray3 *ray, int xy[2]);
 t_thread	*init_thread(t_view *view);
 
 #endif

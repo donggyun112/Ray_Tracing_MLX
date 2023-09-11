@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 12:03:14 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/11 18:15:25 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ void		color_cal(t_view *view, t_ray3 *ray, t_color *color, int pix[2]);
 int			in_triangle(t_vec3 hit, t_plane *pl);
 
 //mapping
-t_color		checkertexture(t_vec3 point, float scale, t_plane *pl, int flag);
+t_color     checkertexture(t_vec3 point, float scale, t_plane *pl);
 t_color		get_checker_pattern(t_vec3 p, t_cylinder *cy);
 void		spherical_map(t_vec3 p, float *u, float *v, t_sphere *sp);
 t_color		uv_grid_pattern_at(t_checker pattern, float u, float v);
@@ -195,6 +195,7 @@ void		ray_color(t_canvas canvas, t_ray3 *ray, int light);
 void		init_texture(t_texture *texture, t_view *view, char *path);
 t_color		get_texture_color(t_texture texture, float u, float v);
 void		spherical_map(t_vec3 p, float *u, float *v, t_sphere *sp);
+t_vec3      main_axis(t_vec3 dir);
 
 //shadow
 int			hit_shadow(t_ray3 *ray, t_canvas canvas, int light);

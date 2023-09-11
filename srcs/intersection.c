@@ -6,40 +6,77 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:29:45 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 14:26:37 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/11 18:50:40 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-t_color	checkertexture(t_vec3 point, float scale, t_plane *pl, int flag)
+/* t_color	checkertexture(t_vec3 point, float scale, t_plane *pl)
 {
-	int		checkerx;
-	int		checkery;
-	int		checkerz;
+	int				checker[3];
+	const t_vec3	axis = main_axis(pl->norm);
+	int				sum;
 
-	if (point.z < 0)
-		point.z -= 1;
 	if (point.x < 0)
 		point.x -= 1;
 	if (point.y < 0)
 		point.y -= 1;
-	checkerx = (int)(point.x * scale) % 2;
-	checkery = (int)(point.y * scale) % 2;
-	checkerz = (int)(point.z * scale) % 2;
-	if (flag == 1 && (checkerx + checkerz) % 2 == 0)
-		return ((t_color){0, 0, 0});
-	else if (flag == 1)
-		return ((t_color){255, 255, 255});
-	else if ((pl->norm.z == 1.0 && ((checkerx + checkery) % 2 == 0)) || \
-	(pl->norm.z == -1.0 && ((checkerx + checkery) % 2 == 0)))
-		return ((t_color){0, 0, 0});
-	else if (pl->norm.z != 1.0 && (checkerx + checkery + checkerz) % 2 == 0 \
-	&& pl->norm.z != -1.0)
+	if (point.z < 0)
+		point.z -= 1;
+	checker[0] = (int)(point.x * scale) % 2;
+	checker[1] = (int)(point.y * scale) % 2;
+	checker[2] = (int)(point.z * scale) % 2;
+	if (axis.z == 1)
+		sum = checker[0] + checker[1];
+	else if (axis.x == 1)
+		sum = checker[1] + checker[2];
+	else
+		sum = checker[0] + checker[2];
+	if (sum % 2 == 0)
 		return ((t_color){0, 0, 0});
 	else
 		return ((t_color){255, 255, 255});
 }
+ */
+
+t_vec3 get_u_v_axes(t_vec3 norm) {
+    if (fabs(norm.x) > fabs(norm.y) && fabs(norm.x) > fabs(norm.z)) {
+        return (t_vec3){0, 1, 0};
+    } else if (fabs(norm.y) > fabs(norm.x) && fabs(norm.y) > fabs(norm.z)) {
+        return (t_vec3){1, 0, 0};
+    } else {
+        return (t_vec3){1, 0, 0};
+    }
+}
+
+int checker_value(float coordinate) {
+    if(coordinate < 0) {
+        coordinate -= 1;
+    }
+    return (int)coordinate % 2;
+}
+
+t_color checkertexture(t_vec3 point, float scale, t_plane *pl) {
+    t_vec3 u_axis, v_axis;
+    t_vec3 relative_pos = sub_vector(point, pl->on_plane);
+
+    u_axis = get_u_v_axes(pl->norm);
+    v_axis = vector_product(pl->norm, u_axis);
+
+    float u = scalar_product(relative_pos, u_axis) * scale;
+    float v = scalar_product(relative_pos, v_axis) * scale;
+
+    int u_checker = checker_value(u);
+    int v_checker = checker_value(v);
+
+    if ((u_checker + v_checker) % 2 == 0) {
+        return ((t_color){0, 0, 0});
+    } else {
+        return ((t_color){255, 255, 255});
+    }
+}
+
 
 void	spherical_map(t_vec3 p, float *u, float *v, t_sphere *sp)
 {
@@ -198,7 +235,7 @@ void	init_pltexture(t_ray3 *ray, t_plane *pl)
 		((float)ray->pix[0] / pl->texture.width), \
 		((float)ray->pix[1] / pl->texture.height));
 	else
-		c = checkertexture(hit, 1, pl, 0);
+		c = checkertexture(hit, 1, pl);
 	ray->color[RED] = c.r;
 	ray->color[GREEN] = c.g;
 	ray->color[BLUE] = c.b;
@@ -316,7 +353,7 @@ void	cap_texture(t_vec3 point, t_cylinder *cy, t_plane *cap, t_ray3 *ray)
 	t_color	c;
 
 	if (cy->type == CCY)
-		c = checkertexture(point, 5.0, cap, 1);
+		c = checkertexture(point, 5.0, cap);
 	else
 		c = get_texture_color(cy->texture, fabs(point.x), fabs(point.z));
 	ray->color[RED] = c.r;

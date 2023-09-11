@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 09:01:15 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/11 10:48:05 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ t_color	anti_aliasing(int pix[2], float vp_idx[2], t_view *view, t_ray3 *ray)
 	return (color);
 }
 
-void	init_backgorund(t_view *view, int pix[2], t_ray3 *ray, int xy[2])
+void	init_background(t_view *view, int pix[2], t_ray3 *ray, int xy[2])
 {
 	float		po[2];
 	t_color		c;
@@ -127,7 +127,7 @@ void	low_quality(int scalar, int pix[2], t_ray3 ray, t_view *view)
 				if (ray.t > 0.0)
 					my_mlx_pixel_put(view, xy[0], xy[1], rgb_to_int(ray.real));
 				else if (view->can.bgt_filepath)
-					init_backgorund(view, pix, &ray, xy);
+					init_background(view, pix, &ray, xy);
 				else
 					my_mlx_pixel_put(view, xy[0], xy[1], 0xFFFFFF);
 			}

@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 12:05:31 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/11 12:25:57 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -412,8 +412,8 @@ int	loop_hook(t_view *view)
 			while (++i < view->can.obj->rl_cnt)
 				rotate_rl(i, view);
 		}
-		move_focus(0, view, 0.005);
-		view->focus = 1;
+		move_focus(50, view, 0.005);
+		newwin(view);
 	}
 	return (0);
 }

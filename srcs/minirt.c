@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 10:48:05 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/11 12:05:31 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,20 @@ void	intersection(t_ray3 *ray, t_volume *obj)
 	}
 }
 
-void	color_cal(t_canvas canvas, t_ray3 *ray, t_color *color)
+void	init_background(t_view *view, int pix[2], t_ray3 *ray)
+{
+	float		po[2];
+	t_color		c;
+
+	po[0] = ((float)pix[0] / view->can.width);
+	po[1] = ((float)pix[1] / view->can.height);
+	c = get_texture_color(view->back, po[0], po[1]);
+	ray->real[RED] = c.r;
+	ray->real[GREEN] = c.g;
+	ray->real[BLUE] = c.b;
+}
+
+void	hit_color(t_canvas canvas, t_ray3 *ray)
 {
 	int	light;
 	int	idx;
@@ -61,6 +74,26 @@ void	color_cal(t_canvas canvas, t_ray3 *ray, t_color *color)
 			idx++;
 		}
 	}
+}
+
+void	no_hit(t_view *view, t_ray3 *ray, int pix[2])
+{
+	if (view->can.bgt_filepath)
+		init_background(view, pix, ray);
+	else
+	{
+	ray->real[RED] = 255;
+	ray->real[GREEN] = 255;
+	ray->real[BLUE] = 255;
+	}
+}
+
+void	color_cal(t_view *view, t_ray3 *ray, t_color *color, int pix[2])
+{
+	if (ray->t > 0.0)
+		hit_color(view->can, ray);
+	else
+		no_hit(view, ray, pix);
 	color->r += ray->real[RED];
 	color->g += ray->real[GREEN];
 	color->b += ray->real[BLUE];
@@ -89,24 +122,10 @@ t_color	anti_aliasing(int pix[2], float vp_idx[2], t_view *view, t_ray3 *ray)
 			ray->pix[0] = pix[0];
 			ray->pix[1] = pix[1];
 			intersection(ray, view->can.obj);
-			color_cal(view->can, ray, &color);
+			color_cal(view, ray, &color, pix);
 		}
 	}
 	return (color);
-}
-
-void	init_background(t_view *view, int pix[2], t_ray3 *ray, int xy[2])
-{
-	float		po[2];
-	t_color		c;
-
-	po[0] = ((float)pix[0] / view->can.width);
-	po[1] = ((float)pix[1] / view->can.height);
-	c = get_texture_color(view->back, po[0], po[1]);
-	ray->real[RED] = c.r;
-	ray->real[GREEN] = c.g;
-	ray->real[BLUE] = c.b;
-	my_mlx_pixel_put(view, xy[0], xy[1], rgb_to_int(ray->real));
 }
 
 void	low_quality(int scalar, int pix[2], t_ray3 ray, t_view *view)
@@ -123,14 +142,7 @@ void	low_quality(int scalar, int pix[2], t_ray3 ray, t_view *view)
 			xy[0] = pix[0] + offset[0];
 			xy[1] = pix[1] + offset[1];
 			if (xy[0] < view->can.width && xy[1] < view->can.height)
-			{
-				if (ray.t > 0.0)
-					my_mlx_pixel_put(view, xy[0], xy[1], rgb_to_int(ray.real));
-				else if (view->can.bgt_filepath)
-					init_background(view, pix, &ray, xy);
-				else
-					my_mlx_pixel_put(view, xy[0], xy[1], 0xFFFFFF);
-			}
+				my_mlx_pixel_put(view, xy[0], xy[1], rgb_to_int(ray.real));
 			offset[1]++;
 		}
 		offset[0]++;
@@ -400,9 +412,8 @@ int	loop_hook(t_view *view)
 			while (++i < view->can.obj->rl_cnt)
 				rotate_rl(i, view);
 		}
-		move_focus(1, view, 0.005);
+		move_focus(0, view, 0.005);
 		view->focus = 1;
-		newwin(view);
 	}
 	return (0);
 }

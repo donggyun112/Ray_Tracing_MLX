@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 11:18:40 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/11 12:03:14 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ void		make_cylinder_cap2(t_cylinder *cy);
 t_vec3		check_plane_direction(t_plane *pl, t_ray3 *ray);
 int			cy_in_range(t_ray3 *ray, float t, t_cylinder *cy);
 void		cylindrical_map(t_vec3 p, float *u, float *v, t_cylinder *cy);
-void		color_cal(t_canvas canvas, t_ray3 *ray, t_color *color);
+void		color_cal(t_view *view, t_ray3 *ray, t_color *color, int pix[2]);
 int			in_triangle(t_vec3 hit, t_plane *pl);
 
 //mapping
@@ -209,7 +209,7 @@ void		init_view_scale(t_view *view);
 void		set_texture(t_view *view, t_volume *obj);
 void		make_image2(void *m);
 void		set_thread_st_point(int *anti, int pix[2], t_thread *t);
-void		init_background(t_view *view, int pix[2], t_ray3 *ray, int xy[2]);
+void		init_background(t_view *view, int pix[2], t_ray3 *ray);
 t_thread	*init_thread(t_view *view);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 05:01:05 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/11 09:01:15 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,12 +139,19 @@ void	low_quality(int scalar, int pix[2], t_ray3 ray, t_view *view)
 
 void	set_thread_st_point(int *anti, int pix[2], t_thread *t)
 {
+	const int	gap = t->canvas.height / NUM_OF_THREAD;
+	int			step;
+	int			remain;
+
+	step = gap / t->view->low_scalar;
+	remain = gap % step;
+	step += !!remain;
 	*anti = t->view->anti_scalar * t->view->anti_scalar;
-	pix[1] = t->id * (t->canvas.height / NUM_OF_THREAD);
+	pix[1] = t->id * (step * t->view->low_scalar);
 	if (t->id == NUM_OF_THREAD - 1)
 		pix[2] = t->canvas.height;
 	else
-		pix[2] = (t->id + 1) * (t->canvas.height / NUM_OF_THREAD);
+		pix[2] = (t->id + 1) * (step * t->view->low_scalar);
 }
 
 void	make_image2(void *m)

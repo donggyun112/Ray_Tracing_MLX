@@ -6,7 +6,7 @@
 /*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 16:48:38 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/11 17:15:52 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -472,7 +472,6 @@ void	move_hook(int keycode, t_view *view)
 		left_right(keycode, view);
 	else if (keycode == W || keycode == S)
 		foward_back(keycode, view);
-	move_focus(0, view, 0.005);
 }
 
 void	rotate_hook(int keycode, t_view *view)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 12:39:42 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/11 13:54:22 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -412,7 +412,8 @@ int	loop_hook(t_view *view)
 			while (++i < view->can.obj->rl_cnt)
 				rotate_rl(i, view);
 		}
-		move_focus(50, view, 0.005);
+		view->focus = 1;
+		move_focus(0, view, 0.005);
 		newwin(view);
 	}
 	return (0);
@@ -454,7 +455,7 @@ int	mouse_motion(int x, int y, t_view *view)
 	static int	c;
 
 	mlx_mouse_get_pos(view->win, &x, &y);
-	if ((pos[0] != x || pos[1] != y) && view->stop)
+	if ((pos[0] != x || pos[1] != y) && view->stop && !view->flag)
 	{
 		if (view->quality_scalar >= -4)
 			view->quality_scalar = -4;

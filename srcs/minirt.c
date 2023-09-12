@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 18:02:49 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/12 03:51:59 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -458,9 +458,9 @@ int	mouse_motion(int x, int y, t_view *view)
 		if (view->quality_scalar >= -4)
 			view->quality_scalar = -4;
 		if (!view->focus)
-			move_focus(2, view, 0.005);
+			move_focus(10, view, 0.005);
 		else
-			move_focus(5, view, 0.005);
+			move_focus(30, view, 0.005);
 	}
 	pos[0] = x;
 	pos[1] = y;

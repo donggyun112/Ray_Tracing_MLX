@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+         #
+#    By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/02 15:17:44 by jinhyeop          #+#    #+#              #
-#    Updated: 2023/09/11 09:01:17 by jinhyeop         ###   ########.fr        #
+#    Updated: 2023/09/12 03:53:03 by seodong-gyu      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 

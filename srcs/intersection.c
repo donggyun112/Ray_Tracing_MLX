@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   intersection.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:29:45 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 18:50:40 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/12 04:04:35 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,16 +224,36 @@ void	init_pl_color(t_ray3 *ray, t_plane *pl)
 	ray->color[BLUE] = pl->color[BLUE];
 }
 
+void	get_plane_uv(t_vec3 point, t_plane *pl, float scale, float *u, float *v)
+{
+	t_vec3 u_axis, v_axis;
+    t_vec3 relative_pos = sub_vector(point, pl->on_plane);
+
+    u_axis = get_u_v_axes(pl->norm);
+    v_axis = vector_product(pl->norm, u_axis);
+
+    *u = scalar_product(relative_pos, u_axis) * scale;
+    *v = scalar_product(relative_pos, v_axis) * scale;
+}
+
 void	init_pltexture(t_ray3 *ray, t_plane *pl)
 {
 	t_color	c;
 	t_vec3	hit;
+	// float	u;
+	// float	v;
 
 	hit = add_vector(ray->origin, multiple_vector(ray->t, ray->dir));
 	if (pl->type == TPL)
+	{
+		// get_plane_uv(hit, pl, 0.02, &u, &v);
+		// u = u - floorf(u);
+		// v = v - floorf(v);
+		// c = get_texture_color(pl->texture, u, v);
 		c = get_texture_color(pl->texture, \
 		((float)ray->pix[0] / pl->texture.width), \
 		((float)ray->pix[1] / pl->texture.height));
+	}
 	else
 		c = checkertexture(hit, 1, pl);
 	ray->color[RED] = c.r;

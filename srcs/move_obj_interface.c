@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 01:29:38 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/14 01:29:54 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/14 01:50:59 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,11 @@ void	rotate_hook(int keycode, t_view *view)
 		rotate_vertical(keycode, view);
 	else if (keycode == 124 || keycode == 123)
 		rotate_horizontal(keycode, view);
+}
+
+int	key_release(int keycode, t_view *view)
+{
+	if (keycode == 13 || keycode == 1 || keycode == 0 || keycode == 2)
+		view->focus = 0;
+	return (0);
 }

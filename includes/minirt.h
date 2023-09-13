@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/14 01:36:39 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/14 01:53:31 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,7 @@ void	move_focus(int scalar, t_view *view, float sensitivity);
 void	grep_obj(int x, int y, t_view *view);
 
 // move_grep_obj
+void	move_grep_obj(t_view *view, t_vec3 right, float pitch, float yaw);
 void	make_cylinder_cap2(t_cylinder *cy);
 t_vec3	rotate_around_axis(t_vec3 vec, t_vec3 axis, float angle);
 
@@ -196,6 +197,11 @@ void	string_put(t_view *view);
 // obj control
 void	zoom_inout(int button, t_view *view);
 
+// mlx hook
+int		loop_hook(t_view *view);
+int		mouse_motion(int x, int y, t_view *view);
+int		key_release(int keycode, t_view *view);
+
 //RENDERING
 t_color		anti_aliasing(int pix[2], \
 float vp_idx[2], t_view *view, t_ray3 *ray);
@@ -207,7 +213,7 @@ void		make_image2(void *m);
 void		set_thread_st_point(int *anti, int pix[2], t_thread *t);
 void		init_background(t_view *view, int pix[2], t_ray3 *ray);
 t_thread	*init_thread(t_view *view);
-
+void		color_cal(t_view *view, t_ray3 *ray, t_color *color, int pix[2]);
 //minirt
 void		intersection(t_ray3 *ray, t_volume *obj);
 

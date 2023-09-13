@@ -6,7 +6,7 @@
 #    By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/02 15:17:44 by jinhyeop          #+#    #+#              #
-#    Updated: 2023/09/14 01:40:38 by seodong-gyu      ###   ########.fr        #
+#    Updated: 2023/09/14 01:55:16 by seodong-gyu      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,8 @@ MAN_FILE = minirt.c mlx_utils.c parse.c \
 		write_rtfile.c write_rtfile_pl.c write_rtfile_view.c write_rtfile_obj.c \
 		move_obj.c move_grep_obj.c move_cam.c mlx_string.c backup_obj.c \
 		copy_cylinder_plane.c copy_obj_interface.c copy_sphere.c save_ppmfile.c \
-		quality.c backup_obj.c init_data.c move_obj_interface.c
+		quality.c backup_obj.c init_data.c move_obj_interface.c render.c \
+		multi_thread.c mlx_mouse.c mlx_loop_hook.c define_color.c
 BONUS_DIR = ./bonus
 BONUS_FILE = 
 MAN_SRCS = $(addprefix $(MAN_DIR)/, $(MAN_FILE))
@@ -51,7 +52,7 @@ LIBFT = $(addprefix $(LIBFT_DIR)/, libft.a)
 all: $(NAME)
 
 %.o:%.c
-	@$(CC) $(CFLAGS) -c $< -o $@ -I includes/
+	$(CC) $(CFLAGS) -c $< -o $@ -I includes/
 
 $(NAME): $(OBJS)
 	$(MAKE) -C $(LIBFT_DIR) all

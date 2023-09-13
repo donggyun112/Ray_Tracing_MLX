@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/13 22:18:57 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/14 01:16:05 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,6 @@ int			win_destroy(t_view *view);
 int			key_hook(int keycode, t_view *view);
 void		my_mlx_pixel_put(t_view *mlx, int x, int y, unsigned int color);
 int			rgb_to_int(int color[]);
-t_vec3		rotate_around_axis(t_vec3 vec, t_vec3 axis, float angle);
 void		rotate_vertical(int keycode, t_view *view);
 void		rotate_horizontal(int keycode, t_view *view);
 void		up_down(int keycode, t_view *view);
@@ -151,8 +150,34 @@ int			clear_backup(t_backup **backup);
 
 
 
+// grep_obj
+int		mouse_press(int button, int x, int y, t_view *view);
+int		mouse_release(int button, int x, int y, t_view *view);
+void	move_focus(int scalar, t_view *view, float sensitivity);
+void	grep_obj(int x, int y, t_view *view);
+
+// move_grep_obj
+void	make_cylinder_cap2(t_cylinder *cy);
+t_vec3	rotate_around_axis(t_vec3 vec, t_vec3 axis, float angle);
+
+// make rtfile
+void	write_rt_color(int color[3], FILE *f);
+void	write_rt_vec(t_vec3 vec, FILE *f);
+
+// write obj
+void	write_rt_plane(t_view *view, FILE *f);
+void	write_rt_light(t_view *view, FILE *f);
+void	write_rt_cylinder(t_view *view, FILE *f);
+void	write_rt_sphere(t_view *view, FILE *f);
+void	write_rt_camera(t_view *view, FILE *f);
+void	write_rt_tr(t_plane pl, FILE *f);
 
 
+// status
+void	string_put(t_view *view);
+
+// obj control
+void	zoom_inout(int button, t_view *view);
 
 //RENDERING
 t_color		anti_aliasing(int pix[2], \

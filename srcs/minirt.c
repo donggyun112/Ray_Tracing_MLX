@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/13 09:27:00 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/13 22:30:02 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -519,30 +519,6 @@ void	zoom_inout(int button, t_view *view)
 	else
 		zoom_out(view);
 	newwin(view);
-}
-
-int	mouse_press(int button, int x, int y, t_view *view)
-{
-	(void)x;
-	(void)y;
-	if (button == 2 || button == 1)
-	{
-		mlx_mouse_get_pos(view->win, &x, &y);
-		grep_obj(x, y, view);
-		view->click_status = 1;
-	}
-	if ((button == 4 || button == 5) && view->click_status)
-		zoom_inout(button, view);
-	return (0);
-}
-
-int	mouse_release(int button, int x, int y, t_view *view)
-{
-	(void)x;
-	(void)y;
-	if (button == 2 || button == 1)
-		view->click_status = 0;
-	return (0);
 }
 
 void	mlx_engine(t_view *view)

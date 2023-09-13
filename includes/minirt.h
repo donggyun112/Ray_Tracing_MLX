@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/14 01:16:05 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/14 01:36:39 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,23 @@ void	write_rt_sphere(t_view *view, FILE *f);
 void	write_rt_camera(t_view *view, FILE *f);
 void	write_rt_tr(t_plane pl, FILE *f);
 
+// copy_obj
+void	obj_copy(t_view *view, int keycode);
+void	rand_vec(t_vec3 *vec, float max);
+float	get_rand(float a, float b);
+t_vec3	init_copy_vec(t_vec3 *vec, t_vec3 tar);
+void	copy_plane(t_view *view, int keycode);
+void	copy_cylinder(t_view *view, int keycode);
+void	copy_sphere(t_view *view, int keycode);
+
+// backup obj
+int		clear_backup(t_backup **backup);
+void	push_obj(t_sphere *sp, t_cylinder *cy, t_plane *pl, t_view *view);
+
+void	zoom_out(t_view *view);
+
+// init data
+void	init_view_scale(t_view *view);
 
 // status
 void	string_put(t_view *view);

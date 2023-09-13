@@ -6,7 +6,7 @@
 #    By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/02 15:17:44 by jinhyeop          #+#    #+#              #
-#    Updated: 2023/09/14 01:13:01 by seodong-gyu      ###   ########.fr        #
+#    Updated: 2023/09/14 01:40:38 by seodong-gyu      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,7 +24,9 @@ MAN_FILE = minirt.c mlx_utils.c parse.c \
 		texture.c utils.c error_handling.c init_cylinder.c init_plane.c \
 		init_sphere.c init_view.c parse_utils.c mlx_key_hook.c grep_obj.c \
 		write_rtfile.c write_rtfile_pl.c write_rtfile_view.c write_rtfile_obj.c \
-		move_obj.c move_grep_obj.c move_cam.c mlx_string.c
+		move_obj.c move_grep_obj.c move_cam.c mlx_string.c backup_obj.c \
+		copy_cylinder_plane.c copy_obj_interface.c copy_sphere.c save_ppmfile.c \
+		quality.c backup_obj.c init_data.c move_obj_interface.c
 BONUS_DIR = ./bonus
 BONUS_FILE = 
 MAN_SRCS = $(addprefix $(MAN_DIR)/, $(MAN_FILE))

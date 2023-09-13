@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   write_ftfile_view.c                                :+:      :+:    :+:   */
+/*   write_rtfile_view.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 22:41:06 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/13 22:41:49 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/14 01:59:01 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	write_rt_camera(t_view *view, FILE *f)
 {
-	fprintf(f, "c	");
+	fprintf(f, "C	");
 	write_rt_vec(view->cam.origin, f);
 	write_rt_vec(view->cam.dir, f);
 	fprintf(f, " %d \n", view->can.fov);
@@ -27,7 +27,7 @@ void	write_rt_rlight(t_view *view, FILE *f)
 	i = -1;
 	while (++i < view->can.obj->rl_cnt)
 	{
-		fprintf(f, "rl	");
+		fprintf(f, "RL	");
 		write_rt_vec(view->can.obj->rl[i].light->light_orig, f);
 		fprintf(f, "%f	", view->can.obj->rl[i].light->light_bright);
 		write_rt_vec(view->can.obj->rl[i].r_center, f);
@@ -52,7 +52,7 @@ void	write_rt_light(t_view *view, FILE *f)
 			continue ;
 		}
 		tmp = view->can.obj->l[i];
-		fprintf(f, "l	");
+		fprintf(f, "L	");
 		write_rt_vec(tmp.light_orig, f);
 		fprintf(f, " %f	", tmp.light_bright);
 		write_rt_color(tmp.light_col, f);

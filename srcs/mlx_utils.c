@@ -3,28 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/13 09:27:34 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/13 22:19:27 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
-
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-void	leaks(void) //remove
-{
-	system("leaks --list minirt");
-}
-
 int	win_destroy(t_view *view)
 {
 	mlx_destroy_window(view->mlx, view->win);
-	// atexit(leaks); //remove
 	exit(0);
 	return (0);
+}
+
+void	string_put_status(t_view *view)
+{
+	char	*tmp;
+	char	*tmp2;
+
+	if (view->change_dir)
+		tmp = ft_strjoin("Editing Mode : ", "TRUE");
+	else
+		tmp = ft_strjoin("Editing Mode : ", "FALSE");
+	mlx_string_put(view->mlx, view->win, view->mini_size + 30, 100, 0XFFFFF, tmp);
+	free(tmp);
+	mlx_string_put(view->mlx, view->win, view->mini_size + 30, 130, 0XFFFFF, "remove = F  back = G");
+	mlx_string_put(view->mlx, view->win, view->mini_size + 30, 160, 0XFFFFF, "random create : Z");
+	mlx_string_put(view->mlx, view->win, view->mini_size + 30, 190, 0XFFFFF, "copy : C");
+	mlx_string_put(view->mlx, view->win, view->mini_size + 30, 220, 0XFFFFF, "defult rander : T");
+	tmp2 = ft_itoa(view->quality_scalar);
+	tmp = ft_strjoin("Current Qulity : ", tmp2);
+	free(tmp2);
+	mlx_string_put(view->mlx, view->win, view->mini_size + 30, 250, 0XFFFFF, tmp);
+	free(tmp);
+}
+
+void	string_put_grep_status(t_view *view)
+{
+	if (view->grep.type == SP && view->click_status)
+		mlx_string_put(view->mlx, view->win, view->mini_size + 30, 280, 0XFFFFF, "Grep Obj Type: SP");
+	else if (view->grep.type == CY && view->click_status)
+		mlx_string_put(view->mlx, view->win, view->mini_size + 30, 280, 0XFFFFF, "Grep Obj Type: CY");
+	else if (view->click_status)
+		mlx_string_put(view->mlx, view->win, view->mini_size + 30, 280, 0XFFFFF, "Grep Obj Type: PL");
+	else
+		mlx_string_put(view->mlx, view->win, view->mini_size + 30, 280, 0XFFFFF, "Grep Obj Type:   ");
 }
 
 void	string_put(t_view *view)
@@ -34,29 +60,8 @@ void	string_put(t_view *view)
 
 	if (!view->show_mouse)
 	{
-		if (view->change_dir)
-			tmp = ft_strjoin("Editing Mode : ", "TRUE");
-		else
-			tmp = ft_strjoin("Editing Mode : ", "FALSE");
-		mlx_string_put(view->mlx, view->win, view->mini_size + 30, 100, 0XFFFFF, tmp);
-		free(tmp);
-		mlx_string_put(view->mlx, view->win, view->mini_size + 30, 130, 0XFFFFF, "remove = F  back = G");
-		mlx_string_put(view->mlx, view->win, view->mini_size + 30, 160, 0XFFFFF, "random create : Z");
-		mlx_string_put(view->mlx, view->win, view->mini_size + 30, 190, 0XFFFFF, "copy : C");
-		mlx_string_put(view->mlx, view->win, view->mini_size + 30, 220, 0XFFFFF, "defult rander : T");
-		tmp2 = ft_itoa(view->quality_scalar);
-		tmp = ft_strjoin("Current Qulity : ", tmp2);
-		free(tmp2);
-		mlx_string_put(view->mlx, view->win, view->mini_size + 30, 250, 0XFFFFF, tmp);
-		free(tmp);
-		if (view->grep.type == SP && view->click_status)
-			mlx_string_put(view->mlx, view->win, view->mini_size + 30, 280, 0XFFFFF, "Grep Obj Type: SP");
-		else if (view->grep.type == CY && view->click_status)
-			mlx_string_put(view->mlx, view->win, view->mini_size + 30, 280, 0XFFFFF, "Grep Obj Type: CY");
-		else if (view->click_status)
-			mlx_string_put(view->mlx, view->win, view->mini_size + 30, 280, 0XFFFFF, "Grep Obj Type: PL");
-		else
-			mlx_string_put(view->mlx, view->win, view->mini_size + 30, 280, 0XFFFFF, "Grep Obj Type:   ");
+		string_put_status(view);
+		string_put_grep_status(view);
 		mlx_string_put(view->mlx, view->win, view->mini_size + 30, 310, 0XFFFFF, "qulity up : 1 | [ ");
 		mlx_string_put(view->mlx, view->win, view->mini_size + 30, 340, 0XFFFFF, "qulity down : 2 | ] ");
 		mlx_string_put(view->mlx, view->win, view->mini_size + 30, 370, 0XFFFFF, "Print ppm : 3");
@@ -991,127 +996,6 @@ int	clear_backup(t_backup **backup)
 	free((*backup));
 	(*backup) = tmp;
 	return (1);
-}
-
-void	key_hook3(int keycode, t_view *view, int lidx)
-{
-	if (view->grep.grep == ON && view->click_status)
-		if (keycode == C || keycode == Z || keycode == F)
-			obj_copy(view, keycode);
-	if (keycode == G)
-		if (clear_backup(&view->backup))
-			newwin(view);
-	if (keycode == Q)
-	{
-		view->change_dir = !view->change_dir;
-		newwin(view);
-	}
-	if (keycode == PGUP)
-	{
-		view->can.obj->l[lidx].light_bright += 0.1;
-		newwin(view);
-	}
-	else if (keycode == PGDN)
-	{
-		view->can.obj->l[lidx].light_bright -= 0.1;
-		newwin(view);
-	}
-}
-
-void	key_hook2(int keycode, t_view *view)
-{
-	if (view->stop && (keycode == W || keycode == S \
-		|| keycode == A || keycode == D))
-	{
-		view->focus = 1;
-		move_focus(0, view, 0.005);
-	}
-	else if (keycode == M && view->stop)
-	{
-		view->show_mouse = !view->show_mouse;
-		if (view->show_mouse)
-			mlx_mouse_hide();
-		else
-			mlx_mouse_show();
-		newwin(view);
-		mlx_mouse_move(view->win, view->can.width / 2, view->can.height / 2);
-	}
-	else if (keycode == PRINT)
-		save_image_to_ppm("outfile.ppm", view);
-	else if (keycode == MAKE)
-		save_image_to_rtfile("outfile.rt", view);
-}
-
-void	key_hook5(int keycode, t_view *view, int lidx)
-{
-	if (keycode == HOME)
-	{
-		view->can.obj->l[lidx].light_col[BLUE] += 5;
-		if (view->can.obj->l[lidx].light_col[BLUE] >= 255)
-		{
-			view->can.obj->l[lidx].light_col[BLUE] = 255;
-			view->can.obj->l[lidx].light_col[GREEN] += 5;
-			if (view->can.obj->l[lidx].light_col[GREEN] >= 255)
-			{
-				view->can.obj->l[lidx].light_col[GREEN] = 255;
-				view->can.obj->l[lidx].light_col[RED] += 5;
-				if (view->can.obj->l[lidx].light_col[RED] >= 255)
-					view->can.obj->l[lidx].light_col[RED] = 255;
-			}
-		}
-		newwin(view);
-	}
-	else if (keycode == END)
-	{
-		view->can.obj->l[lidx].light_col[RED] = rand() % 255;
-		view->can.obj->l[lidx].light_col[GREEN] = rand() % 255;
-		view->can.obj->l[lidx].light_col[BLUE] = rand() % 255;
-		newwin(view);
-	}
-}
-
-void	key_hook4(int keycode, t_view *view, int *lidx)
-{
-	if (keycode == NEXT && *lidx < view->can.obj->l_cnt - 1)
-	{
-		(*lidx)++;
-		view->lnum = *lidx;
-		newwin(view);
-	}
-	else if (keycode == PRIV && lidx > 0)
-	{
-		(*lidx)--;
-		view->lnum = *lidx;
-		newwin(view);
-	}
-}
-
-int	key_hook(int keycode, t_view *view)
-{
-	static int	lidx;
-
-	if (!view->stop && keycode != 35 && keycode != 53)
-		return (0);
-	if (keycode == 125 || keycode == 126 || keycode == 124 || keycode == 123)
-		rotate_hook(keycode, view);
-	else if (keycode == A || keycode == S || keycode == D || keycode == W)
-		move_hook(keycode, view);
-	else if (keycode == 24 || keycode == 27)
-		up_down(keycode, view);
-	else if (keycode == Q_UP || keycode == Q_DOWN || keycode == T || \
-	keycode == Q1 || keycode == Q2)
-		quality(keycode, view);
-	else if (keycode == H)
-		view->flag = !view->flag;
-	else if (keycode == 35)
-		pause_system(view);
-	else if (keycode == 53)
-		win_destroy(view);
-	key_hook2(keycode, view);
-	key_hook3(keycode, view, lidx);
-	key_hook5(keycode, view, lidx);
-	key_hook4(keycode, view, &lidx);
-	return (0);
 }
 
 void	my_mlx_pixel_put(t_view *mlx, int x, int y, unsigned int color)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/13 09:27:04 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/13 22:18:57 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,6 @@ void		ft_obj_count(char **av, t_volume *obj);
 void		init_count(t_volume *obj, char **tmp);
 void		make_obj_cap(t_volume *obj);
 void		make_cylinder_cap(t_cylinder *cy);
-void		free_split(char **tmp);
 int			init_data(char **tmp, t_canvas *canvas);
 void		find_problem(char **tmp, int count);
 void		find_problem2(char **tmp, int count);
@@ -105,14 +104,18 @@ int count);
 void		init_nomal_sphere(t_canvas *canvas, char **tmp, int idx);
 int			init_plane(char **tmp, t_canvas *canvas, int count);
 void		init_texture_plane(char **tmp, t_canvas *canvas, int idx);
-void		init_checker_palne(char **tmp, t_canvas *canvas, int idx);
 void		init_nomal_plane(char **tmp, t_canvas *canvas, int idx);
-int			argument_count(char **tmp);
 int			init_view(char **tmp, t_canvas *canvas, int count);
 void		init_view2(t_canvas *canvas, char **tmp);
 
-//utils
+//parse utils
 int			is_valid_file_type(char *file_path);
+int			ft_strcmp(char *s1, char *s2);
+void		free_split(char **tmp);
+int			argument_count(char **tmp);
+int			is_undefine_obj(char **tmp);
+
+
 
 //mlx_utils
 int			win_destroy(t_view *view);
@@ -136,10 +139,20 @@ int			mouse_motion(int x, int y, t_view *view);
 int			key_release(int keycode, t_view *view);
 void		pause_system(t_view *view);
 void		move_obj(int keycode, t_view *view);
-void		save_image_to_ppm(char *filename, t_view *img);
 int			ft_strcmp(char *s1, char *s2);
 void		grep_obj(int x, int y, t_view *view);
 void		make_cylinder_cap2(t_cylinder *cy);
+void		move_hook(int keycode, t_view *view);
+void		rotate_hook(int keycode, t_view *view);
+void		save_image_to_ppm(char *filename, t_view *view);
+void		save_image_to_rtfile(char *filename, t_view *view);
+void		obj_copy(t_view *view, int keycode);
+int			clear_backup(t_backup **backup);
+
+
+
+
+
 
 //RENDERING
 t_color		anti_aliasing(int pix[2], \

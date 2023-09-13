@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+         #
+#    By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/02 15:17:44 by jinhyeop          #+#    #+#              #
-#    Updated: 2023/09/13 08:38:44 by jinhyeop         ###   ########.fr        #
+#    Updated: 2023/09/13 22:15:32 by seodong-gyu      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,8 @@ MAN_FILE = minirt.c mlx_utils.c parse.c \
 		bumpmap.c color.c cylinder_texture1.c cylinder_texture2.c cylinder.c \
 		diffuse.c plane_texture.c plane.c raycasting.c reflection.c shadow.c \
 		shadow_obj.c simple_vec_cal.c vector.c sphere.c sphere_texture.c \
-		texture.c utils.c
+		texture.c utils.c error_handling.c init_cylinder.c init_plane.c \
+		init_sphere.c init_view.c parse_utils.c mlx_key_hook.c
 BONUS_DIR = ./bonus
 BONUS_FILE = 
 MAN_SRCS = $(addprefix $(MAN_DIR)/, $(MAN_FILE))

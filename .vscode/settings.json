@@ -8,6 +8,7 @@
 		"libft.h": "c",
 		"stdio.h": "c",
 		"fcntl.h": "c",
-		"pthread.h": "c"
+		"pthread.h": "c",
+		"struct.h": "c"
 	}
 }

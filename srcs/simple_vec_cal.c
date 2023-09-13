@@ -3,25 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   simple_vec_cal.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 13:07:58 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/01 23:00:19 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/13 08:26:52 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/vector.h"
 #include "../includes/struct.h"
 
-float	size_of_vec(float x, float y, float z)
-{
-	float	size;
-
-	size = sqrt(x * x + y * y + z * z);
-	return (size);
-}
-
-float	size_of_vec2(t_vec3 vec)
+float	size_of_vec(t_vec3 vec)
 {
 	float	size;
 

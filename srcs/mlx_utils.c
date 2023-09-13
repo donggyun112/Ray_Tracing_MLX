@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 12:17:38 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/11 17:15:52 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/13 09:27:34 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,7 @@ void	left_right(int keycode, t_view *view)
 		if (view->grep.grep == ON && view->click_status)
 			move_obj(keycode, view);
 		newwin(view);
-	}	
+	}
 }
 
 void	up_down(int keycode, t_view *view)

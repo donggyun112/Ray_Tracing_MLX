@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+         #
+#    By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/02 15:17:44 by jinhyeop          #+#    #+#              #
-#    Updated: 2023/09/12 03:53:03 by seodong-gyu      ###   ########.fr        #
+#    Updated: 2023/09/13 08:38:44 by jinhyeop         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,8 +17,11 @@ CLIB = -Llibft -lft -Lmlx -lmlx -framework OpenGL -framework Appkit -Imlx -lm
 NAME = minirt
 
 MAN_DIR = ./srcs
-MAN_FILE = minirt.c mlx_utils.c intersection.c raycasting.c parse.c \
-		vector.c simple_vec_cal.c color.c angle.c shadow.c
+MAN_FILE = minirt.c mlx_utils.c parse.c \
+		bumpmap.c color.c cylinder_texture1.c cylinder_texture2.c cylinder.c \
+		diffuse.c plane_texture.c plane.c raycasting.c reflection.c shadow.c \
+		shadow_obj.c simple_vec_cal.c vector.c sphere.c sphere_texture.c \
+		texture.c utils.c
 BONUS_DIR = ./bonus
 BONUS_FILE = 
 MAN_SRCS = $(addprefix $(MAN_DIR)/, $(MAN_FILE))

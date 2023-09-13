@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/12 15:26:24 by dongkseo         ###   ########.fr       */
+/*   Updated: 2023/09/13 09:27:00 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,9 @@ void	no_hit(t_view *view, t_ray3 *ray, int pix[2])
 		init_background(view, pix, ray);
 	else
 	{
-	ray->real[RED] = 255;
-	ray->real[GREEN] = 255;
-	ray->real[BLUE] = 255;
+		ray->real[RED] = 255;
+		ray->real[GREEN] = 255;
+		ray->real[BLUE] = 255;
 	}
 }
 
@@ -211,31 +211,6 @@ void	set_quality_scalar(t_view *view)
 	}
 }
 
-void	make_image(t_view *view, t_canvas canvas)
-{
-	int		pix[2];
-	float	vp_idx[2];
-	t_ray3	ray;
-	t_color	c;
-
-	set_quality_scalar(view);
-	pix[1] = 0;
-	while (pix[1] < canvas.height)
-	{
-		pix[0] = 0;
-		while (pix[0] < canvas.width)
-		{
-			c = anti_aliasing(pix, vp_idx, view, &ray);
-			ray.real[RED] = c.r / (view->anti_scalar * view->anti_scalar);
-			ray.real[GREEN] = c.g / (view->anti_scalar * view->anti_scalar);
-			ray.real[BLUE] = c.b / (view->anti_scalar * view->anti_scalar);
-			low_quality(view->low_scalar, pix, ray, view);
-			pix[0] += view->low_scalar;
-		}
-		pix[1] += view->low_scalar;
-	}
-}
-
 t_thread	*init_thread(t_view *view)
 {
 	t_thread	*m;
@@ -307,7 +282,7 @@ void	init_view_scale(t_view *view)
 {
 	view->anti_scalar = 1;
 	view->low_scalar = 1;
-	view->quality_scalar = -2;
+	view->quality_scalar = -4;
 	view->flag = 0;
 	view->focus = 0;
 	view->stop = 1;
@@ -357,8 +332,8 @@ void	change_angle(t_view *view)
 			else if (view->can.obj->sp[x].type == CSP)
 				view->can.obj->sp[x].angle += 0.2;
 			else
-			view->can.obj->sp[x].angle = \
-			fmod(view->can.obj->sp[x].angle, 2.0 * M_PI);
+				view->can.obj->sp[x].angle = \
+					fmod(view->can.obj->sp[x].angle, 2.0 * M_PI);
 		}
 		if (x < view->can.obj->cy_cnt)
 		{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:24:29 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/13 01:34:19 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/13 08:24:35 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -215,7 +215,7 @@ void	init_rotate_sphere(t_canvas *canvas, char **tmp, int idx)
 	canvas->obj->rsp[ridx].sp = &canvas->obj->sp[idx];
 	canvas->obj->rsp[ridx].r_axis = norm_vec(canvas->obj->rsp[ridx].r_axis);
 	canvas->obj->rsp[ridx].r_radius = \
-	size_of_vec2(sub_vector(canvas->obj->sp[idx].center, \
+	size_of_vec(sub_vector(canvas->obj->sp[idx].center, \
 	canvas->obj->rsp[ridx].r_center));
 	canvas->obj->sp[idx].angle = 0.000000;
 	canvas->obj->rsp[ridx].sp_idx = idx;

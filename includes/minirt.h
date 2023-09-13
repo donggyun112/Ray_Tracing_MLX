@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/12 03:52:52 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/13 09:27:04 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@
 # define END 119
 # define NEXT 47
 # define PRIV 43
+
 //parse
 t_canvas	parse(char *av[]);
 t_volume	*init_volume(char **av);
@@ -138,70 +139,9 @@ void		move_obj(int keycode, t_view *view);
 void		save_image_to_ppm(char *filename, t_view *img);
 int			ft_strcmp(char *s1, char *s2);
 void		grep_obj(int x, int y, t_view *view);
-
-//intersection
-void		intersection(t_ray3 *ray, t_volume *obj);
-int			discriminant(float a, float b, float c);
-float		quad_formula(float a, float b, float c);
-void		hit_sphere(t_ray3 *ray, t_sphere *sp);
-void		hit_plane(t_ray3 *ray, t_plane *pl);
-void		hit_cylinder(t_ray3 *ray, t_cylinder *cy);
-void		make_cylinder_cap(t_cylinder *cy);
 void		make_cylinder_cap2(t_cylinder *cy);
-t_vec3		check_plane_direction(t_plane *pl, t_ray3 *ray);
-int			cy_in_range(t_ray3 *ray, float t, t_cylinder *cy);
-void		cylindrical_map(t_vec3 p, float *u, float *v, t_cylinder *cy);
-void		color_cal(t_view *view, t_ray3 *ray, t_color *color, int pix[2]);
-int			in_triangle(t_vec3 hit, t_plane *pl);
-
-//mapping
-t_color     checkertexture(t_vec3 point, float scale, t_plane *pl);
-t_color		get_checker_pattern(t_vec3 p, t_cylinder *cy);
-void		spherical_map(t_vec3 p, float *u, float *v, t_sphere *sp);
-t_color		uv_grid_pattern_at(t_checker pattern, float u, float v);
-t_color		get_texture_color(t_texture texture, float u, float v);
-t_color		image_texture_on_sphere(t_vec3 point, \
-t_sphere *sp, t_texture *texture);
-t_color		image_textur_on_cylinder(t_vec3 point, \
-t_cylinder *cy, t_texture *tex);
-t_color		grid_texture_on_sphere(t_vec3 point, \
-t_checker pattern, t_sphere *sp);
-void		sphere_texture(t_ray3 *ray, t_sphere *sp);
-void		cylinder_texture(t_ray3 *ray, t_cylinder *cy, float tmp);
-void		cap_texture(t_vec3 point, \
-t_cylinder *cy, t_plane *cap, t_ray3 *ray);
-void		init_pltexture(t_ray3 *ray, t_plane *pl);
-void		init_texture(t_texture *texture, t_view *view, char *path);
-void		cylindrical_map(t_vec3 p, float *u, float *v, t_cylinder *cy);
-
-//raycasting
-t_ray3		create_ray(t_camera cam, float u, float v);
-t_camera	camera(t_canvas canvas);
-void		make_image(t_view *view, t_canvas canvas);
-
-//angle
-float		cos_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas, int light);
-float		cos_pl(t_plane *pl, t_ray3 *ray, t_canvas canvas, int light);
-float		cos_cy(t_cylinder *cy, t_ray3 *ray, t_canvas canvas, int light);
-float		ref_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas, int light);
-float		ref_pl(t_plane *pl, t_ray3 *ray, t_canvas canvas, int light);
-float		ref_cy(t_cylinder *cy, t_ray3 *ray, t_canvas canvas, int light);
-
-//color
-int			amb_light(t_canvas canvas, t_ray3 *ray, int idx);
-void		ray_color(t_canvas canvas, t_ray3 *ray, int light);
-
-//pattern
-void		init_texture(t_texture *texture, t_view *view, char *path);
-t_color		get_texture_color(t_texture texture, float u, float v);
-void		spherical_map(t_vec3 p, float *u, float *v, t_sphere *sp);
-t_vec3      main_axis(t_vec3 dir);
-
-//shadow
-int			hit_shadow(t_ray3 *ray, t_canvas canvas, int light);
 
 //RENDERING
-
 t_color		anti_aliasing(int pix[2], \
 float vp_idx[2], t_view *view, t_ray3 *ray);
 void		low_quality(int scalar, int pix[2], t_ray3 ray, t_view *view);
@@ -212,5 +152,82 @@ void		make_image2(void *m);
 void		set_thread_st_point(int *anti, int pix[2], t_thread *t);
 void		init_background(t_view *view, int pix[2], t_ray3 *ray);
 t_thread	*init_thread(t_view *view);
+
+//minirt
+void		intersection(t_ray3 *ray, t_volume *obj);
+
+//norminette fix done
+//raycasting
+t_ray3		create_ray(t_camera cam, float u, float v);
+t_camera	camera(t_canvas canvas);
+
+//bumpmap
+t_vec3		bump_sphere(t_sphere *sphere, t_texture bp, t_vec3 hit);
+t_vec3		bump_cylinder(t_cylinder *cy, t_texture bp, \
+			t_vec3 hit, t_vec3 normal);
+
+//diffuse
+float		get_hit_height(t_cylinder *cy, t_vec3 hit);
+float		cos_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas, int light);
+float		cos_pl(t_plane *pl, t_ray3 *ray, t_canvas canvas, int light);
+float		cos_cy(t_cylinder *cy, t_ray3 *ray, t_canvas canvas, int light);
+
+//reflection
+float		ref_sp(t_sphere *sp, t_ray3 *ray, t_canvas canvas, int light);
+float		ref_pl(t_plane *pl, t_ray3 *ray, t_canvas canvas, int light);
+float		ref_cy(t_cylinder *cy, t_ray3 *ray, t_canvas canvas, int light);
+
+//color
+int			amb_light(t_canvas canvas, t_ray3 *ray, int idx);
+void		ray_color(t_canvas canvas, t_ray3 *ray, int light);
+
+//sphere
+void		hit_sphere(t_ray3 *ray, t_sphere *sp);
+
+//sphere_texture
+void		spherical_map(t_vec3 p, float *u, float *v, t_sphere *sp);
+t_color		image_texture_on_sphere(t_vec3 point, t_sphere *sp, \
+			t_texture *texture);
+t_color		grid_texture_on_sphere(t_vec3 point, t_checker pattern, \
+			t_sphere *sp);
+
+//plane
+int			in_triangle(t_vec3 hit, t_plane *pl);
+t_vec3		check_plane_direction(t_plane *pl, t_ray3 *ray);
+void		hit_plane(t_ray3 *ray, t_plane *pl);
+
+//plane_texture
+void		init_pl_color(t_ray3 *ray, t_plane *pl);
+void		init_pltexture(t_ray3 *ray, t_plane *pl);
+
+//cylinder
+int			cy_in_range(t_ray3 *ray, float t, t_cylinder *cy);
+void		hit_cylinder(t_ray3 *ray, t_cylinder *cy);
+
+//cylinder_texture1
+void		cylinder_texture(t_ray3 *ray, t_cylinder *cy, float tmp);
+void		cap_texture(t_vec3 point, t_cylinder *cy, t_plane *cap, \
+			t_ray3 *ray);
+
+//cylinder_texture2
+void		cylindrical_map(t_vec3 p, float *u, float *v, t_cylinder *cy);
+
+//texture
+void		init_texture(t_texture *texture, t_view *view, char *path);
+t_vec3		get_u_v_axis(t_vec3 norm);
+t_color		get_texture_color(t_texture texture, float u, float v);
+t_color		checkertexture(t_vec3 point, float scale, t_plane *pl);
+
+//shadow
+int			hit_shadow(t_ray3 *ray, t_canvas canvas, int light);
+
+//shadow_obj
+void		shadow_sphere(t_ray3 *ray, t_sphere *sp);
+void		shadow_plane(t_ray3 *ray, t_plane *pl);
+void		shadow_cylinder(t_ray3 *ray, t_cylinder *cy);
+
+//utils
+int			discriminant(float a, float b, float c);
+float		quad_formula(float a, float b, float c);
 
 #endif

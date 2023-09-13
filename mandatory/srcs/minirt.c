@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/20 11:48:10 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 05:12:04 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/13 09:25:03 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	intersection(t_ray3 *ray, t_volume *obj, t_canvas canvas)
 void	color_cal(t_view *view, t_canvas canvas, t_ray3 *ray, int pix[])
 {
 	if (ray->t > 0.0)
-	{	
+	{
 		ray_color(canvas, ray);
 		my_mlx_pixel_put(view, pix[0], pix[1], rgb_to_int(ray->color));
 	}

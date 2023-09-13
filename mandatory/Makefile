@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+         #
+#    By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/02 15:17:44 by jinhyeop          #+#    #+#              #
-#    Updated: 2023/09/06 05:07:00 by jinhyeop         ###   ########.fr        #
+#    Updated: 2023/09/14 02:38:39 by seodong-gyu      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ MAN_DIR = ./srcs
 MAN_FILE = minirt.c mlx_utils.c plane.c camera.c parse.c \
 		vector.c simple_vec_cal.c color.c shadow_utils.c shadow.c \
 		angle_ref.c angle_cos.c calculate_utils.c parse_obj.c parse_utils.c \
-		sphere.c cylinder.c 
+		sphere.c cylinder.c error_check.c
 BONUS_DIR = ./bonus
 BONUS_FILE = 
 MAN_SRCS = $(addprefix $(MAN_DIR)/, $(MAN_FILE))

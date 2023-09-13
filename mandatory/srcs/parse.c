@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 21:44:31 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 00:57:08 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/14 02:41:39 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,18 @@ int	init_data(char **tmp, t_canvas *canvas)
 	if (!tmp || !*tmp)
 		return (1);
 	count = argument_count(tmp);
+	find_problem(tmp, count - 1);
 	if (init_view(tmp, canvas, count - 1) == -1)
+	{
 		if (init_light(tmp, canvas, count - 1) == -1)
 			if (init_plane(tmp, canvas, count - 1) == -1)
 				if (init_sphere(tmp, canvas, count - 1) == -1)
 					if (init_cylinder(tmp, canvas, count - 1) == -1)
-						return (-1);
+						if (tmp[0][0] != '#')
+							return (-1);
+	}
+	else
+		canvas->error_flag++;
 	return (0);
 }
 
@@ -85,6 +91,7 @@ t_canvas	parse(char *av[])
 
 	obj = init_volume(av);
 	data.obj = obj;
+	data.error_flag = 0;
 	fd = open(av[1], O_RDONLY);
 	while (1)
 	{
@@ -92,9 +99,12 @@ t_canvas	parse(char *av[])
 		if (!line || !*line)
 			break ;
 		tmp = ft_split(line, " \t\n,");
-		init_data(tmp, &data);
+		if (init_data(tmp, &data) == -1)
+			error_print(*tmp, -1, -1);
 		free(line);
 		free_split(tmp);
 	}
+	if (data.error_flag != 3)
+		error_print("Requir R L A", -1, -1);
 	return (data);
 }

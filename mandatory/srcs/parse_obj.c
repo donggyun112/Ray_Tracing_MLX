@@ -6,7 +6,7 @@
 /*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/06 00:55:04 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/06 01:18:07 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/14 02:35:12 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	init_view(char **tmp, t_canvas *canvas, int count)
 		canvas->amb_col[GREEN] = ft_strtod(tmp[3]);
 		canvas->amb_col[BLUE] = ft_strtod(tmp[4]);
 	}
-	else if (count == 7 && !ft_strcmp(tmp[0], "c"))
+	else if (count == 7 && !ft_strcmp(tmp[0], "C"))
 	{
 		canvas->cam_orig.x = ft_strtod(tmp[1]);
 		canvas->cam_orig.y = ft_strtod(tmp[2]);
@@ -111,7 +111,7 @@ int	init_cylinder(char **tmp, t_canvas *canvas, int count)
 
 int	init_light(char **tmp, t_canvas *canvas, int count)
 {
-	if (!ft_strcmp(tmp[0], "l") && count == 7)
+	if (!ft_strcmp(tmp[0], "L") && count == 7)
 	{
 		canvas->light_orig.x = ft_strtod(tmp[1]);
 		canvas->light_orig.y = ft_strtod(tmp[2]);

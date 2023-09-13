@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/06 03:13:50 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/14 02:33:28 by seodong-gyu      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@
 
 //parse
 t_canvas	parse(char *av[]);
+void		find_problem(char **tmp, int count);
+void		error_print(char *tmp, int expected, int input_count);
 
 //parse utils
 int			argument_count(char **tmp);

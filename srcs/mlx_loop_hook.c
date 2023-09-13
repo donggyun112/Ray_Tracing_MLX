@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_loop_hook.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 01:45:20 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/14 01:46:09 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/14 08:30:39 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

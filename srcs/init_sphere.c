@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_sphere.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 21:56:41 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/13 21:57:54 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/14 08:33:06 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

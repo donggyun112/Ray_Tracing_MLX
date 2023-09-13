@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   copy_sphere.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 01:19:40 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/14 01:20:39 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/14 08:30:53 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

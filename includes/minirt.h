@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/14 01:53:31 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/14 08:36:06 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,8 +115,6 @@ void		free_split(char **tmp);
 int			argument_count(char **tmp);
 int			is_undefine_obj(char **tmp);
 
-
-
 //mlx_utils
 int			win_destroy(t_view *view);
 int			key_hook(int keycode, t_view *view);
@@ -148,59 +146,56 @@ void		save_image_to_rtfile(char *filename, t_view *view);
 void		obj_copy(t_view *view, int keycode);
 int			clear_backup(t_backup **backup);
 
-
-
 // grep_obj
-int		mouse_press(int button, int x, int y, t_view *view);
-int		mouse_release(int button, int x, int y, t_view *view);
-void	move_focus(int scalar, t_view *view, float sensitivity);
-void	grep_obj(int x, int y, t_view *view);
+int			mouse_press(int button, int x, int y, t_view *view);
+int			mouse_release(int button, int x, int y, t_view *view);
+void		move_focus(int scalar, t_view *view, float sensitivity);
+void		grep_obj(int x, int y, t_view *view);
 
 // move_grep_obj
-void	move_grep_obj(t_view *view, t_vec3 right, float pitch, float yaw);
-void	make_cylinder_cap2(t_cylinder *cy);
-t_vec3	rotate_around_axis(t_vec3 vec, t_vec3 axis, float angle);
+void		move_grep_obj(t_view *view, t_vec3 right, float pitch, float yaw);
+void		make_cylinder_cap2(t_cylinder *cy);
+t_vec3		rotate_around_axis(t_vec3 vec, t_vec3 axis, float angle);
 
 // make rtfile
-void	write_rt_color(int color[3], FILE *f);
-void	write_rt_vec(t_vec3 vec, FILE *f);
+void		write_rt_color(int color[3], FILE *f);
+void		write_rt_vec(t_vec3 vec, FILE *f);
 
 // write obj
-void	write_rt_plane(t_view *view, FILE *f);
-void	write_rt_light(t_view *view, FILE *f);
-void	write_rt_cylinder(t_view *view, FILE *f);
-void	write_rt_sphere(t_view *view, FILE *f);
-void	write_rt_camera(t_view *view, FILE *f);
-void	write_rt_tr(t_plane pl, FILE *f);
+void		write_rt_plane(t_view *view, FILE *f);
+void		write_rt_light(t_view *view, FILE *f);
+void		write_rt_cylinder(t_view *view, FILE *f);
+void		write_rt_sphere(t_view *view, FILE *f);
+void		write_rt_camera(t_view *view, FILE *f);
+void		write_rt_tr(t_plane pl, FILE *f);
 
 // copy_obj
-void	obj_copy(t_view *view, int keycode);
-void	rand_vec(t_vec3 *vec, float max);
-float	get_rand(float a, float b);
-t_vec3	init_copy_vec(t_vec3 *vec, t_vec3 tar);
-void	copy_plane(t_view *view, int keycode);
-void	copy_cylinder(t_view *view, int keycode);
-void	copy_sphere(t_view *view, int keycode);
+void		obj_copy(t_view *view, int keycode);
+void		rand_vec(t_vec3 *vec, float max);
+float		get_rand(float a, float b);
+t_vec3		init_copy_vec(t_vec3 *vec, t_vec3 tar);
+void		copy_plane(t_view *view, int keycode);
+void		copy_cylinder(t_view *view, int keycode);
+void		copy_sphere(t_view *view, int keycode);
 
 // backup obj
-int		clear_backup(t_backup **backup);
-void	push_obj(t_sphere *sp, t_cylinder *cy, t_plane *pl, t_view *view);
-
-void	zoom_out(t_view *view);
+int			clear_backup(t_backup **backup);
+void		push_obj(t_sphere *sp, t_cylinder *cy, t_plane *pl, t_view *view);
+void		zoom_out(t_view *view);
 
 // init data
-void	init_view_scale(t_view *view);
+void		init_view_scale(t_view *view);
 
 // status
-void	string_put(t_view *view);
+void		string_put(t_view *view);
 
 // obj control
-void	zoom_inout(int button, t_view *view);
+void		zoom_inout(int button, t_view *view);
 
 // mlx hook
-int		loop_hook(t_view *view);
-int		mouse_motion(int x, int y, t_view *view);
-int		key_release(int keycode, t_view *view);
+int			loop_hook(t_view *view);
+int			mouse_motion(int x, int y, t_view *view);
+int			key_release(int keycode, t_view *view);
 
 //RENDERING
 t_color		anti_aliasing(int pix[2], \

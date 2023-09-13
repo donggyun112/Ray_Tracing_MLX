@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:24:29 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/13 22:03:09 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/14 08:33:21 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ int	init_data(char **tmp, t_canvas *canvas)
 							return (-1);
 	return (0);
 }
-
 
 void	init_count(t_volume *obj, char **tmp)
 {

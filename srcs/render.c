@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 01:43:17 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/14 01:44:28 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/14 08:33:51 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,6 @@ t_color	anti_aliasing(int pix[2], float vp_idx[2], t_view *view, t_ray3 *ray)
 	}
 	return (color);
 }
-
 
 void	low_quality(int scalar, int pix[2], t_ray3 ray, t_view *view)
 {

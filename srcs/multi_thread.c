@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   multi_thread.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 01:41:47 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/14 01:49:29 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/14 08:33:16 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

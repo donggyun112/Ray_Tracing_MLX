@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_key_hook.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 22:07:51 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/13 22:14:54 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/14 08:30:28 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ void	key_hook2(int keycode, t_view *view)
 	else if (keycode == MAKE)
 		save_image_to_rtfile("outfile.rt", view);
 }
-
 
 int	key_hook(int keycode, t_view *view)
 {

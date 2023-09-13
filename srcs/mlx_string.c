@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_string.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 22:21:15 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/13 22:21:56 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/14 08:31:06 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

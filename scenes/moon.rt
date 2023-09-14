@@ -1,0 +1,9 @@
+R	1400 800
+A	0.2								255,255,255
+
+C	-20.0,20.0,0.0	1.0,-1.0,0.0		40
+L	-55.0,10.0,30.0			0.9		255,255,255
+
+tsp	0.0,0.0,0.0		4.0			imgs/earthmap.xpm	imgs/earthbump.xpm
+rsp	0.0,0.0,8.0		1.0		0.0,0.0,0.0		0.0,1.0,0.0		imgs/moon_texture.xpm	imgs/moon_normal.xpm
+bg	imgs/space.xpm

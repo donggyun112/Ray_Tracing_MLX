@@ -6,12 +6,12 @@
 #    By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/04/02 15:17:44 by jinhyeop          #+#    #+#              #
-#    Updated: 2023/09/14 10:06:47 by jinhyeop         ###   ########.fr        #
+#    Updated: 2023/09/14 11:41:56 by jinhyeop         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -O3
+CFLAGS = -Wall -Wextra -Werror -O2
 CLIB = -Llibft -lft -Lmlx -lmlx -framework OpenGL -framework Appkit -Imlx -lm
 
 NAME = minirt

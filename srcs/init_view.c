@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_view.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 22:02:34 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/13 22:02:52 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/14 13:21:52 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,11 @@ void	init_view2(t_canvas *canvas, char **tmp)
 {
 	canvas->width = fabs(ft_strtod(tmp[1]));
 	canvas->height = fabs(ft_strtod(tmp[2]));
+	if (canvas->width < 100 || canvas->height)
+	{
+		printf("Error: Window is too small\n");
+		exit(1);
+	}
 	canvas->ratio = (float)canvas->width / (float)canvas->height;
 }
 

@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 01:31:01 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/14 11:41:17 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/14 12:17:36 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,10 @@ void	pause_system(t_view *view)
 
 void	quality(int keycode, t_view *view)
 {
-	if (keycode == Q_UP && view->quality_scalar < 7)
+	if (keycode == Q_UP && view->quality_scalar < 6)
 		view->quality_scalar += 1;
-	else if (keycode == Q_DOWN && view->quality_scalar > -20)
+	else if (keycode == Q_DOWN && view->quality_scalar \
+			> (-1) * view->can.height / NUM_OF_THREAD)
 		view->quality_scalar -= 1;
 	else if (keycode == Q2)
 		view->quality_scalar = -10;

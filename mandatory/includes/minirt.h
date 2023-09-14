@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/14 02:33:28 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/14 10:57:50 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 # include <math.h>
 # include "struct.h"
 # include "vector.h"
-# include "../mlx/mlx.h"
-# include "../libft/libft.h"
+# include "../../mlx/mlx.h"
+# include "../../libft/libft.h"
 
 # define RED 0
 # define GREEN 1

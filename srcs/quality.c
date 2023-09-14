@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 01:31:01 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/14 08:33:39 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/14 09:30:17 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,13 +91,17 @@ void	quality(int keycode, t_view *view)
 	}
 	else if (keycode == Q_DOWN)
 		view->quality_scalar -= 1;
-	else if (keycode == T)
-		view->quality_scalar = 1;
 	else if (keycode == Q2)
 		view->quality_scalar = -10;
 	if (keycode == Q1)
 	{
 		view->quality_scalar = 6;
+		newwin(view);
+		pause_system(view);
+	}
+	else if (keycode == T)
+	{
+		view->quality_scalar = 1;
 		newwin(view);
 		pause_system(view);
 	}

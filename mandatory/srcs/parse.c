@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/28 21:44:31 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/14 02:41:39 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/14 15:10:44 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,19 @@ t_volume	*init_volume(char **av)
 	return (obj);
 }
 
+int	get_fd(char *name)
+{
+	int	fd;
+
+	fd = open(name, O_RDONLY);
+	if (fd < 0)
+	{
+		printf("File open error\n");
+		exit(1);
+	}
+	return (fd);
+}
+
 t_canvas	parse(char *av[])
 {
 	t_canvas	data;
@@ -89,10 +102,10 @@ t_canvas	parse(char *av[])
 	char		*line;
 	char		**tmp;
 
+	fd = get_fd(av[1]);
 	obj = init_volume(av);
 	data.obj = obj;
 	data.error_flag = 0;
-	fd = open(av[1], O_RDONLY);
 	while (1)
 	{
 		line = get_next_line(fd);

@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/19 20:59:30 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/14 08:36:06 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/14 15:10:33 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ int			ft_strcmp(char *s1, char *s2);
 void		free_split(char **tmp);
 int			argument_count(char **tmp);
 int			is_undefine_obj(char **tmp);
+int			get_fd(char *name);
 
 //mlx_utils
 int			win_destroy(t_view *view);

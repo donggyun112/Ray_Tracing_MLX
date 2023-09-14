@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/29 20:24:29 by jinhyeop          #+#    #+#             */
-/*   Updated: 2023/09/14 08:33:21 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/14 15:10:41 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,10 +121,10 @@ t_canvas	parse(char *av[])
 	char		*line;
 	char		**tmp;
 
+	fd = get_fd(av[1]);
 	obj = init_volume(av);
 	data.obj = obj;
 	data.bgt_filepath = NULL;
-	fd = open(av[1], O_RDONLY);
 	while (1)
 	{
 		line = get_next_line(fd);

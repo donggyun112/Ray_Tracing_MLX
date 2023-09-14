@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 01:36:16 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/14 08:33:04 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/14 09:44:10 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	init_view_scale(t_view *view)
 	view->quality_scalar = -4;
 	view->flag = 0;
 	view->focus = 0;
+	view->lnum = 0;
 	view->stop = 1;
 	view->show_mouse = 1;
 	view->click_status = 0;

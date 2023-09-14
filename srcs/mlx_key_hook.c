@@ -6,7 +6,7 @@
 /*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 22:07:51 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/14 09:27:30 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/14 09:53:04 by jinhyeop         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	key_hook4(int keycode, t_view *view, int *lidx)
 		view->lnum = *lidx;
 		newwin(view);
 	}
-	else if (keycode == PRIV && lidx > 0)
+	else if (keycode == PRIV && *lidx > 0)
 	{
 		(*lidx)--;
 		view->lnum = *lidx;

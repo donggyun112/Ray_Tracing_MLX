@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_loop_hook.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 01:45:20 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/14 08:30:39 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/14 14:07:59 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,6 @@ void	change_angle(t_view *view)
 		{
 			if (view->can.obj->sp[x].type == TSP)
 				view->can.obj->sp[x].angle += 0.05;
-			else if (view->can.obj->sp[x].type == CSP)
-				view->can.obj->sp[x].angle += 0.2;
 			else
 				view->can.obj->sp[x].angle = \
 					fmod(view->can.obj->sp[x].angle, 2.0 * M_PI);

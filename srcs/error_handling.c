@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_handling.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: seodong-gyun <seodong-gyun@student.42.f    +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 22:00:03 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/13 22:01:25 by seodong-gyu      ###   ########.fr       */
+/*   Updated: 2023/09/14 13:40:40 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	find_problem(char **tmp, int count)
 		error_print(tmp[0], 10, count);
 	if (count != 7 && !ft_strcmp(tmp[0], "sp"))
 		error_print(tmp[0], 7, count);
-	else if (count != 6 && !ft_strcmp(tmp[0], "tsp"))
+	else if ((count != 6 && count != 5) && !ft_strcmp(tmp[0], "tsp"))
 		error_print(tmp[0], 6, count);
 	else if (count != 4 && !ft_strcmp(tmp[0], "csp"))
 		error_print(tmp[0], 4, count);

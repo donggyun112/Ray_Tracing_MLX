@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 01:36:16 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/14 12:16:06 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/14 13:41:58 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ void	set_texture(t_view *view, t_volume *obj)
 		if (obj->sp[i].type == TSP)
 		{
 			init_texture(&obj->sp[i].texture, view, obj->sp[i].filepath);
-			init_texture(&obj->sp[i].bumtexture, view, obj->sp[i].bumppath);
+			if (obj->sp[i].bumppath)
+				init_texture(&obj->sp[i].bumtexture, view, obj->sp[i].bumppath);
 		}
 	}
 	i = -1;

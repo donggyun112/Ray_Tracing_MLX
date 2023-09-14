@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_view.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeop <jinhyeop@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: dongkseo <dongkseo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/13 22:02:34 by seodong-gyu       #+#    #+#             */
-/*   Updated: 2023/09/14 13:21:52 by jinhyeop         ###   ########.fr       */
+/*   Updated: 2023/09/14 13:27:14 by dongkseo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	init_view2(t_canvas *canvas, char **tmp)
 {
 	canvas->width = fabs(ft_strtod(tmp[1]));
 	canvas->height = fabs(ft_strtod(tmp[2]));
-	if (canvas->width < 100 || canvas->height)
+	if (canvas->width < 100 || canvas->height < 100)
 	{
 		printf("Error: Window is too small\n");
 		exit(1);

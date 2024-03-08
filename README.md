@@ -49,12 +49,7 @@ MINIRT 프로젝트는 3D 그래픽 개발자들에게 실시간으로 고품질
 ### 1. 라이브러리 컴파일:
 
 MINIRT는 `libft`와 `mlx` 라이브러리에 의존합니다. 이 라이브러리들을 먼저 컴파일해야 합니다.
-
-- `libft`와 `mlx` 라이브러리 컴파일:
-    ```sh
-    make -C libft all
-    make -C mlx all
-    ```
+MINIRT를 컴파일하는 과정에서 자동으로 mlx, libft가 컴파일 됩니다.
 
 ### 2. MINIRT 컴파일:
 

@@ -6,6 +6,8 @@ MINIRT는 raycasting 기술을 활용하여 실시간 ray tracing을 구현한 3
 
 이 기술은 광원, 물체의 재질, 그림자, 반사 및 굴절 등의 물리적 현상을 정밀하게 계산하여 실제와 같은 시각적 효과를 제공합니다. MINIRT 프로젝트의 목표는 사용자가 정의한 3D 환경에서 실시간으로 높은 품질의 렌더링을 달성하는 것입니다.
 
+![](https://file.notion.so/f/f/4b5716b5-80e6-4641-a1da-9729209ad23d/ce4cda84-78bd-483b-ac08-521de6f111af/Untitled.png?id=852adde0-d9a0-494e-b833-82d80ceb7509&table=block&spaceId=4b5716b5-80e6-4641-a1da-9729209ad23d&expirationTimestamp=1709971200000&signature=8FrJk5YfBcL76kH8ZXEX-a6wQd-zxG2h5uK1_aNRiRY&downloadName=Untitled.png)
+
 ## 주요 특징
 
 - **Raycasting 기반 Ray Tracing:** 카메라에서 발사된 광선이 물체와 교차하는 지점을 계산하여 실사와 같은 3D 이미지를 생성합니다.
@@ -20,4 +22,3 @@ MINIRT 프로젝트를 통해 생성되는 주요 산출물은 사용자가 정�
 
 MINIRT 프로젝트는 3D 그래픽 개발자들에게 실시간으로 고품질의 렌더링을 구현할 수 있는 강력한 도구를 제공합니다. 또한, 이 기술은 교육, 엔터테인먼트, 건축 시각화 등 여러 분야에서 혁신적인 시각적 경험을 창출할 잠재력을 가지고 있습니다.
 
-MINIRT를 통해 당신의 3D 프로젝트를 다음 단계로 끌어올리세요.

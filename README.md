@@ -20,4 +20,4 @@ MINIRT를 통해 당신의 3D 프로젝트를 다음 단계로 끌어올리세�
 
 
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ce4cda84-78bd-483b-ac08-521de6f111af/Untitled.png)
+![Uploading image.png…]()

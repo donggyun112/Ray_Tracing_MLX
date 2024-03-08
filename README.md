@@ -6,12 +6,6 @@ MINIRT는 raycasting 기술을 활용하여 실시간 ray tracing을 구현한 3
 
 이 기술은 광원, 물체의 재질, 그림자, 반사 및 굴절 등의 물리적 현상을 정밀하게 계산하여 실제와 같은 시각적 효과를 제공합니다. MINIRT 프로젝트의 목표는 사용자가 정의한 3D 환경에서 실시간으로 높은 품질의 렌더링을 달성하는 것입니다.
 
-![](https://file.notion.so/f/f/4b5716b5-80e6-4641-a1da-9729209ad23d/ce4cda84-78bd-483b-ac08-521de6f111af/Untitled.png?id=852adde0-d9a0-494e-b833-82d80ceb7509&table=block&spaceId=4b5716b5-80e6-4641-a1da-9729209ad23d&expirationTimestamp=1709971200000&signature=8FrJk5YfBcL76kH8ZXEX-a6wQd-zxG2h5uK1_aNRiRY&downloadName=Untitled.png)
-
-
-![](https://file.notion.so/f/f/4b5716b5-80e6-4641-a1da-9729209ad23d/c47a8a50-0a64-4586-83f4-4c1bc6f5329e/Untitled.png?id=ebf78a0f-4635-4813-b7b3-c040678d4192&table=block&spaceId=4b5716b5-80e6-4641-a1da-9729209ad23d&expirationTimestamp=1709971200000&signature=1kMHpOXV3Z6E3OzBvwbLX2oeHxYR9kWKtGXwoGfL2Ic&downloadName=Untitled.png)
-
-
 ## 주요 특징
 
 - **Raycasting 기반 Ray Tracing:** 카메라에서 발사된 광선이 물체와 교차하는 지점을 계산하여 실사와 같은 3D 이미지를 생성합니다.
@@ -19,8 +13,19 @@ MINIRT는 raycasting 기술을 활용하여 실시간 ray tracing을 구현한 3
 - **고성능 렌더링:** 최적화된 알고리즘을 통해 실시간으로 고품질의 3D 렌더링을 구현합니다.
 
 ## 산출물
+![](https://file.notion.so/f/f/4b5716b5-80e6-4641-a1da-9729209ad23d/ce4cda84-78bd-483b-ac08-521de6f111af/Untitled.png?id=852adde0-d9a0-494e-b833-82d80ceb7509&table=block&spaceId=4b5716b5-80e6-4641-a1da-9729209ad23d&expirationTimestamp=1709971200000&signature=8FrJk5YfBcL76kH8ZXEX-a6wQd-zxG2h5uK1_aNRiRY&downloadName=Untitled.png)
+
+
+![](https://file.notion.so/f/f/4b5716b5-80e6-4641-a1da-9729209ad23d/c47a8a50-0a64-4586-83f4-4c1bc6f5329e/Untitled.png?id=ebf78a0f-4635-4813-b7b3-c040678d4192&table=block&spaceId=4b5716b5-80e6-4641-a1da-9729209ad23d&expirationTimestamp=1709971200000&signature=1kMHpOXV3Z6E3OzBvwbLX2oeHxYR9kWKtGXwoGfL2Ic&downloadName=Untitled.png)
+
 
 MINIRT 프로젝트를 통해 생성되는 주요 산출물은 사용자가 정의한 3D 환경에서 실시간으로 렌더링된 고품질의 실사 3D 이미지입니다. 이러한 이미지는 게임 개발, 시뮬레이션, 시각 효과 제작 등 다양한 분야에서 응용될 수 있습니다.
+
+## 프로젝트 진행 과정
+
+프로젝트의 전체 진행 과정은 [여기](https://playful-bicycle-9aa.notion.site/MINIRT-f4f84b77f533435191f926b5324f83cf?pvs=4)에서 확인할 수 있습니다. 이 링크를 통해 개발 과정, 프로젝트 업데이트, 팀원들의 공동 작업 내용 등을 상세히 파악할 수 있습니다.
+
+
 
 ## 기대 효과
 

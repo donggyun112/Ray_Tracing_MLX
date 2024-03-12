@@ -13,8 +13,8 @@ MINIRT는 raycasting 기술을 활용하여 실시간 ray tracing을 구현한 3
 - **고성능 렌더링:** 최적화된 알고리즘을 통해 실시간으로 고품질의 3D 렌더링을 구현합니다.
 
 ## 산출물
-![](https://file.notion.so/f/f/4b5716b5-80e6-4641-a1da-9729209ad23d/ce4cda84-78bd-483b-ac08-521de6f111af/Untitled.png?id=852adde0-d9a0-494e-b833-82d80ceb7509&table=block&spaceId=4b5716b5-80e6-4641-a1da-9729209ad23d&expirationTimestamp=1709971200000&signature=8FrJk5YfBcL76kH8ZXEX-a6wQd-zxG2h5uK1_aNRiRY&downloadName=Untitled.png)
-
+![alt text](image.png)
+![alt text](Untitled.png)
 
 ![](https://file.notion.so/f/f/4b5716b5-80e6-4641-a1da-9729209ad23d/c47a8a50-0a64-4586-83f4-4c1bc6f5329e/Untitled.png?id=ebf78a0f-4635-4813-b7b3-c040678d4192&table=block&spaceId=4b5716b5-80e6-4641-a1da-9729209ad23d&expirationTimestamp=1709971200000&signature=1kMHpOXV3Z6E3OzBvwbLX2oeHxYR9kWKtGXwoGfL2Ic&downloadName=Untitled.png)
 
